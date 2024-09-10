@@ -32,7 +32,7 @@ export default function Landing() {
   const cars = [
     {
       id: 1,
-      imgSrc: "/suzuki-fronx-1.jpg",
+      imgSrc: "Assets/Images/car.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -40,7 +40,7 @@ export default function Landing() {
     },
     {
       id: 2,
-      imgSrc: "/suzuki-fronx-2.jpg",
+      imgSrc: "Assets/Images/car2.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -48,7 +48,7 @@ export default function Landing() {
     },
     {
       id: 3,
-      imgSrc: "/suzuki-fronx-3.jpg",
+      imgSrc: "Assets/Images/car3.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -56,7 +56,7 @@ export default function Landing() {
     },
     {
       id: 4,
-      imgSrc: "/suzuki-fronx-1.jpg",
+      imgSrc: "Assets/Images/car.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -64,7 +64,7 @@ export default function Landing() {
     },
     {
       id: 5,
-      imgSrc: "/suzuki-fronx-2.jpg",
+      imgSrc: "Assets/Images/car.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -72,7 +72,7 @@ export default function Landing() {
     },
     {
       id: 6,
-      imgSrc: "/suzuki-fronx-3.jpg",
+      imgSrc: "Assets/Images/car6.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
