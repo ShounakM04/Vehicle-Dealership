@@ -1,0 +1,22 @@
+{
+  "name": "internship",
+  "version": "1.0.0",
+  "description": "Car DealerShip Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShounakM04/Vehicle-Dealership.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShounakM04/Vehicle-Dealership/issues"
+  },
+  "homepage": "https://github.com/ShounakM04/Vehicle-Dealership#readme",
+  "dependencies": {
+    "express": "^4.20.0"
+  }
+}
