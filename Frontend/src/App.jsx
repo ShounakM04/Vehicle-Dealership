@@ -7,6 +7,7 @@
 import Layout from './components/Layout';
 import Landing from './components/Landing';
 import CarDetails from './components/CarDetails';
+import Login from './components/Login';
 
   const router = createBrowserRouter([
     {
@@ -26,6 +27,17 @@ import CarDetails from './components/CarDetails';
       )
 
 
+    },{
+      path:"/admin",
+      element:(
+        <Layout>
+          <Login/>
+        </Layout>
+      )
+    },
+    {
+      path: "*",
+      element: () => <h1>Page Not Found</h1>  // 404 page component
     }
   ])
 
