@@ -35,7 +35,7 @@ function Cards() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="rounded-lg shadow-md">
             <img
-              src="/car.jpg"
+              src="../../../Assets/Images/car.jpeg"
               alt="Suzuki Fronx"
               className="w-full h-auto rounded-t-lg"
             />
