@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const navigate = useNavigate();
+
     function loginHandler(event) {
         event.preventDefault();
 
@@ -13,6 +16,7 @@ function Login() {
             return;
         }
         alert('Login successful!');
+        navigate('/adminform');
         setUsername('');
         setPassword('');
     }

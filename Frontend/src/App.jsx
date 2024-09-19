@@ -4,11 +4,11 @@
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
+import AdminForm from './pages/AdminForm';
 import Layout from './components/Layout';
-import Landing from './components/Landing';
-import CarDetails from './components/CarDetails';
-import Login from './components/Login';
-
+import Landing from './pages/Landing';
+import CarDetails from './pages/CarDetails';
+import Login from './pages/Login';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -38,6 +38,14 @@ import Login from './components/Login';
     {
       path: "*",
       element: () => <h1>Page Not Found</h1>  // 404 page component
+    },
+    {
+      path:"/adminform",
+      element:(
+        <Layout>
+          <AdminForm/>
+        </Layout>
+      )
     }
   ])
 
