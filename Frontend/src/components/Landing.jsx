@@ -32,7 +32,7 @@ export default function Landing() {
   const cars = [
     {
       id: 1,
-      imgSrc: "Assets/Images/car.jpeg",
+      imgSrc: "Assets/Images/car1.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -56,7 +56,7 @@ export default function Landing() {
     },
     {
       id: 4,
-      imgSrc: "Assets/Images/car.jpeg",
+      imgSrc: "Assets/Images/car1.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",
@@ -64,7 +64,7 @@ export default function Landing() {
     },
     {
       id: 5,
-      imgSrc: "Assets/Images/car.jpeg",
+      imgSrc: "Assets/Images/car1.jpeg",
       name: "2020 SUZUKI FRONX",
       number: "MH19XX1111",
       kilometers: "20,000KM",

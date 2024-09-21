@@ -22,21 +22,21 @@ function CarDetails() {
               <div> 
                 <img
                   src={`../../../Assets/Images/car${params.id}.jpeg`}
-                  alt="Scorpio"
+                  alt="CarImage"
                   className="w-full h-auto rounded-t-lg"
                 />
               </div>
               <div>
                 <img
                   src={`../../../Assets/Images/car${params.id}.jpeg`}
-                  alt="Suzuki Fronx"
+                  alt="CarImage"
                   className="w-full h-auto rounded-t-lg"
                 />
               </div>
               <div>
                 <img
                   src={`../../../Assets/Images/car${params.id}.jpeg`}
-                  alt="Suzuki Fronx"
+                  alt="CarImage"
                   className="w-full h-auto rounded-t-lg"
                 />
               </div>

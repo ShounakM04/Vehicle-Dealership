@@ -8,7 +8,7 @@ import Layout from './components/Layout';
 import Landing from './components/Landing';
 import CarDetails from './components/CarDetails';
 import Login from './components/Login';
-
+import CarDetailsForm  from "./components/CarDetailsForm"
 
   const router = createBrowserRouter([
     {
@@ -33,6 +33,14 @@ import Login from './components/Login';
       element:(
         <Layout>
           <Login/>
+        </Layout>
+      )
+    },
+    {
+      path:"/details/carDetailsForm",
+      element:(
+        <Layout>
+          <CarDetailsForm/>
         </Layout>
       )
     },

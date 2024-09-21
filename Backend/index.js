@@ -16,6 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set('views',path.resolve("./views"));
 
+app.get("/",(req,res)=>{
+    res.send("hello from server");
+})
+
+
+
 // Use your custom logging middleware
 app.use(logResReq("logs.txt"));
 
