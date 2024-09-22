@@ -9,8 +9,8 @@ async function handleHomePage(req,res) {
             ORDER BY c.registernumber
         `);
         const carsWithImages = result.rows.map(row => ({
-            registration_number: row.registernumber,
-            image_url: row.imageurl
+            registrationnumber: row.registernumber,
+            imageurl: row.imageurl
         }));
         //console.log(carsWithImages);
         res.render("home",{
