@@ -4,7 +4,7 @@ const handleCarDetails = require("../controllers/cardetails");
 router = express.Router();
 
 router.get("/",(req,res)=>{
-    return res.render("carDetails");
+    return res.render("detailsUpload");
 });
 
 router.post("/",handleCarDetails);

@@ -8,9 +8,10 @@ const path = require("path");
 
 
 //routers
-const HomeRoute = require("./routes/home.js")
-const Imageroute=require("../Backend/routes/image.js")
+const HomeRoute = require("./routes/home.js");
+const Imageroute=require("../Backend/routes/image.js");     
 const DetailsRoute  = require("./routes/details.js");
+const SpecificPageRoute = require("./routes/specifcCar.js")
 
 app.set("view engine","ejs");
 app.use(express.json()); 
@@ -23,7 +24,8 @@ app.use(logResReq("logs.txt"));
 // Using Routes
 app.use("/",HomeRoute)
 app.use("/upload",Imageroute);
- app.use("/details",DetailsRoute);
+app.use("/details",DetailsRoute);
+app.use("/car",SpecificPageRoute);
 
 
 // Correct `app.listen` without req and res parameters
