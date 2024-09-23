@@ -29,14 +29,15 @@ function CarDetails() {
               <div>
                 <img
                   src={`../../../Assets/Images/car${params.id}.jpeg`}
-                  alt="CarImage"
+                  alt="Suzuki Fronx"
                   className="w-full h-auto rounded-t-lg"
                 />
               </div>
               <div>
                 <img
                   src={`../../../Assets/Images/car${params.id}.jpeg`}
-                  alt="CarImage"
+                  alt="Suzuki Fronx"
+
                   className="w-full h-auto rounded-t-lg"
                 />
               </div>
