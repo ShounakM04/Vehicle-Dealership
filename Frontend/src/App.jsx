@@ -1,15 +1,16 @@
-  import { useState } from 'react'
-  import './App.css'
-  import {
-    createBrowserRouter,
-    RouterProvider,
-  } from "react-router-dom";
-import AdminForm from './pages/AdminForm';
+import { useState } from 'react'
+import './App.css'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import CarDetails from './pages/CarDetails';
 import Login from './pages/Login';
 import CarDetailsForm  from "./pages/CarDetailsForm"
+import DeleteCarDetails from './pages/DeleteCarDetails';
+import Dashboard from './pages/Dashboard';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -37,6 +38,14 @@ import CarDetailsForm  from "./pages/CarDetailsForm"
       )
     },
     {
+      path:"/dashboard",
+      element:(
+        <Layout>
+          <Dashboard/>
+        </Layout>
+      )
+    },
+    {
       path:"/details/carDetailsForm",
       element:(
         <Layout>
@@ -45,23 +54,25 @@ import CarDetailsForm  from "./pages/CarDetailsForm"
       )
     },
     {
-      path: "*",
-      element: () => <h1>Page Not Found</h1>  // 404 page component
-    },
-    {
-      path:"/adminform",
+      path:"/details/DeleteCarDetails",
       element:(
         <Layout>
-          <AdminForm/>
+          <DeleteCarDetails/>
         </Layout>
       )
+    },
+    {
+      path: "*",
+      element: () => <h1>Page Not Found</h1>
     }
   ])
 
   function App() {
       return (
       <>
-        <RouterProvider router={router} />
+        <>
+          <RouterProvider router={router} />
+        </>
       </>
     )
   }
