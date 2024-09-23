@@ -14,8 +14,8 @@ function Login() {
             setPassword('');
             return;
         }
-        alert('Login successful!');
-        navigate("/details/carDetailsForm")
+        alert("Login successful");
+        navigate("/dashboard")
         setUsername('');
         setPassword('');
 
