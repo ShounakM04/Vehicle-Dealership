@@ -5,10 +5,10 @@
     RouterProvider,
   } from "react-router-dom";
 import Layout from './components/Layout';
-import Landing from './components/Landing';
-import CarDetails from './components/CarDetails';
-import Login from './components/Login';
-import CarDetailsForm  from "./components/CarDetailsForm"
+import Landing from './pages/Landing';
+import CarDetails from './pages/CarDetails';
+import Login from './pages/Login';
+import CarDetailsForm  from "./pages/CarDetailsForm"
 
   const router = createBrowserRouter([
     {
