@@ -1,0 +1,4 @@
+.env
+views/
+.env.sample
+node_modules

@@ -5,7 +5,6 @@ function Login() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const navigate = useNavigate();
-
     function loginHandler(event) {
         event.preventDefault();
 
@@ -16,9 +15,10 @@ function Login() {
             return;
         }
         alert('Login successful!');
-        navigate('/adminform');
+        navigate("/details/carDetailsForm")
         setUsername('');
         setPassword('');
+
     }
     return (
         <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-4'>
