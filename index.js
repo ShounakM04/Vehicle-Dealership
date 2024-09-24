@@ -12,7 +12,7 @@ const HomeRoute = require("./routes/home.js");
 const Imageroute=require("../Backend/routes/image.js");     
 const DetailsRoute  = require("./routes/details.js");
 const SpecificPageRoute = require("./routes/specifcCar.js")
-
+const DeleteRecordRoute = require("./routes/deleteRecordRoute.js")
 app.set("view engine","ejs");
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
@@ -26,7 +26,7 @@ app.use("/",HomeRoute)
 app.use("/upload",Imageroute);
 app.use("/details",DetailsRoute);
 app.use("/car",SpecificPageRoute);
-
+app.use("/delete",DeleteRecordRoute);
 
 // Correct `app.listen` without req and res parameters
 app.listen(port, () => {
