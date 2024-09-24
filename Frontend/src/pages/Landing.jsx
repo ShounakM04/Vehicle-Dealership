@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Landing() {
   const [fuelType, setFuelType] = useState("petrol");
   const [budget, setBudget] = useState("any");
   const [kilometres, setKilometres] = useState("any");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [cars, setCars] = useState([]);
 
   const navigate = useNavigate();
 
@@ -29,56 +31,24 @@ export default function Landing() {
     navigate(`/car/${id}`);
   };
 
-  const cars = [
-    {
-      id: 1,
-      imgSrc: "Assets/Images/car1.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-    {
-      id: 2,
-      imgSrc: "Assets/Images/car2.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-    {
-      id: 3,
-      imgSrc: "Assets/Images/car3.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-    {
-      id: 4,
-      imgSrc: "Assets/Images/car1.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-    {
-      id: 5,
-      imgSrc: "Assets/Images/car1.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-    {
-      id: 6,
-      imgSrc: "Assets/Images/car6.jpeg",
-      name: "2020 SUZUKI FRONX",
-      number: "MH19XX1111",
-      kilometers: "20,000KM",
-      price: "₹14 lakh",
-    },
-  ];
+  useEffect(() => {
+    axios.get("http://localhost:8000/")
+      .then((response) => {
+        const data = response.data;
+        const carsData = data.map((car) => ({
+          id: car.registrationnumber,
+          imgSrc: car.imageurl,
+          name: car.carname, // Static field
+          number: car.registrationnumber,
+          kilometers: "20,000KM", // Static field
+          price: car.carprice, // Static field
+        }));
+        setCars(carsData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div className="container mx-auto">
@@ -288,7 +258,7 @@ export default function Landing() {
                 <h3 className="text-lg font-bold mt-4">{car.name}</h3>
                 <p className="text-gray-600 mt-2">{car.number}</p>
                 <p className="text-gray-600 mt-2">{car.kilometers}</p>
-                <p className="text-green-500 font-bold mt-2">{car.price}</p>
+                <p className="text-green-500 font-bold mt-2">₹{car.price}</p>
               </div>
               <div className="mt-4">
                 <button

@@ -244,7 +244,7 @@ function AdminForm() {
         </div>
 
         {/* Image Upload Section */}
-        <h2 className="text-xl font-bold mb-2">Upload Images</h2>
+        <h2 className="text-xl font-bold mb-2">Upload Images (10)</h2>
         <input
           type="file"
           multiple
