@@ -19,9 +19,19 @@ function AdminForm() {
   const [carType, setCarType] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
+  const [DisplayImage, setDisplayImage] = useState(null);
+
+
+
+  const handleDisplayImageChange = (e) => {
+    const file = e.target.files[0]; // Get the first selected file
+    if (file) {
+      setDisplayImage(file); // Set the single image to state
+    }
+  };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]); 
+    setImages([...e.target.files]);
   };
 
   const handleUpload = async () => {
@@ -38,7 +48,7 @@ function AdminForm() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      return response.data; 
+      return response.data;
     } catch (error) {
       console.error("Image upload failed:", error);
       throw new Error("Image upload failed");
@@ -70,7 +80,7 @@ function AdminForm() {
         carPrice,
         carType,
       });
-      
+
       await handleUpload(); // Now upload images only after form submission
       toast.success("Car details added successfully!");
       console.log(response.data);
@@ -244,14 +254,50 @@ function AdminForm() {
         </div>
 
         {/* Image Upload Section */}
-        <h2 className="text-xl font-bold mb-2">Upload Images</h2>
-        <input
-          type="file"
-          multiple
-          onChange={handleImageChange}
-          className="mb-4"
-        />
+        <div>
+          <h2 className="text-xl font-bold mb-2">Upload Display Image </h2>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleDisplayImageChange}
+            className="mb-4"
+          />
+          {DisplayImage && (
+            <div className="mt-4">
+              <img
+                src={URL.createObjectURL(DisplayImage)}
+                alt="Primary Preview"
+                className="h-32 mb-6 object-cover rounded-lg shadow-lg"
+              />
+            </div>
+          )}
+        </div>
 
+
+        <div>
+          <h2 className="text-xl font-bold mb-2">Upload Images (Max 10)</h2>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+            className="mb-4"
+          />
+
+          <div className="flex flex-wrap gap-4 mb-5">
+            {images.map((image, index) => {
+              const imageURL = URL.createObjectURL(image);
+              return (
+                <img
+                  key={index}
+                  src={imageURL}
+                  alt={`Preview ${index + 1}`}
+                  className="h-32 object-cover rounded-lg shadow-lg"
+                />
+              );
+            })}
+          </div>
+        </div>
         <button
           type="submit"
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
