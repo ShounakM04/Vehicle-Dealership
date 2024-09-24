@@ -2,32 +2,29 @@ const express = require("express");
 const logResReq = require("./log"); // Import without destructuring
 const port = 8000;
 const app = express();
-const path = require("path")
-
-
+const path = require("path");
+const cors = require("cors");
 
 
 //routers
-const ImageRouter = require("./routes/image");
-const DetailsRouter  = require("./routes/details")
-
+const HomeRoute = require("./routes/home.js");
+const Imageroute=require("../Backend/routes/image.js");     
+const DetailsRoute  = require("./routes/details.js");
+const SpecificPageRoute = require("./routes/specificCar.js")
+app.use(cors())
 app.set("view engine","ejs");
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 app.set('views',path.resolve("./views"));
 
-app.get("/",(req,res)=>{
-    res.send("hello from server");
-})
-
-
-
 // Use your custom logging middleware
 app.use(logResReq("logs.txt"));
 
 // Using Routes
-app.use("/upload",ImageRouter);
-app.use("/details",DetailsRouter);
+app.use("/",HomeRoute)
+app.use("/upload",Imageroute);
+app.use("/details",DetailsRoute);
+app.use("/car",SpecificPageRoute);
 
 
 // Correct `app.listen` without req and res parameters

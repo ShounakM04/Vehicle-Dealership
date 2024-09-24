@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2; // Correct the import statement
 const fs = require("fs");
-require('dotenv').config();
+require('dotenv').config(); 
 
 // Cloudinary configuration
 cloudinary.config({
