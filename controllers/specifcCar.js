@@ -23,7 +23,7 @@ async function handleSpecifiPage(req,res) {
             const insurance = insuranceResults.rows[0];
             const owner = ownerResults.rows[0];
             console.log(car);
-
+            
 
             res.render("specificCar",{car,images,insurance,owner});
         }else{
