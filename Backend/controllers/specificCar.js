@@ -25,7 +25,7 @@ async function handleSpecifiPage(req,res) {
             console.log(car);
 
 
-            res.render("specificCar",{car,images,insurance,owner});
+            res.json({car,images,insurance,owner});
         }else{
             res.status(400).send("Car not found");
         }
