@@ -57,13 +57,18 @@ const Dashboard = () => {
         </nav>
         
         <div className="min-h-[2px] mt-10 bg-black"></div>
-        
+        <NavLink to={'/details/carDetailsForm'}>
         <button className="mt-10 bg-blue-500 text-white px-7 py-2 rounded hover:bg-blue-600">
-          <NavLink to={'/details/carDetailsForm'}>Add Vehicle</NavLink>
+          Add Vehicle
         </button>
+        </NavLink>
+
+        <NavLink to={'/details/deleteCarDetails'}>
         <button className="mt-10 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-          <NavLink to={'/details/deleteCarDetails'}>Remove Vehicle</NavLink>
+          Remove Vehicle
         </button>
+        </NavLink>
+        
       </div>
       <div className="lg:hidden p-5">
         <button
