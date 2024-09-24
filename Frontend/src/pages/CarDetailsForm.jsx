@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { submitAdminForm } from '../api/adminForm.api.js';
+import { toast } from 'react-toastify'; // Ensure you have react-toastify installed
+import axios from 'axios'; // Ensure axios is imported
 
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
@@ -12,11 +14,46 @@ function AdminForm() {
   const [ownerPhone, setOwnerPhone] = useState('');
   const [ownerEmail, setOwnerEmail] = useState('');
   const [ownerAddress, setOwnerAddress] = useState('');
-  // const [imageUrl, setImageUrl] = useState('');
-  // const [imageFile, setImageFile] = useState(null);
+  const [carColor, setCarColor] = useState('');
+  const [carPrice, setCarPrice] = useState('');
+  const [carType, setCarType] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [images, setImages] = useState([]);
+
+  const handleImageChange = (e) => {
+    setImages([...e.target.files]); 
+  };
+
+  const handleUpload = async () => {
+    setUploading(true);
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append('images[]', image);
+    });
+    formData.append('carNumber', registrationNumber); // Add registration number to the form data
+
+    try {
+      const response = await axios.post('http://localhost:8000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data; 
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      throw new Error("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (carPrice < 0) {
+      toast.error("Car price cannot be negative");
+      return;
+    }
+
     try {
       const response = await submitAdminForm({
         vehicleName,
@@ -29,16 +66,30 @@ function AdminForm() {
         ownerPhone,
         ownerEmail,
         ownerAddress,
-        // imageUrl: uploadedImageUrl // Commented out
+        carColor,
+        carPrice,
+        carType,
       });
+      
+      await handleUpload(); // Now upload images only after form submission
+      toast.success("Car details added successfully!");
       console.log(response.data);
     } catch (error) {
+      if (error.status === 400) {
+        if (error.message.includes("Registration number already exists")) {
+          toast.error("Registration number already exists. Please enter a unique registration number.");
+        } else {
+          toast.error("Error submitting the form. Please check your inputs.");
+        }
+      } else {
+        toast.error("An error occurred while saving details");
+      }
       console.log(error);
     }
   };
 
   return (
-    <div className="container mx-auto p-10">
+    <div className="container mx-auto p-16">
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-bold mb-2">Vehicle Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -63,15 +114,51 @@ function AdminForm() {
             />
           </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="registrationNumber" className="block text-gray-700 text-sm font-bold mb-2">Registration Number</label>
-          <input
-            type="text"
-            id="registrationNumber"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={registrationNumber}
-            onChange={(e) => setRegistrationNumber(e.target.value)}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="registrationNumber" className="block text-gray-700 text-sm font-bold mb-2">Registration Number</label>
+            <input
+              type="text"
+              id="registrationNumber"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={registrationNumber}
+              onChange={(e) => setRegistrationNumber(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="carType" className="block text-gray-700 text-sm font-bold mb-2">Car Type</label>
+            <input
+              type="text"
+              id="carType"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={carType}
+              onChange={(e) => setCarType(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* New fields for Car Color and Car Price side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="carColor" className="block text-gray-700 text-sm font-bold mb-2">Car Color</label>
+            <input
+              type="text"
+              id="carColor"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={carColor}
+              onChange={(e) => setCarColor(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="carPrice" className="block text-gray-700 text-sm font-bold mb-2">Car Price</label>
+            <input
+              type="number"
+              id="carPrice"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={carPrice}
+              onChange={(e) => setCarPrice(Math.max(0, e.target.value))} // Prevent negative input
+            />
+          </div>
         </div>
 
         {/* Insurance Details */}
@@ -125,7 +212,7 @@ function AdminForm() {
           <div>
             <label htmlFor="ownerPhone" className="block text-gray-700 text-sm font-bold mb-2">Owner Phone</label>
             <input
-              type="tel"
+              type="text"
               id="ownerPhone"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={ownerPhone}
@@ -156,25 +243,21 @@ function AdminForm() {
           </div>
         </div>
 
-        {/* Image Upload */}
-        {/* <h2 className="text-xl font-bold mb-2">Car Image</h2>
-        <div className="mb-4">
-          <label htmlFor="imageUpload" className="block text-gray-700 text-sm font-bold mb-2">Upload Image</label>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
-        </div> */}
+        {/* Image Upload Section */}
+        <h2 className="text-xl font-bold mb-2">Upload Images (10)</h2>
+        <input
+          type="file"
+          multiple
+          onChange={handleImageChange}
+          className="mb-4"
+        />
 
-        {/* Submit button */}
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={uploading}
         >
-          Submit
+          {uploading ? 'Uploading...' : 'Submit'}
         </button>
       </form>
     </div>

@@ -11,6 +11,8 @@ import Login from './pages/Login';
 import CarDetailsForm  from "./pages/CarDetailsForm"
 import DeleteCarDetails from './pages/DeleteCarDetails';
 import Dashboard from './pages/Dashboard';
+import { ToastContainer } from 'react-toastify'; // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -71,6 +73,7 @@ import Dashboard from './pages/Dashboard';
       return (
       <>
         <>
+        <ToastContainer />
           <RouterProvider router={router} />
         </>
       </>
