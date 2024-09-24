@@ -55,6 +55,8 @@ const Dashboard = () => {
             </li>
           </ul>
         </nav>
+
+        
         
         <div className="min-h-[2px] mt-10 bg-black"></div>
         <NavLink to={'/details/carDetailsForm'}>
@@ -68,7 +70,7 @@ const Dashboard = () => {
           Remove Vehicle
         </button>
         </NavLink>
-        
+
       </div>
       <div className="lg:hidden p-5">
         <button
