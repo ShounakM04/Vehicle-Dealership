@@ -1,6 +1,6 @@
 //const express = require('express')
 const db = require('../models/database')
-const cloudin = require("../controllers/photoUpload")
+const cloudin = require("./cloudController")
 
 async function handleImageUpload(req,res){
     const carNumber = req.body.carNumber;

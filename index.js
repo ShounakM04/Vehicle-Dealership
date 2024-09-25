@@ -8,10 +8,10 @@ const path = require("path");
 
 
 //routers
-const HomeRoute = require("./routes/home.js");
-const Imageroute=require("../Backend/routes/image.js");     
-const DetailsRoute  = require("./routes/details.js");
-const SpecificPageRoute = require("./routes/specifcCar.js")
+const HomeRoute = require("./routes/homeRoute.js");
+const Imageroute=require("./routes/imageRoute.js");     
+const DetailsRoute  = require("./routes/cardetailsRoute.js");
+const SpecificPageRoute = require("./routes/specifcCarRoute.js")
 const DeleteRecordRoute = require("./routes/deleteRecordRoute.js")
 app.set("view engine","ejs");
 app.use(express.json()); 

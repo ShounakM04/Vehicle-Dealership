@@ -1,5 +1,5 @@
 const express = require("express");
-const handleSpecifiPage = require("../controllers/specifcCar");
+const handleSpecifiPage = require("../controllers/specifcCarController");
 const handleRecordDeletion = require("../controllers/deleteRecord.controller");
 const db = require("../models/database");
 
