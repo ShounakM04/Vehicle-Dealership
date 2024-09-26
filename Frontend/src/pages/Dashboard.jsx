@@ -71,6 +71,12 @@ const Dashboard = () => {
         </button>
         </NavLink>
 
+        <div className="min-h-[2px] mt-10 bg-black"></div>
+
+        <button className="mt-10 bg-green-500 text-white px-10 py-2 rounded hover:bg-green-600">
+          <NavLink to={'/details/customerEnquiry'}>Enquiry</NavLink>
+        </button>
+
       </div>
       <div className="lg:hidden p-5">
         <button
