@@ -45,8 +45,8 @@ function CarDetails() {
               {carData.images.map((image, index) => (
                 <div key={index}>
                   <img
-                    src={image.imageurl}
-                    alt={`Car ${carData.car.name}`}
+                    src={image}  // Correctly use the image URL
+                    alt={`Car ${carData.car.carname}`}
                     className="w-full h-auto rounded-t-lg"
                   />
                 </div>
