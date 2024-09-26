@@ -15,13 +15,11 @@ async function handleImageUpload(req,res){
             const filepath = file.path;
             const result = await cloudin(filepath);
             imageUrl = result.secure_url;
-            imageUrls.push(imageUrl);
-
-            const query = `INSERT INTO  carimages (registernumber,imageurl) VALUES ($1,$2)`
-            const values = [carNumber,imageUrl];
-            await db.query(query,values);   
-            
+            imageUrls.push(imageUrl);   
         }
+        const query = `INSERT INTO  images (carNumber,image_urls) VALUES ($1,$2)`
+            const values = [carNumber,imageUrls];
+            await db.query(query,values);  
         res.send("Images uploaded successfully")
 
     }

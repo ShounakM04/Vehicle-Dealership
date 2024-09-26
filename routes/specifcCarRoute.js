@@ -3,6 +3,6 @@ const handleSpecifiPage = require("../controllers/specifcCarController");
 
 router = express.Router();
 
-router.get("/:registrationnumber",handleSpecifiPage);
+router.get("/",handleSpecifiPage);
 
 module.exports = router;        

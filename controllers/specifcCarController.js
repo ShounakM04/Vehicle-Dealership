@@ -2,13 +2,13 @@ const db = require("../models/database")
 
 async function handleSpecifiPage(req,res) {
     try{
-        const regisNum = req.params.registrationnumber;
+        const regisNum = req.query.registrationnumber;
         console.log(regisNum)
         const values = [regisNum];
         const query1 = `select * from cardetails where registernumber = $1`
         const detailsResult = await db.query(query1,values);
 
-        const query2 = `select imageurl from carimages where registernumber = ($1)`
+        const query2 = `select image_urls from images where carNumber = ($1)`
         const imageResults = await db.query(query2,values);
 
         const query3 = `select * from carinsurance where registernumber = ($1)`;
@@ -19,13 +19,13 @@ async function handleSpecifiPage(req,res) {
 
         if(detailsResult.rows.length >0 ){
             const car = detailsResult.rows[0];
-            const images = imageResults.rows;
+            const images = imageResults.rows[0];
             const insurance = insuranceResults.rows[0];
             const owner = ownerResults.rows[0];
             console.log(car);
             
 
-            res.render("specificCar",{car,images,insurance,owner});
+            res.json({car,images,insurance,owner});
         }else{
             res.status(400).send("Car not found");
         }
