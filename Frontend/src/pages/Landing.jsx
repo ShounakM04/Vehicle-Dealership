@@ -87,9 +87,10 @@ export default function Landing() {
                   value={type}
                   checked={fuelType === type}
                   onChange={handleFuelTypeChange}
-                  className="mr-2"
+                  className="mr-2 cursor-pointer"
+
                 />
-                <label htmlFor={type} className="font-medium">
+                <label htmlFor={type} className="font-medium cursor-pointer">
                   {type.toUpperCase()}
                 </label>
               </div>
@@ -107,9 +108,9 @@ export default function Landing() {
                   value={type}
                   checked={carType === type}
                   onChange={handleCarTypeChange}
-                  className="mr-2"
+                  className="mr-2 cursor-pointer"
                 />
-                <label htmlFor={type} className="font-medium">
+                <label htmlFor={type} className="font-medium cursor-pointer">
                   {type.toUpperCase()}
                 </label>
               </div>

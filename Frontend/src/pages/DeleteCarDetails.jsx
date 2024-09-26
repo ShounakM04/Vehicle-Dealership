@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast notifications
 import Modal from 'react-modal'; // Import the react-modal package
+import axios from 'axios';
+
 
 // Set up the root element for the modal
 Modal.setAppElement('#root');
@@ -11,13 +14,45 @@ function DeleteCarDetails() {
   const [submittedID, setSubmittedID] = useState(''); // Holds the submitted ID for deletion
   const [submitted, setSubmitted] = useState(false); // To control if the form was submitted
   const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
+  const [carData, setCarData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+
+
+  // Fetch car details using the submitted ID
+  const fetchCarDetails = async (currDeleteId) => {
+    setLoading(true); // Set loading to true before the fetch call
+    setError(null); // Reset error before fetch
+    try {
+      const response = await axios.get(`http://localhost:8000/car/${currDeleteId}`);
+      setCarData(response.data); // Store the fetched car data
+      console.log(response.data); // Log the fetched car data
+    } catch (err) {
+      setCarData(null);
+      console.error('Error fetching car details:', err);
+      setError('Error fetching car details'); // Set error message if fetch fails
+    } finally {
+      setLoading(false); // Set loading to false after fetch completes
+    }
+  };
+
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
+
+    const currDeleteId = deleteID;
+
     setSubmittedID(deleteID); // Store the deleteID for deletion
     setDeleteID(''); // Clear the input field after submission
     setSubmitted(true); // Set the form as submitted
+
+
+
+    await fetchCarDetails(currDeleteId); // Call the fetch function
+
   };
 
   // Simulate deletion from DB and handle success/error with toast notifications
@@ -88,12 +123,110 @@ function DeleteCarDetails() {
         </button>
       </form>
 
+      {/* Loading State */}
+      {/* {loading && submitted && <p className="text-center mt-4">Loading...</p>} */}
+
+      {/* Error Message */}
+      {error && !loading && (
+        <div className="mt-4 p-4 bg-red-100 border border-red-500 rounded text-center text-red-700">
+          {error}
+        </div>
+      )}
+
+      {/* No data found message */}
+      {!carData && submitted && !loading && !error && (
+        <p className="text-center mt-4">No data found for this ID.</p>
+      )}
+
+
       {/* Display confirmation section only after form is submitted */}
-      {submitted && (
+      {submitted && carData && carData.car && (
         <div className="mt-8 p-4 bg-gray-100 rounded-lg shadow">
-          <h3 className="text-lg font-semibold">Car Details for Deletion</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, explicabo?</p>
-          
+          <div className="container mx-auto">
+            <main className="py-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white shadow-md rounded-md p-4 ">
+                  <h1 className="text-2xl font-bold mb-4 mt-16">{carData.car.carcompany} {carData.car.carname}</h1>
+
+
+                  <div>
+                    <img
+                      src={carData.images[0]}  // Correctly use the image URL
+                      alt={`Car ${carData.car.carname}`}
+                      className="w-full h-auto rounded-t-lg"
+                    />
+                  </div>
+
+
+                </div>
+
+                <div className="bg-white shadow-md rounded-md p-4">
+                  <h2 className="text-2xl font-bold mb-4">{carData.car.carname} Details</h2>
+                  <h3 className="text-lg font-semibold mb-2">Car Information</h3>
+                  <ul>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Car Name:</span>
+                      <span>{carData.car.carname}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Make:</span>
+                      <span>{carData.car.carmake}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Company:</span>
+                      <span>{carData.car.carcompany}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Color:</span>
+                      <span>{carData.car.carcolor}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Price:</span>
+                      <span>{carData.car.carprice}</span>
+                    </li>
+                  </ul>
+
+                  {/* Insurance Section */}
+                  <h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
+                  <ul>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Insurance Company:</span>
+                      <span>{carData.insurance.companyname}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Policy Number:</span>
+                      <span>{carData.insurance.policynum}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Policy Tenure:</span>
+                      <span>{carData.insurance.policytenure} years</span>
+                    </li>
+                  </ul>
+
+                  {/* Owner Section */}
+                  <h3 className="text-lg font-semibold mb-2 mt-4">Owner Information</h3>
+                  <ul>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Owner Name:</span>
+                      <span>{carData.owner.ownername}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Phone Number:</span>
+                      <span>{carData.owner.ownerphone}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Email:</span>
+                      <span>{carData.owner.owneremail}</span>
+                    </li>
+                    <li className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Address:</span>
+                      <span>{carData.owner.owneraddress}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+          </div>
           {/* First-stage confirm button */}
           <button
             onClick={handleDeleteConfirmation}
