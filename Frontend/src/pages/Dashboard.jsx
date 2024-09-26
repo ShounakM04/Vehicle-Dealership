@@ -64,6 +64,13 @@ const Dashboard = () => {
         <button className="mt-10 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
           <NavLink to={'/details/deleteCarDetails'}>Remove Vehicle</NavLink>
         </button>
+
+        <div className="min-h-[2px] mt-10 bg-black"></div>
+
+        <button className="mt-10 bg-green-500 text-white px-10 py-2 rounded hover:bg-green-600">
+          <NavLink to={'/details/customerEnquiry'}>Enquiry</NavLink>
+        </button>
+
       </div>
       <div className="lg:hidden p-5">
         <button

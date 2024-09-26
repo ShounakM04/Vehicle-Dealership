@@ -13,6 +13,7 @@ import DeleteCarDetails from './pages/DeleteCarDetails';
 import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
+import CustomerEnquiry from './pages/CustomerEnquiry';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -60,6 +61,14 @@ import 'react-toastify/dist/ReactToastify.css';
       element:(
         <Layout>
           <DeleteCarDetails/>
+        </Layout>
+      )
+    },
+    {
+      path:"/details/customerEnquiry",
+      element:(
+        <Layout>
+          <CustomerEnquiry/>
         </Layout>
       )
     },
