@@ -11,9 +11,8 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
       <div
-        className={`${
-          isSidebarOpen ? 'block' : 'hidden'
-        } lg:block bg-white w-64 p-5 fixed lg:relative z-20`}
+        className={`${isSidebarOpen ? 'block' : 'hidden'
+          } lg:block bg-white w-64 p-5 fixed lg:relative z-20`}
       >
         <div className="lg:hidden mb-5">
           <button
@@ -55,21 +54,28 @@ const Dashboard = () => {
             </li>
           </ul>
         </nav>
-        
-        <div className="min-h-[2px] mt-10 bg-black"></div>
-        
-        <button className="mt-10 bg-blue-500 text-white px-7 py-2 rounded hover:bg-blue-600">
-          <NavLink to={'/details/carDetailsForm'}>Add Vehicle</NavLink>
-        </button>
-        <button className="mt-10 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-          <NavLink to={'/details/deleteCarDetails'}>Remove Vehicle</NavLink>
-        </button>
+
+
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
+        <NavLink to={'/details/carDetailsForm'}>
+          <button className="mt-10 bg-blue-500 text-white px-7 py-2 rounded hover:bg-blue-600">
+            Add Vehicle
+          </button>
+        </NavLink>
 
-        <button className="mt-10 bg-green-500 text-white px-10 py-2 rounded hover:bg-green-600">
-          <NavLink to={'/details/customerEnquiry'}>Enquiry</NavLink>
-        </button>
+        <NavLink to={'/details/deleteCarDetails'}>
+          <button className="mt-10 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            Remove Vehicle
+          </button>
+        </NavLink>
+
+        <div className="min-h-[2px] mt-10 bg-black"></div>
+        <NavLink to={'/details/customerEnquiry'}>
+          <button className="mt-10 bg-green-500 text-white px-10 py-2 rounded hover:bg-green-600">
+            Enquiry
+          </button>
+        </NavLink>
 
       </div>
       <div className="lg:hidden p-5">
@@ -163,11 +169,10 @@ const Dashboard = () => {
                   <td className="p-2">{user.VechicleNo}</td>
                   <td className="p-2">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        user.status === "sold"
+                      className={`px-2 py-1 rounded-full text-xs ${user.status === "sold"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
-                      }`}
+                        }`}
                     >
                       {user.status}
                     </span>
