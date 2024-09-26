@@ -2,7 +2,6 @@ const db = require("../models/database");
 
 async function handleCarDetails(req, res) {
   try {
-    // Validate request body
     if (!req.body) {
       throw new Error("Request body is empty");
     }
@@ -20,7 +19,8 @@ async function handleCarDetails(req, res) {
       ownerAddress,
       carColor,
       carPrice,
-      carType
+      carType, 
+      fuel
     } = req.body;
 
     // Log the received data
@@ -88,8 +88,8 @@ async function handleCarDetails(req, res) {
     }
 
     // Insert car details
-    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, carprice) VALUES ($1, $2, $3, $4, $5, $6)`;
-    const values2 = [registrationNumber, vehicleName, carType, brandName, carColor, carPrice];
+    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, carprice, fuel) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+    const values2 = [registrationNumber, vehicleName, carType, brandName, carColor, carPrice, fuel];
     await db.query(query2, values2);
     console.log("Car details inserted:", values2);
 

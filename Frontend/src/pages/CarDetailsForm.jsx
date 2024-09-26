@@ -29,6 +29,7 @@ function AdminForm() {
       setDisplayImage(file); // Set the single image to state
     }
   };
+  const [fuel, setFuel] = useState('');
 
   const handleImageChange = (e) => {
     setImages([...e.target.files]);
@@ -79,6 +80,7 @@ function AdminForm() {
         carColor,
         carPrice,
         carType,
+        fuel
       });
 
       await handleUpload(); // Now upload images only after form submission
@@ -167,6 +169,18 @@ function AdminForm() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={carPrice}
               onChange={(e) => setCarPrice(Math.max(0, e.target.value))} // Prevent negative input
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="carColor" className="block text-gray-700 text-sm font-bold mb-2">Fuel Type</label>
+            <input
+              type="text"
+              id="fuel"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={fuel}
+              onChange={(e) => setFuel(e.target.value)}
             />
           </div>
         </div>
