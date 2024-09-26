@@ -137,7 +137,7 @@ export default function Landing() {
                 <img
                   src={car.imgSrc}
                   alt={car.name}
-                  className="w-full rounded-md"
+                  className="w-full rounded-md min-h-[60%]"
                 />
                 <h3 className="text-lg font-bold mt-4">{car.name}</h3>
                 <p className="text-gray-600 mt-2">{car.number}</p>
