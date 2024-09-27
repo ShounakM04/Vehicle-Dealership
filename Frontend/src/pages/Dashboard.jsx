@@ -58,20 +58,20 @@ const Dashboard = () => {
 
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
-        <NavLink to={'/details/carDetailsForm'}>
+        <NavLink to={'/dashboard/carDetailsForm'}>
           <button className="mt-10 bg-blue-500 text-white w-36 px-7 py-2 rounded hover:bg-blue-600">
             Add Vehicle
           </button>
         </NavLink>
 
-        <NavLink to={'/details/deleteCarDetails'}>
+        <NavLink to={'/dashboard/deleteCarDetails'}>
           <button className="mt-10 bg-red-500 text-white w-36 px-4 py-2 rounded hover:bg-red-600">
             Remove Vehicle
           </button>
         </NavLink>
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
-        <NavLink to={'/details/customerEnquiry'}>
+        <NavLink to={'/dashboard/customerEnquiry'}>
           <button className="mt-10 bg-green-500 text-white w-36 px-10 py-2 rounded hover:bg-green-600">
             Enquiry
           </button>

@@ -49,7 +49,7 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
       )
     },
     {
-      path:"/details/carDetailsForm",
+      path:"/dashboard/carDetailsForm",
       element:(
         <Layout>
           <CarDetailsForm/>
@@ -57,7 +57,7 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
       )
     },
     {
-      path:"/details/DeleteCarDetails",
+      path:"/dashboard/DeleteCarDetails",
       element:(
         <Layout>
           <DeleteCarDetails/>
@@ -65,7 +65,7 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
       )
     },
     {
-      path:"/details/customerEnquiry",
+      path:"/dashboard/customerEnquiry",
       element:(
         <Layout>
           <CustomerEnquiry/>
