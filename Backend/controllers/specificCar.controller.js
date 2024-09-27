@@ -3,7 +3,7 @@ const db = require("../models/database");
 async function handleSpecifiPage(req, res) {
     try {
         const regisNum = req.params.registrationnumber;
-        console.log(regisNum);
+        //console.log(regisNum);
         const values = [regisNum];
 
         // Query to fetch car details
@@ -28,7 +28,7 @@ async function handleSpecifiPage(req, res) {
             const insurance = insuranceResults.rows[0]; // Assuming one insurance record per car
             const owner = ownerResults.rows[0]; // Assuming one owner record per car
 
-            console.log(car);
+            //console.log(car);
 
             res.json({ car, images, insurance, owner });
         } else {

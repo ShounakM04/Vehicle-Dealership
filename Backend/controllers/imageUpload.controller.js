@@ -4,7 +4,7 @@ const cloudin = require("./cloud.controller.js")
 
 async function handleImageUpload(req,res){
     const carNumber = req.body.carNumber;
-    console.log(req.body);
+    //console.log(req.body);
     if(!req.files){
         return res.status(400).send("No files uploaded");
     }

@@ -24,7 +24,7 @@ async function handleCarDetails(req, res) {
     } = req.body;
 
     // Log the received data
-    console.log("Received data:", req.body);
+    // //console.log("Received data:", req.body);
 
     // Validate individual fields
     if (!registrationNumber || registrationNumber.trim() === "") {
@@ -91,19 +91,19 @@ async function handleCarDetails(req, res) {
     const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, carprice, fuel) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
     const values2 = [registrationNumber, vehicleName, carType, brandName, carColor, carPrice, fuel];
     await db.query(query2, values2);
-    console.log("Car details inserted:", values2);
+    //console.log("Car details inserted:", values2);
 
     // Insert insurance details
     const query3 = `INSERT INTO carinsurance (registernumber, companyname, policynum, policytenure) VALUES ($1, $2, $3, $4)`;
     const values3 = [registrationNumber, insuranceCompany, policyNumber, policyTenure];
     await db.query(query3, values3);
-    console.log("Insurance details inserted:", values3);
+    //console.log("Insurance details inserted:", values3);
 
     // Insert owner details
     const query4 = `INSERT INTO ownerdetails (ownername, ownerphone, owneremail, owneraddress, registernumber) VALUES ($1, $2, $3, $4, $5)`;
     const values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registrationNumber];
     await db.query(query4, values4);
-    console.log("Owner details inserted:", values4);
+    //console.log("Owner details inserted:", values4);
 
     res.status(200).send("Details entered into the database successfully");
   } catch (error) {

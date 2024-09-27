@@ -88,7 +88,7 @@ function AdminForm() {
 
       await handleUpload(); // Now upload images only after form submission
       toast.success("Car details added successfully!");
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       if (error.status === 400) {
         if (error.message.includes("Registration number already exists")) {

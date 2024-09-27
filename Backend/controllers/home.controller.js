@@ -2,7 +2,7 @@ const db = require("../models/database");
 
 async function handleHomePage(req, res) {
     const { fuelType, carMake } = req.query;
-    console.log(fuelType, carMake);
+    //console.log(fuelType, carMake);
     try {
         let query1 = `
         SELECT c.carname, c.registernumber, c.carcolor, c.carprice, ci.image_urls
@@ -13,11 +13,11 @@ async function handleHomePage(req, res) {
         if (fuelType) {
             query1 += ` AND c.fuel = '${fuelType}'`;
         }
-        console.log(query1);
+        //console.log(query1);
         if (carMake) {
             query1 += ` AND c.carmake = '${carMake}'`;
         }
-        console.log(query1);
+        //console.log(query1);
 
         query1 += ` ORDER BY c.registernumber`;
 
