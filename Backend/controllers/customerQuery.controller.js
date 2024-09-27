@@ -4,7 +4,13 @@ async function handleGetQuery(req, res) {
     try {
         const enquiry = await db.query(`SELECT * FROM customerQuery`);
         const custEnquiry = enquiry.rows; 
-        res.json(custEnquiry); 
+        // console.log("get function "+custEnquiry);
+       // Fetching the count of enquiries
+       const countResult = await db.query(`SELECT COUNT(*) AS total_count FROM customerQuery`);
+       const totalCount = countResult.rows[0].total_count;
+
+       // Sending the response with both the data and the count
+       res.json({ enquiries: custEnquiry, totalCount });
     } catch (error) {
         console.log(`Error occurred while fetching customer queries: ${error}`);
         res.status(500).json({ message: 'Internal Server Error' }); 
@@ -13,10 +19,10 @@ async function handleGetQuery(req, res) {
 
 async function handleNewCustomerQuery(req, res) {
     try {
-        const { custName, custContact, custQuery } = req.body;
-        console.log(custName, custContact, custQuery);
-        const query = `INSERT INTO customerQuery (custName, custContact, custQuery) VALUES ($1, $2, $3)`;
-        const values = [custName, custContact, custQuery];
+        const { custName, custContact, custQuery, date } = req.body;
+        // console.log(custName, custContact, custQuery,"Date : " + date);
+        const query = `INSERT INTO customerQuery (custName, custContact, custQuery, enquirydate) VALUES ($1, $2, $3, $4)`;
+        const values = [custName, custContact, custQuery, date];
 
         await db.query(query, values); 
         res.status(201).send("Customer query added"); 
@@ -33,21 +39,19 @@ async function handleNewCustomerQuery(req, res) {
 }
 
 async function handleDeleteCustomerQuery(req, res) {
-    const { custcontact } = req.params; 
+    const { serialnum, custcontact } = req.body;
 
     try {
-        const result = await db.query(`DELETE FROM customerQuery WHERE custcontact = $1`, [custcontact]);
-        
-        if (result.rowCount === 0) {
-            return res.status(404).json({ message: 'Customer query not found' }); 
-        }
-
-        res.status(200).json({ message: 'Customer query deleted successfully' }); 
+        await db.query(`DELETE FROM customerQuery WHERE serialnum = $1 AND custcontact = $2`, [serialnum, custcontact]);
+        res.status(200).json({ message: 'Enquiry deleted successfully' });
     } catch (error) {
-        console.log(`Error occurred while deleting customer query: ${error}`);
-        res.status(500).json({ message: 'Internal Server Error' }); 
+        console.error('Error deleting enquiry:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }
+
+
+
 
 module.exports = {
     handleGetQuery,

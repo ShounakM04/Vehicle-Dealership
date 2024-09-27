@@ -29,7 +29,7 @@ function DeleteCarDetails() {
     try {
       const response = await axios.get(`http://localhost:8000/car/${currDeleteId}`);
       setCarData(response.data); // Store the fetched car data
-      console.log(response.data); // Log the fetched car data
+      //console.log(response.data); // Log the fetched car data
     } catch (err) {
       setCarData(null);
       console.error('Error fetching car details:', err);
@@ -61,10 +61,10 @@ function DeleteCarDetails() {
 
       // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
       try {
-        console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
+        //console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
         const response = await axios.post(`http://localhost:8000/dashboard/deleteCarDetails/${submittedID}`);
         
-        console.log("Delete entry : "+response.data); // Log the fetched car data
+        //console.log("Delete entry : "+response.data); // Log the fetched car data
 
 
         toast.success(`Vehicle with Reg ID ${submittedID} deleted successfully!`, {

@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/",handleEnquiry.handleGetQuery)
 router.post("/", handleEnquiry.handleNewCustomerQuery)
-router.delete('/:custcontact', handleEnquiry.handleDeleteCustomerQuery);
+router.delete('/', handleEnquiry.handleDeleteCustomerQuery);
 
 module.exports = router;
