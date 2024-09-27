@@ -56,21 +56,28 @@ function DeleteCarDetails() {
   };
 
   // Simulate deletion from DB and handle success/error with toast notifications
-  const deleteEntry = () => {
-    try {
-      console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
+  const deleteEntry = async () => {
+
       // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
-      toast.success(`Vehicle with Reg ID ${submittedID} deleted successfully!`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      setModalOpen(false); // Close the modal after successful deletion
-      setSubmitted(false); // Reset the submission state
-    } catch (error) {
+      try {
+        console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
+        const response = await axios.post(`http://localhost:8000/dashboard/deleteCarDetails/${submittedID}`);
+        
+        console.log("Delete entry : "+response.data); // Log the fetched car data
+
+
+        toast.success(`Vehicle with Reg ID ${submittedID} deleted successfully!`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setModalOpen(false); // Close the modal after successful deletion
+        setSubmitted(false); // Reset the submission state
+
+      } catch (error) {
       toast.error(`Error occurred while deleting vehicle: ${error.message}`, {
         position: "top-right",
         autoClose: 5000,
@@ -249,7 +256,7 @@ function DeleteCarDetails() {
         <p>Are you sure you want to delete the vehicle with reg No.: {submittedID}?</p>
         <div className="mt-6">
           <button
-            onClick={deleteEntry}
+             onClick={() => deleteEntry()}  
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
           >
             Confirm Delete

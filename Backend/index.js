@@ -10,7 +10,8 @@ const cors = require("cors");
 const HomeRoute = require("./routes/home.js");
 const Imageroute=require("../Backend/routes/image.js");     
 const DetailsRoute  = require("./routes/details.js");
-const SpecificPageRoute = require("./routes/specificCar.js")
+const SpecificPageRoute = require("./routes/specificCar.js");
+const DashboardPageRoute = require("./routes/dashboard.js");
 app.use(cors())
 app.set("view engine","ejs");
 app.use(express.json()); 
@@ -25,6 +26,7 @@ app.use("/",HomeRoute)
 app.use("/upload",Imageroute);
 app.use("/details",DetailsRoute);
 app.use("/car",SpecificPageRoute);
+app.use("/dashboard",DashboardPageRoute);
 
 
 // Correct `app.listen` without req and res parameters

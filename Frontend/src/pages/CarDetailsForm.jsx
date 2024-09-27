@@ -217,6 +217,11 @@ function AdminForm() {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={policyTenure}
             onChange={(e) => setPolicyTenure(e.target.value)}
+
+            // Disable mouse wheel increment/decrement
+            onWheel={(e) => e.target.blur()}
+            style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
+
           />
         </div>
 
