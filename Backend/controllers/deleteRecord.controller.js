@@ -10,7 +10,7 @@ async function handleRecordDeletion(req,res) {
     try{
         const query = `delete from cardetails where registernumber = ($1)`;
         const values = [registerNum];
-        db.query(query,values);
+        await db.query(query,values);
 
         res.status(200).send("Car Records deleted successfully");
     }

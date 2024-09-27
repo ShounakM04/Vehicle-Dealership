@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast notifications
 import Modal from 'react-modal'; // Import the react-modal package
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 // Set up the root element for the modal
@@ -20,7 +21,7 @@ function DeleteCarDetails() {
 
 
 
-
+  const navigate = useNavigate();
   // Fetch car details using the submitted ID
   const fetchCarDetails = async (currDeleteId) => {
     setLoading(true); // Set loading to true before the fetch call
@@ -99,9 +100,19 @@ function DeleteCarDetails() {
   const closeModal = () => {
     setModalOpen(false); // Close the modal without deletion
   };
-
+  const handleGoBack = () => {
+    navigate('/dashboard');
+  };
   return (
-    <div className="container mx-auto p-16">
+    <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
+      <div className="mb-4">
+        <button
+          onClick={handleGoBack}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-300 transition"
+        >
+          Back to Dashboard
+        </button>
+      </div>
       {/* Form for submitting the vehicle reg ID */}
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-bold mb-2">Vehicle Details</h2>

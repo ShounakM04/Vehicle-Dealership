@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import EnquiryCard from '../components/EnquiryCard';
@@ -9,41 +9,20 @@ function CustomerEnquiry() {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [description, setDescription] = useState('');
+  const [enquiries, setEnquiries] = useState([]);
   const [uploading, setUploading] = useState(false);
-  const [enquiries, setEnquiries] = useState([
-    {
-      customerName: 'John Doe',
-      customerPhone: '1234567890',
-      description: 'My car needs servicing.',
-      date: '2024-09-25T14:48:00.000Z'
-    },
-    {
-      customerName: 'Jane Smith',
-      customerPhone: '0987654321',
-      description: 'I have an issue with my car registration.',
-      date: '2024-09-24T09:15:00.000Z'
-    },
-    {
-      customerName: 'Alice Johnson',
-      customerPhone: '1122334455',
-      description: 'I want to enquire about car insurance.',
-      date: '2024-09-23T17:30:00.000Z'
-    }
-  ]);
-
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
+  const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate('/dashboard'); // Navigates back to the dashboard route
+    navigate('/dashboard');
   };
 
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^[0-9]{10}$/; 
     return phoneRegex.test(phone);
   };
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
 
   const openDeleteModal = (enquiry) => {
     setSelectedEnquiry(enquiry);
@@ -55,45 +34,69 @@ function CustomerEnquiry() {
     setSelectedEnquiry(null);
   };
 
-  const handleDelete = () => {
-    setEnquiries(enquiries.filter((enquiry) => enquiry !== selectedEnquiry));
-    closeModal();
-    toast.success('Enquiry deleted successfully!');
+  const handleDelete = async () => {
+    if (!selectedEnquiry) return;
+
+    try {
+      await axios.delete(`http://localhost:8000/enquiry/${selectedEnquiry.customerPhone}`); 
+      setEnquiries(enquiries.filter((enquiry) => enquiry.serialnum !== selectedEnquiry.customerPhone)); 
+      toast.success('Enquiry deleted successfully!');
+    } catch (error) {
+      toast.error('Failed to delete enquiry'); 
+    } finally {
+      closeModal(); 
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validatePhoneNumber(customerPhone)) {
-      toast.error("Please enter a valid 10-digit phone number");
+      toast.error('Please enter a valid 10-digit phone number');
       return;
     }
 
     try {
-      await axios.post('http://localhost:8000/submit', {
-        customerName,
-        customerPhone,
-        description,
-        date: new Date()
+      setUploading(true);
+      await axios.post('http://localhost:8000/enquiry', {
+        custName: customerName,
+        custContact: customerPhone,
+        custQuery: description,
       });
-      
-      setEnquiries([...enquiries, {
-        customerName,
-        customerPhone,
-        description,
-        date: new Date(),
-      }]);
 
-      toast.success("Enquiry submitted successfully!");
+      setEnquiries([...enquiries, { custname: customerName, custcontact: customerPhone, custquery: description }]);
+      toast.success('Enquiry submitted successfully!');
 
+      // Reset form fields
       setCustomerName('');
       setCustomerPhone('');
       setDescription('');
     } catch (error) {
-      toast.error("An error occurred while saving details");
-      console.log(error);
+      toast.error('An error occurred while saving details');
+    } finally {
+      setUploading(false);
     }
   };
+
+  const fetchEnquiries = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/enquiry');
+      const formattedEnquiries = response.data.map(enquiry => ({
+        serialnum: enquiry.serialnum,
+        customerName: enquiry.custname,
+        customerPhone: enquiry.custcontact,
+        description: enquiry.custquery,
+      }));
+      setEnquiries(formattedEnquiries);
+    } catch (error) {
+      toast.error('Failed to fetch enquiries');
+    }
+  };
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, [handleDelete]);
+  
 
   return (
     <div className="container mx-auto p-8 bg-white">
@@ -161,13 +164,12 @@ function CustomerEnquiry() {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Customer Enquiries</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {enquiries.map((enquiry, index) => (
+          {Array.isArray(enquiries) && enquiries.map((enquiry, index) => (
             <EnquiryCard
               key={index}
               customerName={enquiry.customerName}
               customerPhone={enquiry.customerPhone}
               description={enquiry.description}
-              date={enquiry.date}
               onDelete={() => openDeleteModal(enquiry)}
             />
           ))}
@@ -180,25 +182,24 @@ function CustomerEnquiry() {
         contentLabel="Confirm Deletion"
         className="bg-white w-full sm:w-2/3 lg:w-1/3 mx-4 sm:mx-auto mt-32 p-4 rounded-lg shadow-lg"
         overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center"
-        >
+      >
         <h2 className="text-lg sm:text-xl font-bold mb-4">Confirm Deletion</h2>
         <p className="text-sm sm:text-base mb-4">Are you sure you want to delete this enquiry?</p>
         <div className="flex justify-end">
-            <button
+          <button
             className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded mr-2 text-sm"
             onClick={closeModal}
-            >
+          >
             Cancel
-            </button>
-            <button
+          </button>
+          <button
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm"
             onClick={handleDelete}
-            >
+          >
             Delete
-            </button>
+          </button>
         </div>
-        </Modal>
-
+      </Modal>
     </div>
   );
 }

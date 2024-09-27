@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { submitAdminForm } from '../api/adminForm.api.js';
 import { toast } from 'react-toastify'; // Ensure you have react-toastify installed
 import axios from 'axios'; // Ensure axios is imported
-
+import { useNavigate } from 'react-router-dom';
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
   const [brandName, setBrandName] = useState('');
@@ -21,7 +21,10 @@ function AdminForm() {
   const [images, setImages] = useState([]);
   const [DisplayImage, setDisplayImage] = useState(null);
 
-
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate('/dashboard');
+  };
 
   const handleDisplayImageChange = (e) => {
     const file = e.target.files[0]; // Get the first selected file
@@ -101,7 +104,15 @@ function AdminForm() {
   };
 
   return (
-    <div className="container mx-auto p-16">
+    <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
+      <div className="mb-4">
+        <button
+          onClick={handleGoBack}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-300 transition"
+        >
+          Back to Dashboard
+        </button>
+      </div>
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-bold mb-2">Vehicle Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
