@@ -5,8 +5,6 @@ const app = express();
 const path = require("path");
 
 
-
-
 //routers
 const HomeRoute = require("./routes/homeRoute.js");
 const Imageroute=require("./routes/imageRoute.js");     
