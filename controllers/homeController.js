@@ -11,15 +11,15 @@ async function handleHomePage(req,res) {
         WHERE 1=1
          `;
 
-// Add conditions only when they exist
+        // Add conditions only when they exist
         if (fuelType) {
             query1 = query1 + ` AND c.fuel = '${fuelType}'`;
         }
-        console.log(query1);
+        //console.log(query1);
         if (carMake) {
             query1 = query1 + ` AND c.carmake = '${carMake}'`;
         }
-        console.log(query1);
+        //console.log(query1);
 
 
         query1 = query1 + ` ORDER BY c.registernumber`;
