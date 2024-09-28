@@ -1,7 +1,7 @@
 const db = require("../models/database")
 
 async function handleRecordDeletion(req,res) {
-    const registerNum = req.params.registrationnumber;
+    const registerNum = req.body.deletedID;
     //console.log(req.params);
 
     //console.log("Inside handleRecordDeletion function");
