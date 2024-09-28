@@ -7,6 +7,6 @@ router.get("/",(req,res)=>{
     res.status(200).send("Delete page");
 });
 
-router.post("/deleteCarDetails/:registrationnumber",handleDeleteCarDetails);
+router.post("/deleteCarDetails",handleDeleteCarDetails);
 
 module.exports = router;
