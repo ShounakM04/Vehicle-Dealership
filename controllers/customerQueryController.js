@@ -26,7 +26,7 @@ async function handleNewCustomerQuery(req, res) {
 
         await db.query(query, values); 
         res.status(201).send("Customer query added"); 
-
+        
     } catch (error) {
         console.log(`Error occurred while adding customer query: ${error}`);
         
