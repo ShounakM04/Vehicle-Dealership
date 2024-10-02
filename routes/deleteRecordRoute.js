@@ -2,11 +2,12 @@ const express = require("express");
 const handleSpecifiPage = require("../controllers/specifcCarController");
 const handleRecordDeletion = require("../controllers/deleteRecord.controller");
 const db = require("../models/database");
+const { authenticateToken, authorizeEmployeeOrAdmin } = require("../controllers/userRole-auth");
 
 
 DeleteRecordRoute = express.Router();
 
-DeleteRecordRoute.get("/",(req,res)=>{
+DeleteRecordRoute.get("/",authenticateToken,authorizeEmployeeOrAdmin,(req,res)=>{
     res.send("Delete page")
 })
 
