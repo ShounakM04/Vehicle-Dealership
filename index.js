@@ -12,7 +12,8 @@ const DetailsRoute  = require("./routes/cardetailsRoute.js");
 const SpecificPageRoute = require("./routes/specifcCarRoute.js")
 const DeleteRecordRoute = require("./routes/deleteRecordRoute.js")
 const customerQueryRoute = require("./routes/customerQueryRoute.js")
-
+const LoginRoute = require("./adminRoutes/userLoginRoutes.js")
+const RegistrationRoute = require("./adminRoutes/userRegistrationRoute.js")
 
 app.set("view engine","ejs");
 app.use(express.json()); 
@@ -29,6 +30,8 @@ app.use("/details",DetailsRoute);
 app.use("/car",SpecificPageRoute);
 app.use("/delete",DeleteRecordRoute);
 app.use("/customer",customerQueryRoute);
+app.use("/login",LoginRoute);
+app.use("/register",RegistrationRoute);
 
 // Correct `app.listen` without req and res parameters
 app.listen(port, () => {

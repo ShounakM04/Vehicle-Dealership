@@ -1,0 +1,6 @@
+
+1727893199308 : ::1 : POST : /register
+1727893212867 : ::1 : POST : /register
+1727893683041 : ::1 : GET : /delete
+1727893779427 : ::1 : POST : /register
+1727893809194 : ::1 : GET : /delete
