@@ -8,7 +8,9 @@ const generateAdminToken = ({userID, password}) =>{
 }
 
 const generateEmployeeToken = ({userID, password}) =>{
-    return jwt.sign({userID,password, isEmployee :true},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'6h'});
+    const token =  jwt.sign({userID,password, isEmployee :true},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'6h'});
+    console.log("token");
+    return token;
 }
 
 const generateDriverToken = ({userID, password}) =>{

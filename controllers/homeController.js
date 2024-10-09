@@ -2,7 +2,6 @@ const db = require("../models/database")
 
 async function handleHomePage(req,res) {
     const {fuelType,carMake} = req.query;
-    console.log(fuelType,carMake);
     try{
         let query1 = `
         SELECT c.carname,c.registernumber,c.carcolor,c.carprice,ci.image_urls
