@@ -29,7 +29,48 @@ async function handleUserRegistration(req,res) {
 }
 
 async function handleUserLogin(req,res) {
-    res.json("User Login");
+    const {userID,userPass} = req.body;
+    try{
+        if(!(userID,userPass)) {
+            return res.status(400).send("Enter the details");
+        }
+        const query = `SELECT * FROM users where userid = $1`
+        const values = [userID];
+
+         
+        const user = await db.query(query,values);
+        const userDetails = user.rows[0];
+
+        if(!userDetails){
+            return res.status(400).send("User does not exists");
+        }
+
+        //console.log(userDetails );
+        const result = await bcrypt.compare(userPass,userDetails.userpassword);
+        
+        if(!result) {
+            return res.status(401).send("Access Denied");
+        }
+
+
+        let token;
+        if(result && userDetails.userdesignation === 'admin'){
+            token = generateAdminToken(user);
+        }
+        if(result && userDetails.userdesignation === 'Employee'){
+            token = generateEmployeeToken(user);
+        }
+        if(result && userDetails.userdesignation === 'driver'){
+            token = generateDriverToken(user);
+        }
+        console.log(token)
+        res.setHeader('Authorization' , `Bearer : ${token}`);
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+    }catch(error){
+        console.log(`Error occured is : ${error}`);
+        res.status(400).send("There has been an error in the login process")
+    }
+
 }
 
 module.exports = {
