@@ -62,7 +62,7 @@ function DeleteCarDetails() {
       // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
       try {
         //console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-        const response = await axios.post(`http://localhost:8000/dashboard/deleteCarDetails`,{
+        const response = await axios.post(`http://localhost:8000/delete`,{
           deletedID :submittedID
         });
         
