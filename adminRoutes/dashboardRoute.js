@@ -1,10 +1,9 @@
 const express = require("express");
 const handleRecordDeletion = require("../controllers/deleteRecord.controller");
+const handleDashboard = require("../adminControllers/dashboardController");
 
 const router = express.Router();
 
-router.get("/" ,(req,res) =>{
-    res.status(200).send("Delete page");
-})
+router.get("/" ,handleDashboard);
 
-router.post("/deleteCarDetails",handleRecordDeletion);
+module.exports = router;
