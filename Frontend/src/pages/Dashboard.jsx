@@ -69,6 +69,18 @@ const Dashboard = () => {
             Remove Vehicle
           </button>
         </NavLink>
+        
+        <NavLink to={'/dashboard/addNoticeImage'}>
+          <button className="mt-10 bg-yellow-500 text-white w-36 px-4 py-2 rounded hover:bg-yellow-600">
+            Add Notice
+          </button>
+        </NavLink>
+
+        <NavLink to={'/dashboard/addNoticeImage'}>
+          <button className="mt-10 bg-blue-500 text-white w-36 px-4 py-2 rounded hover:bg-blue-600">
+            Sell Car
+          </button>
+        </NavLink>
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
         <NavLink to={'/dashboard/customerEnquiry'}>
@@ -76,6 +88,8 @@ const Dashboard = () => {
             Enquiry
           </button>
         </NavLink>
+
+        
 
       </div>
       <div className="lg:hidden p-5">
