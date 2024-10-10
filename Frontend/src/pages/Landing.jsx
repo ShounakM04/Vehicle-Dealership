@@ -54,6 +54,7 @@ export default function Landing() {
           };
         });
         setCars(carsData);
+        console.log(response)
       } catch (error) {
         console.error(error);
       }

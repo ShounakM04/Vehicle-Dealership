@@ -79,7 +79,7 @@ function CarDetails() {
                 <span>{carData.car.carprice}</span>
               </li>
             </ul>
-
+              
             {/* Insurance Section */}
             <h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
             <ul>
