@@ -26,7 +26,10 @@ async function handleHomePage(req,res) {
         const result = await db.query(query1);
             const carsWithImages = result.rows.map(row => ({
                 registrationnumber: row.registernumber,
-                imageurl: row.image_urls
+                imageurl: row.image_urls,
+                carprice: row.carprice,
+                carname: row.carname,
+                
             }));
             //console.log(carsWithImages);
             res.json({

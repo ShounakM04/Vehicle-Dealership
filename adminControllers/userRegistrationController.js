@@ -54,18 +54,19 @@ async function handleUserLogin(req,res) {
 
 
         let token;
-        if(result && userDetails.userdesignation === 'admin'){
+        if(result && userDetails.userdesignation === 'Admin'){
             token = generateAdminToken(user);
         }
         if(result && userDetails.userdesignation === 'Employee'){
             token = generateEmployeeToken(user);
         }
-        if(result && userDetails.userdesignation === 'driver'){
+        if(result && userDetails.userdesignation === 'Driver'){
             token = generateDriverToken(user);
         }
         console.log(token)
-        res.setHeader('Authorization' , `Bearer : ${token}`);
+        res.setHeader('Authorization' , `Bearer ${token}`);
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+        return res.json(token);
     }catch(error){
         console.log(`Error occured is : ${error}`);
         res.status(400).send("There has been an error in the login process")
