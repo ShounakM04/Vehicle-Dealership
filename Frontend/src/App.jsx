@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 import CustomerEnquiry from './pages/CustomerEnquiry';
+import CostReport from './pages/CostReport';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -69,6 +70,14 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
       element:(
         <Layout>
           <CustomerEnquiry/>
+        </Layout>
+      )
+    },
+    {
+      path:"/costReport/:id",
+      element:(
+        <Layout>
+          <CostReport/>
         </Layout>
       )
     },
