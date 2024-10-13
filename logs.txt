@@ -37,3 +37,10 @@
 1728536435098 : ::1 : POST : /login
 1728536727563 : ::1 : GET : /
 1728539505859 : ::1 : GET : /dashboard
+1728541470449 : ::1 : POST : /dashboard
+1728541515291 : ::1 : POST : /upload
+1728542028893 : ::1 : GET : /dashboard
+1728542149591 : ::1 : POST : /register
+1728542208319 : ::1 : POST : /register
+1728542222962 : ::1 : POST : /register
+1728842861288 : ::1 : POST : /insurance
