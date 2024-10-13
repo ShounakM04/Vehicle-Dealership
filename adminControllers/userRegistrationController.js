@@ -12,13 +12,13 @@ async function handleUserRegistration(req,res) {
         const values = [userID,userName,hashedPassword,userDesignation]
         const user = await db.query(query,values);
         if(isAdmin){
-            res.json(generateAdminToken(user.rows[0]));
+           return  res.json(generateAdminToken(user.rows[0]));
         }
         if(isDriver){
-            res.json(generateDriverToken(user.rows[0]));
+            return res.json(generateDriverToken(user.rows[0]));
         }
         if(isEmployee){
-            res.json(generateEmployeeToken(user.rows[0]));  
+            return res.json(generateEmployeeToken(user.rows[0]));  
         }
         
     }
