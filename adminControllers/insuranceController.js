@@ -56,4 +56,40 @@ async function handleInsuranceDetails(req, res) {
     }
 }
 
-module.exports = handleInsuranceDetails;
+async function handleGetInsuranceDetails(req,res) {
+    const registernum = req.query.registernum;
+    try{
+        if(!registernum) {
+            return res.status(400).send("Enter the correct value");
+        }
+
+        const query = `SELECT * FROM carinsurance WHERE registernum = $1`;
+        const value = [registernum];
+        const result = await db.query(query,value);
+
+        if (result.rows.length === 0) {
+            return res.status(404).send("The Car Insurance Details Do Not Exist");
+        }
+        
+        const insuranceData = result.rows[0];
+        return res.status(200).json({
+            registernum: insuranceData.registernum,
+            insurancecompany: insuranceData.insurancecompany,
+            insurancenumber: insuranceData.insurancenumber,
+            insurancetenure: insuranceData.insurancetenure,
+            insurancestartdate: insuranceData.insurancestartdate,
+            insuranceenddate: insuranceData.insuranceenddate,
+            insurancedocuments: insuranceData.insurancedocuments
+        })
+    }
+    catch(error){
+        console.log(error);
+        return res.status(500).send("Internal Server error");
+    }
+    
+}
+
+
+module.exports = {handleInsuranceDetails,
+    handleGetInsuranceDetails
+};
