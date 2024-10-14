@@ -51,3 +51,10 @@
 1728928511690 : ::1 : POST : /insurance
 1728928601712 : ::1 : POST : /insurance
 1728928747225 : ::1 : POST : /insurance
+1728929923341 : ::1 : GET : /insurance
+1728930016626 : ::1 : GET : /insurance
+1728930026910 : ::1 : GET : /insurance
+1728930056593 : ::1 : GET : /insurance
+1728930081140 : ::1 : GET : /insurance
+1728930233269 : ::1 : GET : /insurance
+1728930270177 : ::1 : GET : /insurance
