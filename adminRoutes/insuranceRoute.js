@@ -7,6 +7,6 @@ router.get("/",(req,res) => {
     res.json("Insurance details page")
 })
 
-router.post("/",upload.array("images[]",5),handleInsuranceDetails);
+router.post("/",upload.array('images',5),handleInsuranceDetails);
 
 module.exports = router;
