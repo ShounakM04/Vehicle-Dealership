@@ -16,6 +16,7 @@ const LoginRoute = require("./adminRoutes/userLoginRoutes.js")
 const RegistrationRoute = require("./adminRoutes/userRegistrationRoute.js")
 const DashboardRoute = require("./adminRoutes/dashboardRoute.js")
 const InsuranceRoute  = require("./adminRoutes/insuranceRoute.js")
+const MaintainanceRoute = require("./adminRoutes/maintainanceRoute.js")
 
 app.set("view engine","ejs");
 app.use(express.json()); 
@@ -36,6 +37,7 @@ app.use("/login",LoginRoute);
 app.use("/register",RegistrationRoute);
 app.use("/dashboard",DashboardRoute);
 app.use("/insurance",InsuranceRoute);
+app.use("/maintainance",MaintainanceRoute);
 
 // Correct `app.listen` without req and res parameters
 app.listen(port, () => {
