@@ -15,6 +15,7 @@ import AddNoticeImage  from './pages/AddNoticeImage'
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 import CustomerEnquiry from './pages/CustomerEnquiry';
+import CostReport from './pages/CostReport';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -78,6 +79,15 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
       element:(
         <Layout>
           <AddNoticeImage/>
+        </Layout>
+      )
+      
+    },
+    {
+      path:"/costReport/:id",
+      element:(
+        <Layout>
+          <CostReport/>
         </Layout>
       )
     },
