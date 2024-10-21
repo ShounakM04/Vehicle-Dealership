@@ -9,7 +9,7 @@ import Landing from './pages/Landing';
 import CarDetails from './pages/CarDetails';
 import Login from './pages/Login';
 import CarDetailsForm  from "./pages/CarDetailsForm"
-import DeleteCarDetails from './pages/SellCarDetails';
+import DeleteCarDetails from './pages/DeleteCarDetails.jsx';
 import Dashboard from './pages/Dashboard';
 import AddNoticeImage  from './pages/AddNoticeImage'
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
