@@ -1,5 +1,6 @@
 const db = require("../models/database");
 const cloudin = require('../adminControllers/cloudController');
+const { documentUpload } = require("../utils/uploadFunctions");
 
 async function handleInsuranceDetails(req, res) {
     const {
@@ -23,21 +24,15 @@ async function handleInsuranceDetails(req, res) {
     }
 
     try {
-        const documentUrls = [];
 
-        // Loop through files and upload them to Cloudinary
-        for (const doc of req.files) {
-            const path = doc.path;
-            const result = await cloudin(path); // Upload document to Cloudinary
-            const docResult = result.secure_url;
-            documentUrls.push(docResult); // Store secure URLs
-        }
+        const documentUrls = documentUpload(req.files);
 
         // Check if documents were successfully uploaded
         if (documentUrls.length === 0) {
             return res.status(401).send("Error uploading the documents.");
         }
 
+        
         // Insert data into the carinsurance table
         const query = `INSERT INTO carinsurance (registernum, insurancecompany, insurancenumber, insurancetenure, insurancestartdate, insuranceenddate, insurancedocuments) 
                        VALUES ($1, $2, $3, $4, $5, $6, $7)`;

@@ -1,5 +1,6 @@
 //const express = require('express')
-const db = require('../models/database')
+const db = require('../models/database');
+const { imageUpload } = require('../utils/uploadFunctions');
 const cloudin = require("./cloudController")
 
 async function handleImageUpload(req,res){
@@ -10,13 +11,7 @@ async function handleImageUpload(req,res){
     }
 
     try{
-        imageUrls = []
-        for(const file  of req.files){
-            const filepath = file.path;
-            const result = await cloudin(filepath);
-            imageUrl = result.secure_url;
-            imageUrls.push(imageUrl);   
-        }
+        const imageUrls = imageUpload(req.files);
         const query = `INSERT INTO  images (carNumber,image_urls) VALUES ($1,$2)`
             const values = [carNumber,imageUrls];
             await db.query(query,values);  

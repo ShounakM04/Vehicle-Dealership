@@ -7,7 +7,7 @@ const path = require("path");
 
 //routers
 const HomeRoute = require("./routes/homeRoute.js");
-const Imageroute=require("./adminControllers/imageRoute.js");     
+const Imageroute=require("./adminRoutes/imageRoute.js");     
 const DetailsRoute  = require("./routes/cardetailsRoute.js");
 const SpecificPageRoute = require("./routes/specifcCarRoute.js")
 const DeleteRecordRoute = require("./routes/deleteRecordRoute.js")
