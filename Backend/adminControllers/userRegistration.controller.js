@@ -12,13 +12,13 @@ async function handleUserRegistration(req,res) {
         const values = [userID,userName,hashedPassword,userDesignation]
         const user = await db.query(query,values);
         if(isAdmin){
-            res.json(generateAdminToken(user.rows[0]));
+           return  res.json(generateAdminToken(user.rows[0]));
         }
         if(isDriver){
-            res.json(generateDriverToken(user.rows[0]));
+            return res.json(generateDriverToken(user.rows[0]));
         }
         if(isEmployee){
-            res.json(generateEmployeeToken(user.rows[0]));  
+            return res.json(generateEmployeeToken(user.rows[0]));  
         }
         
     }
@@ -64,9 +64,9 @@ async function handleUserLogin(req,res) {
             token = generateDriverToken(user);
         }
         console.log(token)
-        res.setHeader('Authorization' , `Bearer : ${token}`);
-        return res.send(token)
-        // res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+        res.setHeader('Authorization' , `Bearer ${token}`);
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+        return res.json(token);
     }catch(error){
         console.log(`Error occured is : ${error}`);
         res.status(400).send("There has been an error in the login process")

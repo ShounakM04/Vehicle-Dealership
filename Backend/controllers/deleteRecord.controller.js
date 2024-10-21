@@ -7,10 +7,11 @@ async function handleRecordDeletion(req,res) {
         const values = [registerNum];
         await db.query(query,values);
 
-        res.status(200).send("Car Records deleted successfully");
+        return res.status(200).send("Car Records deleted successfully");
     }
     catch(error){
         console.log(`The following error has occured : ${error}`);
+        return ;
     }
     
 }

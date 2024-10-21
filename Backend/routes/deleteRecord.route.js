@@ -36,17 +36,18 @@ DeleteRecordRoute.post("/", async (req,res)=>{
             owner,
             insurance
         });
-   res.send(`Entered registered number is : ${registerNum}`)
+    res.send(`Entered registered number is : ${registerNum}`)
 });  
 
 DeleteRecordRoute.delete("/" , (req,res) => {
     try{
-        const regisNum = req.query.registernumber;
+        const regisNum = req.query.deletedID;
+        console.log(regisNum)
         const query = `delete from cardetails where registernumber =($1)`;
         const values = [regisNum];
         db.query(query,values);
 
-        res.status(200).send("Record deleted successfully");
+       return res.status(200).send("Record deleted successfully");
     }
     catch(error){
         console.log(`Error occured while executig the queries : ${error}`);
