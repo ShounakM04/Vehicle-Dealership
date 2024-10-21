@@ -1,5 +1,5 @@
 const db = require("../models/database");
-const cloudin = require('../controllers/cloudController');
+const cloudin = require('../adminControllers/cloudController');
 
 async function handleInsuranceDetails(req, res) {
     const {

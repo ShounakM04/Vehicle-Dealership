@@ -3,3 +3,4 @@ views/
 .env.sample
 node_modules/
 temp.txt
+/resources
