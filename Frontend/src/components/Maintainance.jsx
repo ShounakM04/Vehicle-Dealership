@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export function Maintainance({ registernumber }) {
-    const [reportData, setReportData] = useState({ carDetails: { carNo: '' }, maintenanceRecords: [] });
+    // const [reportData, setReportData] = useState({ carDetails: { carNo: '' }, maintenanceRecords: [] });
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -11,45 +11,42 @@ export function Maintainance({ registernumber }) {
     const [maintainanceDate, setMaintainanceDate] = useState('');
     const [role, setRole] = useState('');
 
-    // Function to fetch maintenance details (GET)
-    const fetchMaintenanceDetails = async () => {
-        try {
-            console.log("Hello" + registernumber    )
-            const response = await axios.get("http://localhost:8000/maintainance", {
-                params: {
-                    registernumber
-                },
-            });
-            const { maintainancedetails } = response.data;
-            setReportData((prevData) => ({
-                ...prevData,
-                maintenanceRecords: maintainancedetails || [],
-            }));
-        } catch (error) {
-            console.error('Error fetching maintenance details:', error);
-            toast.error('Failed to fetch maintenance details.');
-        }
-    };
+    // const fetchMaintenanceDetails = async () => {
+    //     try {
+    //         const response = await axios.get("http://localhost:8000/maintainance", {
+    //             params: { registerNumber: registernumber },  
+    //         });
+    //         const { maintenanceRecords } = response.data;
+    //         setReportData((prevData) => ({
+    //             ...prevData,
+    //             maintenanceRecords: maintenanceRecords || [],
+    //         }));
+    //         console.log("main", response)
+    //     } catch (error) {
+    //         console.error('Error fetching maintenance details:', error);
+    //         toast.error('Failed to fetch maintenance details.');
+    //     }
+    // };
 
-    // Effect to fetch the data when the component mounts
-    useEffect(() => {
-        fetchMaintenanceDetails();
-    }, []);
+    
+    // useEffect(() => {
+    //     if (registernumber) fetchMaintenanceDetails();
+    // }, [registernumber]);  
 
-    // Handle form submission (POST)
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Create a FormData object to handle file uploads and other data
+      
         const formData = new FormData();
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('role', role);
-        formData.append('maintainanceDate', maintainanceDate);
+        formData.append('registerNumber', registernumber);  // Include the car register number
+        formData.append('maintainanceType', description);   // Matches the backend 'maintainanceType'
+        formData.append('maintainanceCost', price);         // Matches the backend 'maintainanceCost'
+        formData.append('doneby', role);                    // Matches the backend 'doneby'
+        formData.append('maintainancedate', maintainanceDate); // Matches the backend 'maintainancedate'
 
         // Append multiple files if any
         files.forEach((file, index) => {
-            formData.append(`file${index}`, file); // Assign unique keys for each file
+            formData.append('documents', file);  // All files should be appended as 'files'
         });
 
         try {
@@ -64,7 +61,6 @@ export function Maintainance({ registernumber }) {
             toast.success('Maintenance record added successfully!');
             console.log(response.data);
 
-            // Reset the form after submission
             setTitle('');
             setPrice('');
             setDescription('');
@@ -72,11 +68,10 @@ export function Maintainance({ registernumber }) {
             setMaintainanceDate('');
             setRole('');
 
-            // Optionally, you can refetch the maintenance details after adding a new record
-            fetchMaintenanceDetails();
+            // fetchMaintenanceDetails();
         } catch (error) {
             console.error('Error adding maintenance record:', error);
-            toast.error('Failed to add maintenance record.');
+            // toast.error('Failed to add maintenance record.');
         }
     };
 
