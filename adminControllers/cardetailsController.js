@@ -93,12 +93,6 @@ async function handleCarDetails(req, res) {
     await db.query(query2, values2);
     console.log("Car details inserted:", values2);
 
-    // Insert insurance details
-    const query3 = `INSERT INTO carinsurance (registernumber, companyname, policynum, policytenure) VALUES ($1, $2, $3, $4)`;
-    const values3 = [registrationNumber, insuranceCompany, policyNumber, policyTenure];
-    await db.query(query3, values3);
-    console.log("Insurance details inserted:", values3);
-
     // Insert owner details
     const query4 = `INSERT INTO ownerdetails (ownername, ownerphone, owneremail, owneraddress, registernumber) VALUES ($1, $2, $3, $4, $5)`;
     const values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registrationNumber];
