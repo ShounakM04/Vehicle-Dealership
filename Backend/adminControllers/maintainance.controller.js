@@ -136,6 +136,7 @@ async function handleGetMaintainanceDetails(req, res) {
 
 async function handlePostMaintainanceDetails(req, res) {
     const { registerNumber, maintainanceType, maintainanceCost, maintainancedate, doneby } = req.body;
+    console.log(doneby);
 
     // Check for missing fields
     if (!registerNumber || !maintainanceType || !maintainanceCost || !maintainancedate || !doneby) {

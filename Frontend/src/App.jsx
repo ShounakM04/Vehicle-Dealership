@@ -16,6 +16,8 @@ import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 import CustomerEnquiry from './pages/CustomerEnquiry';
 import CostReport from './pages/CostReport';
+import SellCarDetails from './pages/SellCarDetails';
+
   const router = createBrowserRouter([
     {
       path:"/",
@@ -34,7 +36,8 @@ import CostReport from './pages/CostReport';
       )
 
 
-    },{
+    },
+    {
       path:"/admin",
       element:(
         <Layout>
@@ -79,6 +82,15 @@ import CostReport from './pages/CostReport';
       element:(
         <Layout>
           <AddNoticeImage/>
+        </Layout>
+      )
+      
+    },
+    {
+      path:"/dashboard/sellCarDetails",
+      element:(
+        <Layout>
+          <SellCarDetails />
         </Layout>
       )
       

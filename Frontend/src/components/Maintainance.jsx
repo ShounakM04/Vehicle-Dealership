@@ -10,6 +10,7 @@ export function Maintainance({ registernumber }) {
     const [files, setFiles] = useState([]);
     const [maintainanceDate, setMaintainanceDate] = useState('');
     const [role, setRole] = useState('');
+    const [adding, setAdding] = useState(false);
 
     // const fetchMaintenanceDetails = async () => {
     //     try {
@@ -28,7 +29,7 @@ export function Maintainance({ registernumber }) {
     //     }
     // };
 
-    
+
     // useEffect(() => {
     //     if (registernumber) fetchMaintenanceDetails();
     // }, [registernumber]);  
@@ -36,7 +37,7 @@ export function Maintainance({ registernumber }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-      
+
         const formData = new FormData();
         formData.append('registerNumber', registernumber);  // Include the car register number
         formData.append('maintainanceType', description);   // Matches the backend 'maintainanceType'
@@ -51,6 +52,7 @@ export function Maintainance({ registernumber }) {
 
         try {
             // Send POST request to add new maintenance record
+            setAdding(true);
             const response = await axios.post('http://localhost:8000/maintainance', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -73,6 +75,7 @@ export function Maintainance({ registernumber }) {
             console.error('Error adding maintenance record:', error);
             // toast.error('Failed to add maintenance record.');
         }
+        setAdding(false);
     };
 
     return (
@@ -131,8 +134,16 @@ export function Maintainance({ registernumber }) {
                         className="border border-gray-300 rounded p-2 w-full"
                     />
                 </div>
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+                {/* <button type="submit" className="bg-blue-500 text-white p-2 rounded">
                     Add Maintenance Record
+                </button> */}
+
+                <button
+                    type="submit"
+                    className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${adding ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={adding}
+                >
+                    {adding ? 'Adding...' : 'Add Maintenance Record'}
                 </button>
             </form>
         </>

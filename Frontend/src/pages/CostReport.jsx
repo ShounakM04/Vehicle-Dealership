@@ -76,9 +76,12 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
+      console.log("hi");
       const response = await axios.get("http://localhost:8000/maintainance", {
         params: { registerNumber: vehicleData.carDetails.carNo },
       });
+      console.log("hi");
+
       const { maintenanceRecords, totalmaintainance } = response.data;
 
       // Check if maintenanceRecords is an array before setting the state
@@ -93,7 +96,7 @@ const CostReport = () => {
       }
     } catch (error) {
       console.error("Error fetching maintenance details:", error);
-      toast.error("Failed to fetch maintenance details.");
+      // toast.error("Failed to fetch maintenance details.");
     }
   };
 

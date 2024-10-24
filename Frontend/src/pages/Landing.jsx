@@ -51,6 +51,7 @@ export default function Landing() {
             number: car.registrationnumber,
             kilometers: "20,000KM",
             price: car.carprice,
+            status:car.status
           };
         });
         setCars(carsData);
@@ -129,7 +130,9 @@ export default function Landing() {
         </div>
 
         <div className="flex flex-wrap w-full lg:w-3/4 gap-2">
-          {cars.map((car) => (
+          {cars.map((car) => 
+          (car.status===false &&
+          <>
             <div
               key={car.id}
               className="bg-white rounded-md shadow-md p-4 flex flex-col justify-between w-full sm:w-1/3 lg:w-[32%]"
@@ -154,6 +157,7 @@ export default function Landing() {
                 </button>
               </div>
             </div>
+            </>
           ))}
         </div>
       </main>

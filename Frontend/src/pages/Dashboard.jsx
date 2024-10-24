@@ -98,7 +98,7 @@ const Dashboard = () => {
           </button>
         </NavLink>
 
-        <NavLink to={'/dashboard/addNoticeImage'}>
+        <NavLink to={'/dashboard/sellCarDetails'}>
           <button className="mt-10 bg-blue-500 text-white w-36 px-4 py-2 rounded hover:bg-blue-600">
             Sell Car
           </button>
