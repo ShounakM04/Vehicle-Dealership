@@ -15,6 +15,7 @@ function CarDetails() {
       try {
         const response = await axios.get(`http://localhost:8000/car/${params.id}`);
         setCarData(response.data);
+        console.log(response.data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching car details:', err);
