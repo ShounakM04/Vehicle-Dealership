@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import EnquiryCard from '../components/EnquiryCard';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 function CustomerEnquiry() {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [description, setDescription] = useState('');
   const [enquiries, setEnquiries] = useState([]);
-  const [countQueries,setCountQueries] = useState("0");
+  const [countQueries, setCountQueries] = useState("0");
   const [uploading, setUploading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
@@ -26,7 +27,6 @@ function CustomerEnquiry() {
   };
 
   const openDeleteModal = (enquiry) => {
-
     setSelectedEnquiry(enquiry);
     setModalIsOpen(true);
   };
@@ -40,31 +40,29 @@ function CustomerEnquiry() {
     if (!selectedEnquiry) return;
 
     try {
-        // Assuming selectedEnquiry contains both serialnum and custcontact
-        const { serialnum, customerPhone } = selectedEnquiry; // Adjust based on your data structure
-        
-        await axios.delete(`http://localhost:8000/customer`, {
-            data: {
-                serialnum: serialnum,
-                custcontact: customerPhone
-            }
-        }); 
-        
-        // Update the state to remove the deleted enquiry
-        setEnquiries(enquiries.filter((enquiry) => 
-            enquiry.serialnum !== serialnum || enquiry.customerPhone !== customerPhone
-        )); 
-        toast.success('Enquiry deleted successfully!');
-        
-        // Re-fetch enquiries after deletion
-        fetchEnquiries();
+      const { serialnum, customerPhone } = selectedEnquiry;
+      
+      await axios.delete('http://localhost:8000/customer', {
+        data: {
+          serialnum: serialnum,
+          custcontact: customerPhone
+        }
+      }); 
+      
+      // Update the state to remove the deleted enquiry
+      setEnquiries(enquiries.filter((enquiry) => 
+        enquiry.serialnum !== serialnum || enquiry.customerPhone !== customerPhone
+      )); 
+      toast.success('Enquiry deleted successfully!');
+      
+      // Re-fetch enquiries after deletion
+      fetchEnquiries();
     } catch (error) {
-        toast.error('Failed to delete enquiry'); 
+      toast.error('Failed to delete enquiry'); 
     } finally {
-        closeModal(); 
+      closeModal(); 
     }
-};
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,10 +79,10 @@ function CustomerEnquiry() {
         custName: customerName,
         custContact: customerPhone,
         custQuery: description,
-        date : submissionDate
+        date: submissionDate
       });
 
-      setEnquiries([...enquiries, { custname: customerName, custcontact: customerPhone, custquery: description ,date: submissionDate}]);
+      setEnquiries([...enquiries, { custname: customerName, custcontact: customerPhone, custquery: description, date: submissionDate }]);
 
       // Re-fetch enquiries after submission
       fetchEnquiries();
@@ -103,8 +101,6 @@ function CustomerEnquiry() {
   };
 
   const fetchEnquiries = async () => {
-
-    //console.log("Inside fetchEnquiries")
     try {
       const response = await axios.get('http://localhost:8000/customer');
       const formattedEnquiries = response.data.enquiries.map(enquiry => ({
@@ -112,11 +108,10 @@ function CustomerEnquiry() {
         customerName: enquiry.custname,
         customerPhone: enquiry.custcontact,
         description: enquiry.custquery,
-        date : enquiry.enquirydate
+        date: enquiry.enquirydate
       }));
       setEnquiries(formattedEnquiries);
-      setCountQueries(response.data.totalCount)
-      console.log("\nAfter get axios : "+formattedEnquiries)
+      setCountQueries(response.data.totalCount);
     } catch (error) {
       toast.error('Failed to fetch enquiries');
     }
@@ -125,10 +120,10 @@ function CustomerEnquiry() {
   useEffect(() => {
     fetchEnquiries();
   }, []);
-  
 
   return (
     <div className="container mx-auto p-8 bg-white">
+      <ToastContainer /> {/* Add ToastContainer for notifications */}
       <div className="mb-4">
         <button
           onClick={handleGoBack}
@@ -191,7 +186,7 @@ function CustomerEnquiry() {
       <div className="my-12 border-t-2 border-teal-300"></div>
 
       <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Customer Enquiries ({(countQueries)})</h2>
+        <h2 className="text-xl font-bold mb-4">Customer Enquiries ({countQueries})</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.isArray(enquiries) && enquiries.map((enquiry, index) => (
             <EnquiryCard
@@ -199,9 +194,8 @@ function CustomerEnquiry() {
               customerName={enquiry.customerName}
               customerPhone={enquiry.customerPhone}
               description={enquiry.description}
-              date={(enquiry.date)} 
+              date={enquiry.date} 
               onDelete={() => openDeleteModal(enquiry)}
-              
             />
           ))}
         </div>

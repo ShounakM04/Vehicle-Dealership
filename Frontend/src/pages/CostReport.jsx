@@ -104,6 +104,10 @@ const CostReport = () => {
     if (vehicleData.carDetails.carNo) fetchMaintenanceDetails();
   }, [vehicleData.carDetails.carNo]);
 
+  const handleMaintenanceAdded = () => {
+    fetchMaintenanceDetails(); // Refresh maintenance records after adding a new one
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-80px)]">
       <div className="flex flex-col lg:flex-row p-5 bg-gray-100 min-h-[calc(100vh-80px)]">
@@ -218,7 +222,7 @@ const CostReport = () => {
         {/* Form Section */}
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg">
           {soldStatus === false ? (
-            <Maintainance registernumber={vehicleData.carDetails.carNo} />
+            <Maintainance registernumber={vehicleData.carDetails.carNo}  onMaintenanceAdded={handleMaintenanceAdded} />
           ) : (
             <Insurance />
           )}
@@ -229,7 +233,7 @@ const CostReport = () => {
               <label className="block text-sm font-medium mb-2">Total Amount</label>
               <input
                 type="number"
-                value={totalAmountToBePaid}
+                value={totalAmountToBePaid} 
                 onChange={(e) => setTotalAmountToBePaid(e.target.value)}
                 required
                 className="border border-gray-300 rounded p-2 w-full"

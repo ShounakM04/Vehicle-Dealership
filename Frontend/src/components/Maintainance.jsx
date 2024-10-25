@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-export function Maintainance({ registernumber }) {
-    // const [reportData, setReportData] = useState({ carDetails: { carNo: '' }, maintenanceRecords: [] });
+export function Maintainance({ registernumber, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -12,46 +11,21 @@ export function Maintainance({ registernumber }) {
     const [role, setRole] = useState('');
     const [adding, setAdding] = useState(false);
 
-    // const fetchMaintenanceDetails = async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:8000/maintainance", {
-    //             params: { registerNumber: registernumber },  
-    //         });
-    //         const { maintenanceRecords } = response.data;
-    //         setReportData((prevData) => ({
-    //             ...prevData,
-    //             maintenanceRecords: maintenanceRecords || [],
-    //         }));
-    //         console.log("main", response)
-    //     } catch (error) {
-    //         console.error('Error fetching maintenance details:', error);
-    //         toast.error('Failed to fetch maintenance details.');
-    //     }
-    // };
-
-
-    // useEffect(() => {
-    //     if (registernumber) fetchMaintenanceDetails();
-    // }, [registernumber]);  
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
         const formData = new FormData();
-        formData.append('registerNumber', registernumber);  // Include the car register number
-        formData.append('maintainanceType', description);   // Matches the backend 'maintainanceType'
-        formData.append('maintainanceCost', price);         // Matches the backend 'maintainanceCost'
-        formData.append('doneby', role);                    // Matches the backend 'doneby'
-        formData.append('maintainancedate', maintainanceDate); // Matches the backend 'maintainancedate'
+        formData.append('registerNumber', registernumber);
+        formData.append('maintainanceType', description);
+        formData.append('maintainanceCost', price);
+        formData.append('doneby', role);
+        formData.append('maintainancedate', maintainanceDate);
 
-        // Append multiple files if any
-        files.forEach((file, index) => {
-            formData.append('documents', file);  // All files should be appended as 'files'
+        files.forEach((file) => {
+            formData.append('documents', file);
         });
 
         try {
-            // Send POST request to add new maintenance record
             setAdding(true);
             const response = await axios.post('http://localhost:8000/maintainance', formData, {
                 headers: {
@@ -59,10 +33,10 @@ export function Maintainance({ registernumber }) {
                 },
             });
 
-            // Handle success
             toast.success('Maintenance record added successfully!');
             console.log(response.data);
 
+            // Clear form fields
             setTitle('');
             setPrice('');
             setDescription('');
@@ -70,12 +44,14 @@ export function Maintainance({ registernumber }) {
             setMaintainanceDate('');
             setRole('');
 
-            // fetchMaintenanceDetails();
+            // Call the parent callback to refresh maintenance records
+            if (onMaintenanceAdded) onMaintenanceAdded();
         } catch (error) {
             console.error('Error adding maintenance record:', error);
-            // toast.error('Failed to add maintenance record.');
+            toast.error('Failed to add maintenance record.');
+        } finally {
+            setAdding(false);
         }
-        setAdding(false);
     };
 
     return (
@@ -106,7 +82,7 @@ export function Maintainance({ registernumber }) {
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                         required
-                        className="border border-gray-300 rounded p-2 w-full"
+                        className="border border-gray-300 rounded p-2 w-full text-sm md:text-base"
                     >
                         <option value="" disabled>Select role</option>
                         <option value="admin">Admin</option>
@@ -114,7 +90,6 @@ export function Maintainance({ registernumber }) {
                         <option value="driver">Driver</option>
                     </select>
                 </div>
-
                 <div className="mb-4">
                     <label className="block text-sm font-medium mb-2">Maintenance Date</label>
                     <input
@@ -134,10 +109,6 @@ export function Maintainance({ registernumber }) {
                         className="border border-gray-300 rounded p-2 w-full"
                     />
                 </div>
-                {/* <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-                    Add Maintenance Record
-                </button> */}
-
                 <button
                     type="submit"
                     className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${adding ? 'opacity-50 cursor-not-allowed' : ''}`}

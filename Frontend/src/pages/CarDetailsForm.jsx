@@ -60,22 +60,24 @@ function AdminForm() {
       setUploading(false);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check for a negative car price
     if (carPrice < 0) {
       toast.error("Car price cannot be negative");
       return;
     }
-
+  
     try {
       const response = await submitAdminForm({
         vehicleName,
         brandName,
         registrationNumber,
         insuranceCompany,
+        insuranceNumber: "10",
         policyNumber,
-        policyTenure,
+        insuranceTenure: policyTenure,
         ownerName,
         ownerPhone,
         ownerEmail,
@@ -83,25 +85,29 @@ function AdminForm() {
         carColor,
         carPrice,
         carType,
-        fuel
+        fuel,
       });
-
-      await handleUpload(); // Now upload images only after form submission
+  
+      await handleUpload(); // Upload images only after form submission
       toast.success("Car details added successfully!");
-      //console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
-      if (error.status === 400) {
-        if (error.message.includes("Registration number already exists")) {
-          toast.error("Registration number already exists. Please enter a unique registration number.");
+      // Check if error response is available
+      if (error.response) {
+        // Handle specific error statuses
+        if (error.response.status === 400) {
+          const { error: errorMessage } = error.response.data; // Adjusted to fetch the error message from the response
+          toast.error(errorMessage || "Error submitting the form. Please check your inputs."); // Show the backend error message if available
         } else {
-          toast.error("Error submitting the form. Please check your inputs.");
+          toast.error("An error occurred while saving details. Please try again.");
         }
       } else {
-        toast.error("An error occurred while saving details");
+        // Handle network or unexpected errors
+        toast.error("An unexpected error occurred. Please check your network connection.");
       }
-      console.log(error);
     }
   };
+  
 
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">

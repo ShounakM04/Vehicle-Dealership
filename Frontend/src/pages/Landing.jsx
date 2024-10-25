@@ -5,17 +5,11 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function Landing() {
-
-  const carouselImages = [
-    "https://res.cloudinary.com/dghy51qvs/image/upload/v1729797908/hqupzzufite2yp8n8dbr.png",
-    "https://res.cloudinary.com/dghy51qvs/image/upload/v1729797918/gkxtppjfghpvyn4znj0n.png",
-    "https://res.cloudinary.com/dghy51qvs/image/upload/v1729797926/ujridzxmgo95sxb9pbgr.png",
-  ];
-
   const [fuelType, setFuelType] = useState(null);
   const [carType, setCarType] = useState(null);
   const [cars, setCars] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [noticeImages, setNoticeImages] = useState([]);
 
   const navigate = useNavigate();
 
@@ -42,6 +36,7 @@ export default function Landing() {
     setShowFilters((prev) => !prev);
   };
 
+  // Fetch cars based on filters
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -71,14 +66,29 @@ export default function Landing() {
     fetchCars();
   }, [fuelType, carType]);
 
+  // Fetch notice images only once on component mount
+  useEffect(() => {
+    const fetchNoticeImages = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/dashboard/get-notice');
+        const array = response.data;
+        const imageUrls = array.map(item => item.image_urls);
+        setNoticeImages(imageUrls);  // Set fetched image URLs
+        console.log("Notice Images:", imageUrls);
+      } catch (error) {
+        console.error("Error fetching notice images:", error);
+      }
+    };
+
+    fetchNoticeImages();
+  }, []); // Empty dependency array to run only once
+
   return (
     <div className="container mx-auto">
       {/* Top Section with Carousel and Filters */}
       <div className="flex flex-col lg:flex-row gap-4">
-
-
- {/* Filters Section */}
- <div className="w-100vh lg:w-1/4 bg-white rounded-md shadow-md p-4">
+        {/* Filters Section */}
+        <div className={`w-100vh lg:w-1/4 bg-white rounded-md shadow-md p-4 ${showFilters ? '' : 'hidden lg:block'}`}>
           <div className="hidden lg:block mb-4">
             <h2 className="text-xl font-bold">FILTERS</h2>
           </div>
@@ -131,8 +141,17 @@ export default function Landing() {
           </button>
         </div>
 
-          {/* Carousel Section */}
-          <div className="w-full lg:w-3/4 mt-2">
+        {/* Filter Toggle Button for Mobile */}
+        <button 
+          onClick={toggleFilters} 
+          className="lg:hidden mb-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </button>
+
+        {/* Carousel Section */}
+        <div className="w-full lg:w-3/4 mt-2">
+          {noticeImages.length > 0 ? (
             <Carousel
               showArrows={true}
               autoPlay={true}
@@ -140,27 +159,29 @@ export default function Landing() {
               showThumbs={false}
               className="rounded-t-lg"
             >
-              {carouselImages.map((image, index) => (
+              {noticeImages.map((image, index) => (
                 <div key={index}>
                   <img
                     src={image}
                     alt={`Car Image ${index + 1}`}
-                    className="w-full  h-auto rounded-t-lg max-h-[60vh] object-contain"
+                    className="w-full h-auto rounded-t-lg max-h-[60vh] object-contain"
                   />
                 </div>
               ))}
             </Carousel>
-          </div>
+          ) : (
+            <p>Loading images...</p>
+          )}
         </div>
+      </div>
 
-       
       {/* Car Cards Section */}
       <div className="flex flex-wrap mt-8 gap-4">
         {cars.map((car) => (
           car.status === false && (
             <div
               key={car.id}
-              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-1/3"
+              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32.5%]"
             >
               <img
                 src={car.imgSrc}

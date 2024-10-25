@@ -25,54 +25,45 @@ function SellCarDetails() {
     carPhoto: null,
     carID: ''
   });
-  const [submittedID, setSubmittedID] = useState(''); // Holds the submitted ID for deletion
-  const [submitted, setSubmitted] = useState(false); // To control if the form was submitted
-  const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
-
-
+  const [submittedID, setSubmittedID] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
+
   // Fetch car details using the submitted ID
   const fetchCarDetails = async (currDeleteId) => {
-    setLoading(true); // Set loading to true before the fetch call
-    setError(null); // Reset error before fetch
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(`http://localhost:8000/car/${currDeleteId}`);
-      setCarData(response.data); // Store the fetched car data
-      console.log(response.data); // Log the fetched car data
+      setCarData(response.data);
+      console.log(response.data);
     } catch (err) {
       setCarData(null);
       console.error('Error fetching car details:', err);
-      setError('Error fetching car details'); // Set error message if fetch fails
+      setError('Error fetching car details');
     } finally {
-      setLoading(false); // Set loading to false after fetch completes
+      setLoading(false);
     }
   };
 
   const handleSellConfirmation = () => {
-    setModalOpen(true); // Show modal after clicking the "Confirm" button
+    setModalOpen(true);
   };
 
   // Handle form submission
-  const     handleSubmitID = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-
+  const handleSubmitID = async (e) => {
+    e.preventDefault();
     const currDeleteId = deleteID;
     formData.carID = currDeleteId;
 
-    setSubmittedID(deleteID); // Store the deleteID for deletion
-    setDeleteID(''); // Clear the input field after submission
-    setSubmitted(true); // Set the form as submitted
-
-
-
-    await fetchCarDetails(currDeleteId); // Call the fetch function
-
+    setSubmittedID(deleteID);
+    setDeleteID('');
+    setSubmitted(true);
+    await fetchCarDetails(currDeleteId);
   };
 
-  
-
- 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -83,38 +74,29 @@ function SellCarDetails() {
     setFormData({ ...formData, [name]: files[0] });
   };
 
-  const handleSubmit = async (e) => {
-    // e.preventDefault();
-    // const formDataObj = new FormData();
-    // Object.keys(formData).forEach((key) => {
-    //   formDataObj.append(key, formData[key]);
-    // });
-
+  const handleSubmit = async () => {
     try {
-        console.log(formData);
-      await axios.post('http://localhost:8000/dashboard/sell-car',  {
+      console.log(formData);
+      await axios.post('http://localhost:8000/dashboard/sell-car', {
         formData,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       toast.success('Car sold successfully!', { position: 'top-right' });
       setCarData(null);
-    setSubmitted(false)
-      
+      setSubmitted(false);
     } catch (error) {
       toast.error('Error selling car. Try again.', { position: 'top-right' });
     }
-    setModalOpen(false); 
-    
+    setModalOpen(false);
   };
 
   const handleGoBack = () => {
     navigate('/dashboard/sellCarDetails');
   };
 
-
   // Close the modal
   const closeModal = () => {
-    setModalOpen(false); // Close the modal without deletion
+    setModalOpen(false);
   };
 
   return (
@@ -141,14 +123,13 @@ function SellCarDetails() {
             type="text"
             id="brandName"
             required
-            maxLength="10" // Restrict input to 10 characters
+            maxLength="10"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={deleteID}
             onChange={(e) => setDeleteID(e.target.value)}
           />
         </div>
         <button
-         
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6"
         >
           Submit
@@ -166,26 +147,24 @@ function SellCarDetails() {
       {!carData && submitted && !loading && !error && (
         <p className="text-center mt-4">No data found for this ID.</p>
       )}
-      
 
-{submitted && carData && carData.car && carData.car.status===false &&  (
+      {submitted && carData && carData.car && carData.car.status === false && (
         <div className="mt-8 p-4 bg-gray-100 rounded-lg shadow">
           <div className="container mx-auto">
             <main className="py-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white shadow-md rounded-md p-4 ">
-                  <h1 className="text-2xl font-bold mb-4 mt-16">{carData.car.carcompany} {carData.car.carname}</h1>
-
+                  <h1 className="text-2xl font-bold mb-4 mt-16">
+                    {carData.car.carcompany} {carData.car.carname}
+                  </h1>
 
                   <div>
                     <img
-                      src={carData.images[0]}  // Correctly use the image URL
+                      src={carData.images[0]}
                       alt={`Car ${carData.car.carname}`}
                       className="w-full h-auto rounded-t-lg"
                     />
                   </div>
-
-
                 </div>
 
                 <div className="bg-white shadow-md rounded-md p-4">
@@ -213,7 +192,6 @@ function SellCarDetails() {
                       <span>{carData.car.carprice}</span>
                     </li>
                   </ul>
-
                 </div>
               </div>
             </main>
@@ -221,16 +199,15 @@ function SellCarDetails() {
         </div>
       )}
 
-        {
-        submitted && carData && carData.car && carData.car.status===true &&(
-            <div className="mt-4 p-4 bg-green-100 border border-green-500 rounded text-center text-green-700">
-            Already Sold
+      {submitted && carData && carData.car && carData.car.status === true && (
+        <div className="mt-4 p-4 bg-green-100 border border-green-500 rounded text-center text-green-700">
+          Already Sold
         </div>
-        )
-      }
-          {/* Sell Car Form */}
-          {submitted && carData && carData.car && carData.car.status===false &&
-          <>
+      )}
+
+      {/* Sell Car Form */}
+      {submitted && carData && carData.car && carData.car.status === false && (
+        <>
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4">
             <h2 className="text-xl font-bold mb-4">Sell Car Form</h2>
 
@@ -308,7 +285,7 @@ function SellCarDetails() {
               type="file"
               name="insuranceDocument"
               onChange={handleFileChange}
-              className="mb-4"
+              className="shadow border rounded w-full py-2 px-3 mb-4"
               required
             />
 
@@ -316,33 +293,37 @@ function SellCarDetails() {
               type="file"
               name="carPhoto"
               onChange={handleFileChange}
-              className="mb-4"
+              className="shadow border rounded w-full py-2 px-3 mb-4"
               required
             />
 
             <button
-              type="submit"
-              onClick={handleSellConfirmation}
+              type="button" // Prevent form submission
+              onClick={handleSellConfirmation} // Show confirmation modal
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               Sell
             </button>
           </form>
-          </>}
+        </>
+      )}
 
-          {/* Modal for final confirmation */}
+      {/* Modal for final confirmation */}
       <Modal
         isOpen={modalOpen}
         onRequestClose={closeModal}
-        contentLabel="Confirm Deletion"
+        contentLabel="Confirm Sell"
         className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto mt-20"
         overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
       >
-        <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-        <p>Are you sure you want to delete the vehicle with reg No.: {submittedID}?</p>
+        <h3 className="text-lg font-semibold mb-4">Confirm Sale</h3>
+        <p>Are you sure you want to sell the vehicle with reg No.: {submittedID}?</p>
         <div className="mt-6">
           <button
-             onClick={() => handleSubmit()}  
+            onClick={async () => {
+              await handleSubmit(); // Call the handleSubmit function
+              closeModal(); // Close the modal after submitting
+            }}
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
           >
             Confirm Sell
@@ -355,8 +336,10 @@ function SellCarDetails() {
           </button>
         </div>
       </Modal>
-          <ToastContainer />
-        </div>
-      )}
+
+      <ToastContainer />
+    </div>
+  );
+}
 
 export default SellCarDetails;

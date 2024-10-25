@@ -1,4 +1,4 @@
-const cloudin = require("./cloudController");
+const cloudin = require("../controllers/cloud.controller");
 
 async function imageUpload(registerNumber, files) {
     const imageUrls = [];
