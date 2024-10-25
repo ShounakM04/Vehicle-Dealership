@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/",handleGetInsuranceDetails);
 
-router.post("/",upload.array('images',5),handleInsuranceDetails);
+router.post("/",upload.array('insuranceDocument',5),handleInsuranceDetails);
 
 module.exports = router;

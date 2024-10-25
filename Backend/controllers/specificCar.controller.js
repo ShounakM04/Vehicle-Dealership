@@ -15,7 +15,7 @@ async function handleSpecifiPage(req, res) {
         const imageResults = await db.query(query2, values);
 
         // Query to fetch car insurance details
-        const query3 = `SELECT * FROM carinsurance WHERE registernumber = $1`;
+        const query3 = `SELECT * FROM carinsurance WHERE registernum = $1`;
         const insuranceResults = await db.query(query3, values);
 
         // Query to fetch owner details
