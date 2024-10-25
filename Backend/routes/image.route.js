@@ -8,6 +8,6 @@ Imagerouter.get("/",(req,res)=>{
     return res.render("upload");
 })
 
-Imagerouter.post("/",upload.array("images[]",10),handleImageUpload);
+Imagerouter.post("/",upload.fields([{ name: 'displayImage' , maxCount: 1 }, { name: 'images[]', maxCount: 10 }]),handleImageUpload);
 
 module.exports = Imagerouter;

@@ -45,9 +45,10 @@ export default function Landing() {
         if (carType) params.carMake = carType;
 
         const response = await axios.get(`http://localhost:8000/`, { params });
+        console.log(response.data)
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
-          const firstImage = car.imageurl[0];
+          const firstImage = car.displayImage ;
           return {
             id: car.registrationnumber,
             imgSrc: firstImage,
@@ -55,7 +56,8 @@ export default function Landing() {
             number: car.registrationnumber,
             kilometers: "20,000KM",
             price: car.carprice,
-            status: car.status
+            status: car.status,
+
           };
         });
         setCars(carsData);

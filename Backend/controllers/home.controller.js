@@ -5,7 +5,7 @@ async function handleHomePage(req, res) {
     //console.log(fuelType, carMake);
     try {
         let query1 = `
-        SELECT c.carname, c.registernumber, c.carcolor, c.carprice,c.status, ci.image_urls
+        SELECT c.carname, c.registernumber, c.carcolor, c.carprice,c.status, ci.image_urls, ci.display_image
         FROM cardetails c 
         JOIN images ci ON c.registernumber = ci.carNumber
         WHERE 1=1
@@ -27,7 +27,8 @@ async function handleHomePage(req, res) {
             carname: row.carname, 
             carprice: row.carprice, 
             imageurl: row.image_urls,
-            status:row.status
+            status:row.status,
+            displayImage: row.display_image
         }));
         
         res.json({

@@ -41,11 +41,19 @@ function AdminForm() {
   const handleUpload = async () => {
     setUploading(true);
     const formData = new FormData();
+    
+    // Append the display image to the form data
+    if (DisplayImage) {
+      formData.append('displayImage', DisplayImage); // Use a unique key for the display image
+    }
+  
+    // Append other images to the form data
     images.forEach((image) => {
       formData.append('images[]', image);
     });
+    
     formData.append('carNumber', registrationNumber); // Add registration number to the form data
-
+  
     try {
       const response = await axios.post('http://localhost:8000/upload', formData, {
         headers: {
@@ -60,54 +68,55 @@ function AdminForm() {
       setUploading(false);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Check for a negative car price
-    if (carPrice < 0) {
-      toast.error("Car price cannot be negative");
-      return;
-    }
   
-    try {
-      const response = await submitAdminForm({
-        vehicleName,
-        brandName,
-        registrationNumber,
-        insuranceCompany,
-        insuranceNumber: "10",
-        policyNumber,
-        insuranceTenure: policyTenure,
-        ownerName,
-        ownerPhone,
-        ownerEmail,
-        ownerAddress,
-        carColor,
-        carPrice,
-        carType,
-        fuel,
-      });
+const handleSubmit = async (e) => {
+  e.preventDefault();
   
-      await handleUpload(); // Upload images only after form submission
-      toast.success("Car details added successfully!");
-      // console.log(response.data);
-    } catch (error) {
-      // Check if error response is available
-      if (error.response) {
-        // Handle specific error statuses
-        if (error.response.status === 400) {
-          const { error: errorMessage } = error.response.data; // Adjusted to fetch the error message from the response
-          toast.error(errorMessage || "Error submitting the form. Please check your inputs."); // Show the backend error message if available
-        } else {
-          toast.error("An error occurred while saving details. Please try again.");
-        }
+  // Check for a negative car price
+  if (carPrice < 0) {
+    toast.error("Car price cannot be negative");
+    return;
+  }
+
+  try {
+    const response = await submitAdminForm({
+      vehicleName,
+      brandName,
+      registrationNumber,
+      insuranceCompany,
+      insuranceNumber: "10",
+      policyNumber,
+      insuranceTenure: policyTenure,
+      ownerName,
+      ownerPhone,
+      ownerEmail,
+      ownerAddress,
+      carColor,
+      carPrice,
+      carType,
+      fuel,
+    });
+
+    await handleUpload(); // Upload images only after form submission
+    toast.success("Car details added successfully!");
+    // console.log(response.data);
+  } catch (error) {
+    // Check if error response is available
+    if (error.response) {
+      // Handle specific error statuses
+      if (error.response.status === 400) {
+        const { error: errorMessage } = error.response.data; // Adjusted to fetch the error message from the response
+        toast.error(errorMessage || "Error submitting the form. Please check your inputs."); // Show the backend error message if available
       } else {
-        // Handle network or unexpected errors
-        toast.error("An unexpected error occurred. Please check your network connection.");
+        toast.error("An error occurred while saving details. Please try again.");
       }
+    } else {
+      // Handle network or unexpected errors
+      toast.error("An unexpected error occurred. Please check your network connection.");
     }
-  };
-  
+  }
+};
+
 
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
