@@ -76,19 +76,34 @@ function SellCarDetails() {
 
   const handleSubmit = async () => {
     try {
-      console.log(formData);
-      await axios.post('http://localhost:8000/dashboard/sell-car', {
-        formData,
+      setLoading(true);
+      const sellFormData = new FormData();
+      // Append all fields to FormData
+      sellFormData.append("sellingPrice", formData.sellingPrice);
+      sellFormData.append("ownerName", formData.ownerName);
+      sellFormData.append("contactNo", formData.contactNo);
+      sellFormData.append("downPayment", formData.downPayment);
+      sellFormData.append("totalInstallments", formData.totalInstallments);
+      sellFormData.append("installmentAmount", formData.installmentAmount);
+      sellFormData.append("commission", formData.commission);
+      sellFormData.append("insuranceDocument", formData.insuranceDocument);
+      sellFormData.append("carPhoto", formData.carPhoto);
+      sellFormData.append("carID", formData.carID);
+  
+      await axios.post('http://localhost:8000/dashboard/sell-car', sellFormData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+  
       toast.success('Car sold successfully!', { position: 'top-right' });
       setCarData(null);
       setSubmitted(false);
     } catch (error) {
       toast.error('Error selling car. Try again.', { position: 'top-right' });
     }
+    setLoading(false);
     setModalOpen(false);
   };
+  
 
   const handleGoBack = () => {
     navigate('/dashboard/sellCarDetails');
@@ -319,18 +334,25 @@ function SellCarDetails() {
         <h3 className="text-lg font-semibold mb-4">Confirm Sale</h3>
         <p>Are you sure you want to sell the vehicle with reg No.: {submittedID}?</p>
         <div className="mt-6">
+          {/* Loading Overlay */}
+  {loading && (
+    <div className="absolute inset-0 bg-gray-500 opacity-50 z-10" />
+  )}
           <button
             onClick={async () => {
               await handleSubmit(); // Call the handleSubmit function
               closeModal(); // Close the modal after submitting
             }}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading}
           >
-            Confirm Sell
+            
+            {loading ? 'Selling...' : 'Confirm Sell'}
           </button>
           <button
             onClick={closeModal}
             className="bg-gray-300 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            disabled={loading}
           >
             Cancel
           </button>

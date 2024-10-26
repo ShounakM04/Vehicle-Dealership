@@ -4,9 +4,13 @@ import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useContext } from "react";
+import { SearchContext } from "../context/SearchContext";
+
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
+  const {query, setQuery} = useContext(SearchContext);
 
   const navigate = useNavigate();
 
@@ -18,11 +22,21 @@ const Dashboard = () => {
     navigate(`/costReport/${url}`)
   }
 
+  const handleSearchInputChange = (e) => {
+    // console.log(e.target.value)
+    setQuery(e.target.value);
+    
+  };
+
   // Fetch car details from the API
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/dashboard');
+        const params = {};
+        if (query) params.carSearch = query;
+        // console.log(params)
+        const response = await axios.get(`http://localhost:8000/dashboard`,{params});
+        // console.log(response);
         setCarDetails(response.data); // Assuming the response contains an array of car details
       } catch (error) {
         console.error('Error fetching car details:', error);
@@ -30,7 +44,7 @@ const Dashboard = () => {
     };
 
     fetchCarDetails();
-  }, []);
+  }, [query]);
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
@@ -148,6 +162,37 @@ const Dashboard = () => {
 
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-3">Car Details</h3>
+
+          {/* search section */}
+          <div className="relative mx-auto w-full max-w-md ml-0 mb-4">
+                <input
+                  type="text"
+                  className="w-full h-8 pl-10 pr-4 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                  placeholder="Search..."
+                  value={query}
+                  onChange={handleSearchInputChange}
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-4.35-4.35M18.4 10.55a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+
+
+
           <table className="w-full table-auto">
             <thead>
               <tr className="text-left bg-gray-200">
