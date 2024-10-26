@@ -47,7 +47,7 @@ export default function Landing() {
         const params = {};
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
-        if (query) params.carname = query;
+        if (query) params.carSearch = query;
         const response = await axios.get(`http://localhost:8000/`, { params });
         console.log(response.data)
         const data = response.data.carsWithImages;
@@ -90,7 +90,7 @@ export default function Landing() {
   }, []); // Empty dependency array to run only once
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto max-w-full">
       {/* Top Section with Carousel and Filters */}
       <div className="flex flex-col lg:flex-row gap-4 mt-8 ml-12 mr-12">
         {/* Filters Section */}
@@ -188,7 +188,7 @@ export default function Landing() {
           car.status === false && (
             <div
               key={car.id}
-              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32.5%]"
+              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%]"
             >
               <img
                 src={car.imgSrc}

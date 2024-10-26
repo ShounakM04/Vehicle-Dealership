@@ -161,9 +161,14 @@ function DeleteCarDetails() {
         <p className="text-center mt-4">No data found for this ID.</p>
       )}
 
+{submitted && carData && carData.car && carData.car.status === true && (
+        <div className="mt-4 p-4 bg-green-100 border border-green-500 rounded text-center text-green-700">
+          Already Sold
+        </div>
+      )}
 
       {/* Display confirmation section only after form is submitted */}
-      {submitted && carData && carData.car && (
+      {submitted && carData && carData.car && carData.car.status === false &&  (
         <div className="mt-8 p-4 bg-gray-100 rounded-lg shadow">
           <div className="container mx-auto">
             <main className="py-10">

@@ -11,7 +11,12 @@ const router = express.Router();
 
 // router.get("/" ,authenticateToken,authorizeAdmin,handleDashboard);
 router.get("/" ,handleDashboard);
-router.post("/sell-car",handleSellCar);
+router.post("/sell-car",upload.fields([
+    { name: 'insuranceDocument', maxCount: 1 },
+    { name: 'carPhoto', maxCount: 5 } // Adjust maxCount for car photos if needed
+]),handleSellCar);
+// router.post("/",upload.fields([{ name: 'insuranceDocument' , maxCount: 1 }, { name: 'carPhoto', maxCount: 10 }]),handleSellCar);
+
 // router.post("/add-notice",handleAddNotice)
 router.post("/add-notice",upload.array("images[]",20),handleAddNotice);
 

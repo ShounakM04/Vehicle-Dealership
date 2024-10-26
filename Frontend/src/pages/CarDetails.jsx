@@ -82,22 +82,23 @@ function CarDetails() {
             </ul>
 
             {/* Insurance Section */}
-            <h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
-            <ul>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Insurance Company:</span>
-                <span>{carData.insurance.carcompany}</span>
-              </li>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Policy Number:</span>
-                <span>{carData.insurance.policynum}</span>
-              </li>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Policy Tenure:</span>
-                <span>{carData.insurance.policytenure} years</span>
-              </li>
-            </ul>
-
+            {carData.insurance && <><h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
+              <ul>
+                <li className="flex justify-between items-center mb-2">
+                  <span className="font-semibold">Insurance Company:</span>
+                  <span>{carData.insurance.insurancecompany}</span>
+                </li>
+                <li className="flex justify-between items-center mb-2">
+                  <span className="font-semibold">Policy Number:</span>
+                  <span>{carData.insurance.policynum}</span>
+                </li>
+                <li className="flex justify-between items-center mb-2">
+                  <span className="font-semibold">Policy Tenure:</span>
+                  <span>{carData.insurance.policytenure} years</span>
+                </li>
+              </ul>
+            </>
+            }
             {/* Owner Section */}
             {/* <h3 className="text-lg font-semibold mb-2 mt-4">Owner Information</h3>
             <ul>
