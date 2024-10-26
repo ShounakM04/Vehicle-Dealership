@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { SearchContext } from '../context/SearchContext.jsx';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const {query, setQuery} = useContext(SearchContext);
   const location = useLocation(); // Get current location
 
   const toggleMenu = () => {

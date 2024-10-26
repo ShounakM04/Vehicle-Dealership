@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CustomerEnquiry from './pages/CustomerEnquiry';
 import CostReport from './pages/CostReport';
 import SellCarDetails from './pages/SellCarDetails';
-
+import { SearchProvider } from './context/SearchContext.jsx';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -105,7 +105,11 @@ import SellCarDetails from './pages/SellCarDetails';
     },
     {
       path: "*",
-      element: () => <h1>Page Not Found</h1>
+      element: (
+        <Layout>
+          <h1>Page Not Found</h1>
+        </Layout>
+      )
     }
 
     
@@ -113,12 +117,10 @@ import SellCarDetails from './pages/SellCarDetails';
 
   function App() {
       return (
-      <>
-        <>
+        <SearchProvider>
         <ToastContainer />
           <RouterProvider router={router} />
-        </>
-      </>
+        </SearchProvider>
     )
   }
 

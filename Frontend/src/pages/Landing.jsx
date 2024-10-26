@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { SearchContext } from "../context/SearchContext";
+import { useContext } from "react";
+
 
 export default function Landing() {
   const [fuelType, setFuelType] = useState(null);
@@ -10,7 +13,8 @@ export default function Landing() {
   const [cars, setCars] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [noticeImages, setNoticeImages] = useState([]);
-
+  const { query } = useContext(SearchContext);
+  // const [carname, setCarname] = useState(null);
   const navigate = useNavigate();
 
   const handleFuelTypeChange = (event) => {
@@ -43,7 +47,7 @@ export default function Landing() {
         const params = {};
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
-
+        if (query) params.carname = query;
         const response = await axios.get(`http://localhost:8000/`, { params });
         console.log(response.data)
         const data = response.data.carsWithImages;
@@ -66,7 +70,7 @@ export default function Landing() {
       }
     };
     fetchCars();
-  }, [fuelType, carType]);
+  }, [fuelType, carType, query]);
 
   // Fetch notice images only once on component mount
   useEffect(() => {
@@ -88,15 +92,16 @@ export default function Landing() {
   return (
     <div className="container mx-auto">
       {/* Top Section with Carousel and Filters */}
-      <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-4 mt-8 ml-12 mr-12">
         {/* Filters Section */}
-        <div className={`w-100vh lg:w-1/4 bg-white rounded-md shadow-md p-4 ${showFilters ? '' : 'hidden lg:block'}`}>
+        {/* {console.log("query", query)} */}
+        <div className={`w-100vh lg:w-1/4 bg-white h-full rounded-md shadow-md p-4 ${showFilters ? '' : 'hidden lg:block'}`}>
           <div className="hidden lg:block mb-4">
             <h2 className="text-xl font-bold">FILTERS</h2>
           </div>
 
           <div className="mb-4">
-            <h2 className="text-xl font-bold">FUEL TYPE</h2>
+            <h2 className="text-xl py-4 font-bold">FUEL TYPE</h2>
             {["petrol", "diesel", "cng"].map((type) => (
               <div className="flex items-center" key={type}>
                 <input
@@ -116,7 +121,7 @@ export default function Landing() {
           </div>
 
           <div className="mb-4">
-            <h2 className="text-xl font-bold">CAR TYPE</h2>
+            <h2 className="text-xl py-6 font-bold">CAR TYPE</h2>
             {["car", "truck", "bike", "tempo"].map((type) => (
               <div className="flex items-center" key={type}>
                 <input
@@ -152,7 +157,7 @@ export default function Landing() {
         </button>
 
         {/* Carousel Section */}
-        <div className="w-full lg:w-3/4 mt-2">
+        <div className="w-full lg:w-3/4 mt-2 m-10 p-4">
           {noticeImages.length > 0 ? (
             <Carousel
               showArrows={true}
@@ -178,7 +183,7 @@ export default function Landing() {
       </div>
 
       {/* Car Cards Section */}
-      <div className="flex flex-wrap mt-8 gap-4">
+      <div className="flex flex-wrap gap-4 m-10 p-4">
         {cars.map((car) => (
           car.status === false && (
             <div
