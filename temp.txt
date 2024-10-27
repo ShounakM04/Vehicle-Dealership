@@ -1,0 +1,32 @@
+<div class="car-details">
+        <h2>Details for Car: <%= car.registernumber %></h2>
+        <p><strong>Name:</strong> <%= car.carname %></p>
+        <p><strong>Model:</strong> <%= car.carmake %></p>
+        <p><strong>Color:</strong> <%= car.carcolor %></p>
+        <p><strong>Company:</strong> $<%= car.carcompany %></p>
+        <p><strong>Price:</strong>$<%= car.carprice%></p>
+        <h3>Car Images:</h3>
+        <div class="car-images">
+            <% images.forEach(function(image) { %>
+                <img src="<%= image.imageurl %>" alt="Car Image">
+            <% }) %>
+        </div>
+        <!-- Owner Details Section -->
+        <div class="owner-details">
+            <h3>Owner Details:</h3>
+            <p><strong>Owner Name:</strong> <%= owner.ownername %></p>
+            <p><strong>Owner Address:</strong> <%= owner.owneraddress %></p>
+            <p><strong>Owner Contact:</strong> <%= owner.ownerphone %></p>
+            <p><strong>Owner Email:</strong> <%= owner.owneremail %></p>
+
+            
+        </div>
+
+        <!-- Insurance Details Section -->
+        <div class="insurance-details">
+            <h3>Insurance Details:</h3>
+            <p><strong>Insurance Number:</strong> <%= insurance.policynum %></p>
+            <p><strong>Insurance Company:</strong> <%= insurance.companyname %></p>
+            <p><strong>Insurance Expiry:</strong> <%= insurance.policytenure %></p>
+        </div>
+    </div>
