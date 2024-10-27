@@ -1,21 +1,40 @@
 const cloudin = require("../controllers/cloud.controller");
+const { uploadToS3 } = require("../amazonS3/s3config");
+
+// async function imageUpload(registerNumber, files) {
+//     const imageUrls = [];
+//     try {
+//         // Loop through each file and upload to Cloudinary
+//         for (const file of files) {
+           
+//             const result = await cloudin(file.buffer);
+//             const imageUrl = result.secure_url;
+//             imageUrls.push(imageUrl);   
+//         }
+//         return imageUrls;
+//     } catch (error) {
+//         console.error(`Error uploading images for ${registerNumber}:`, error);
+//         throw new Error('Image upload failed');
+//     }
+// }
+
 
 async function imageUpload(registerNumber, files) {
     const imageUrls = [];
     try {
-        // Loop through each file and upload to Cloudinary
+        // Loop through each file and upload to S3
         for (const file of files) {
-            const filepath = file.path;
-            const result = await cloudin(filepath);
-            const imageUrl = result.secure_url;
-            imageUrls.push(imageUrl);   
+            const { buffer, originalname, mimetype } = file;
+            const s3Url = await uploadToS3(buffer, originalname, mimetype);
+            imageUrls.push(s3Url);
         }
         return imageUrls;
     } catch (error) {
         console.error(`Error uploading images for ${registerNumber}:`, error);
-        throw new Error('Image upload failed');
+        throw new Error("Image upload failed");
     }
 }
+
 
 async function documentUpload(registerNumber, files) {
     const documentUrls = [];

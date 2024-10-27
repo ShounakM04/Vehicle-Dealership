@@ -40,37 +40,38 @@ export default function Landing() {
     setShowFilters((prev) => !prev);
   };
 
-  // Fetch cars based on filters
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const params = {};
-        if (fuelType) params.fuelType = fuelType;
-        if (carType) params.carMake = carType;
-        if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000/`, { params });
-        console.log(response.data)
-        const data = response.data.carsWithImages;
-        const carsData = data.map((car) => {
-          const firstImage = car.displayImage ;
-          return {
-            id: car.registrationnumber,
-            imgSrc: firstImage,
-            name: car.carname,
-            number: car.registrationnumber,
-            kilometers: "20,000KM",
-            price: car.carprice,
-            status: car.status,
+ // Fetch cars based on filters
+useEffect(() => {
+  const fetchCars = async () => {
+    try {
+      const params = {};
+      if (fuelType) params.fuelType = fuelType;
+      if (carType) params.carMake = carType;
+      if (query) params.carSearch = query;
+      const response = await axios.get(`http://localhost:8000/`, { params });
+      console.log(response.data);
+      const data = response.data.carsWithImages;
+      const carsData = data.map((car) => {
+        const firstImage = car.imageurl; // Updated to use imageurl instead of displayImage
+        return {
+          id: car.registrationnumber,
+          imgSrc: firstImage, // Set imgSrc to the signed URL
+          name: car.carname,
+          number: car.registrationnumber,
+          kilometers: "20,000KM", // You might want to update this with actual data if available
+          price: car.carprice,
+          status: car.status,
+        };
+      });
+      setCars(carsData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-          };
-        });
-        setCars(carsData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchCars();
-  }, [fuelType, carType, query]);
+  fetchCars();
+}, [fuelType, carType, query]);
+
 
   // Fetch notice images only once on component mount
   useEffect(() => {

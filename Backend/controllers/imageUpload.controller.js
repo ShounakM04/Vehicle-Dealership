@@ -25,8 +25,48 @@
 
 // module.exports = handleImageUpload;
 
-const db = require('../models/database');
-const { imageUpload } = require('../utils/uploadFunctions.js');
+// const db = require('../models/database');
+// const { imageUpload } = require('../utils/uploadFunctions.js');
+
+// async function handleImageUpload(req, res) {
+//     const carNumber = req.body.carNumber;
+
+//     if (!req.files) {
+//         return res.status(400).send("No files uploaded");
+//     }
+
+//     try {
+//         // Upload the display image if provided
+//         const displayImageUrls = req.files['displayImage'] 
+//             ? await imageUpload(carNumber, [req.files['displayImage'][0]]) 
+//             : [];
+
+//         // Upload other images if provided
+//         console.log(req.files['images[]'] );
+//         const otherImageUrls = req.files['images[]'] 
+//             ? await imageUpload(carNumber, req.files['images[]']) 
+//             : [];
+
+//         // Combine the URLs for display image and other images into respective fields
+//         const displayImageUrl = displayImageUrls.length > 0 ? displayImageUrls[0] : null;
+//         const imageUrls = otherImageUrls.length > 0 ? otherImageUrls : null;
+
+//         // Insert data into the database with 'display_image' field
+//         const query = `INSERT INTO images (carNumber, image_urls, display_image) VALUES ($1, $2, $3)`;
+//         const values = [carNumber, imageUrls, displayImageUrl];
+//         await db.query(query, values);
+
+//         res.send("Images uploaded successfully");
+//     } catch (error) {
+//         console.log(`${error} : Error occurred while uploading the file`);
+//         res.status(500).send("An error occurred during the file upload");
+//     }
+// }
+
+// module.exports = handleImageUpload;
+
+// const db = require('../models/database');
+const { uploadToS3 } = require('../amazonS3/s3config'); // Import S3 upload function
 
 async function handleImageUpload(req, res) {
     const carNumber = req.body.carNumber;
@@ -36,25 +76,32 @@ async function handleImageUpload(req, res) {
     }
 
     try {
+        // Define the folder name for the car
+        const folderName = `${carNumber}/VehicleImages/`;
+
         // Upload the display image if provided
-        const displayImageUrls = req.files['displayImage'] 
-            ? await imageUpload(carNumber, [req.files['displayImage'][0]]) 
-            : [];
+        const displayImageUrl = req.files['displayImage'] 
+            ? await uploadToS3(req.files['displayImage'][0].buffer, `${folderName}0`, req.files['displayImage'][0].mimetype) // Use '0' for display image
+            : null;
+
+        console.log("Display Image URL: " + displayImageUrl);
 
         // Upload other images if provided
-        console.log(req.files['images[]'] );
         const otherImageUrls = req.files['images[]'] 
-            ? await imageUpload(carNumber, req.files['images[]']) 
+            ? await Promise.all(req.files['images[]'].map((file, index) => 
+                uploadToS3(file.buffer, `${folderName}${index + 1}`, file.mimetype) // Use sequential names starting from '1'
+            )) 
             : [];
 
-        // Combine the URLs for display image and other images into respective fields
-        const displayImageUrl = displayImageUrls.length > 0 ? displayImageUrls[0] : null;
-        const imageUrls = otherImageUrls.length > 0 ? otherImageUrls : null;
+        console.log("Other Images URLs: " + otherImageUrls);
 
-        // Insert data into the database with 'display_image' field
-        const query = `INSERT INTO images (carNumber, image_urls, display_image) VALUES ($1, $2, $3)`;
-        const values = [carNumber, imageUrls, displayImageUrl];
-        await db.query(query, values);
+        // Combine the URLs for display image and other images into respective fields
+        // const imageUrls = otherImageUrls.length > 0 ? otherImageUrls : null;
+
+        // // Insert data into the database with 'display_image' field
+        // const query = `INSERT INTO images (carNumber, image_urls, display_image) VALUES ($1, $2, $3)`;
+        // const values = [carNumber, imageUrls, displayImageUrl];
+        // await db.query(query, values);
 
         res.send("Images uploaded successfully");
     } catch (error) {

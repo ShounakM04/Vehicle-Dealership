@@ -1,5 +1,6 @@
 const db = require('../models/database');
 const { imageUpload } = require('../utils/uploadFunctions.js');
+const {uploadToS3} = require('../amazonS3/s3config.js')
 
 async function handleAddNotice(req, res) {
     const carNumber = req.body.carNumber;
@@ -26,6 +27,35 @@ async function handleAddNotice(req, res) {
         res.status(500).send("An error occurred while uploading the images");
     }
 }
+// async function handleAddNotice(req, res) {
+//     const carNumber = req.body.carNumber;
+//     console.log(req.body);
+    
+//     if (!req.files) {
+//         return res.status(400).send("No files uploaded");
+//     }
+    
+//     try {
+//         // Define the folder name for the car
+//         const folderName = `NoticeImages/`;
+
+        
+//         const imageUrls = req.files 
+//             ? await Promise.all(req.files.map((file, index) => 
+//                 uploadToS3(file.buffer, `${folderName}${index + 1}`, file.mimetype) // Use sequential names starting from '1'
+//             )) 
+//             : [];
+
+//         console.log("Other Images URLs: " + imageUrls);
+
+//         // Response message
+//         res.send("Notice Images uploaded successfully");
+//     } catch (error) {
+//         console.log(`${error} : Error occurred while uploading the images`);
+//         res.status(500).send("An error occurred while uploading the images");
+//     }
+// }
+
 
 
 async function handleGetNotice(req, res) {
