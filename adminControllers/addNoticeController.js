@@ -1,6 +1,6 @@
 const db = require('../models/database');
 const { imageUpload } = require('../utils/uploadFunctions.js');
-const {uploadToS3} = require('../amazonS3/s3config.js')
+const {uploadToS3Image} = require('../amazonS3/s3config.js')
 
 async function handleAddNotice(req, res) {
     const carNumber = req.body.carNumber;
