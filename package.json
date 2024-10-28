@@ -18,11 +18,8 @@
   },
   "homepage": "https://github.com/ShounakM04/Vehicle-Dealership#readme",
   "dependencies": {
-<<<<<<< HEAD
     "@aws-sdk/client-s3": "^3.679.0",
     "@aws-sdk/s3-request-presigner": "^3.679.0",
-=======
->>>>>>> 3da7b74e84f93ce96df14e979d9336d3a1306ab0
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.0",
     "dotenv": "^16.4.5",

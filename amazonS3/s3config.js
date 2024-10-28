@@ -10,17 +10,10 @@ const s3Client = new S3Client({
     }
 });
 
-<<<<<<< HEAD
-async function getObjectURL(name) {
-    const commmand = new GetObjectCommand({
-        Bucket: "cardealerbucket",
-        Key: name,
-=======
 async function getObjectURL(key) {
     const commmand = new GetObjectCommand({
         Bucket: "cardealerbucket",
         Key: key,
->>>>>>> 3da7b74e84f93ce96df14e979d9336d3a1306ab0
     });
     const url = await getSignedUrl(s3Client,commmand);
     return url;
