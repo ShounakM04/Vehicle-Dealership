@@ -12,14 +12,10 @@ async function handleAddNotice(req, res) {
     
     try {
         // Upload images and get an array of URLs
-        const imageUrls = await imageUpload(carNumber, req.files);
+        
 
         // Loop through each URL and insert it individually
-        for (const imageUrl of imageUrls) {
-            const query = `INSERT INTO noticeImages (image_urls) VALUES ($1)`;
-            const values = [imageUrl];
-            await db.query(query, values);
-        }
+    
 
         res.send("Notice Images uploaded successfully");
     } catch (error) {

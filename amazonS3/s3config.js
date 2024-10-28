@@ -1,4 +1,4 @@
-const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 require("dotenv").config();
 
@@ -29,13 +29,12 @@ async function uploadToS3(buffer, filename, contentType) {
         Body: buffer,
         ContentType: contentType,
     });
-    await s3Client.send(command);
-    return `https://cardealerbucket.s3.ap-south-1.amazonaws.com/${filename}`;
+    const url = await getSignedUrl(s3Client,command,{expiresIn : 1800});
+    return url;
 }
 
 
 async function uploadToS3Image(buffer, filename) {
-    
     const contentType = filename.endsWith('.png') ? "image/png" : "image/jpeg";
     return await uploadToS3(buffer, filename, contentType);
 }
@@ -45,7 +44,20 @@ async function uploadToS3Doc(buffer, filename) {
     return await uploadToS3(buffer, filename, "application/pdf");
 }
 
+async function  deleteObject(filename) {
+    const command = DeleteObjectCommand({
+        Bucket : "cardealerbucket",
+        Key : filename
+    });
 
+    try {
+        await s3Client.send(command);
+        console.log("Object deleted successfully");
+    } catch (error) {
+        res.status(500).send({message : "Internal Server Error"});
+    }
+    
+}
 
 // List images in a specific folder
 async function listImagesInFolder(carNumber) {
@@ -74,4 +86,4 @@ async function listImagesInFolder(carNumber) {
 
 
 
-module.exports = { s3Client, getObjectURL, uploadToS3Image,uploadToS3Doc,listImagesInFolder };
+module.exports = { s3Client, getObjectURL, uploadToS3Image,uploadToS3Doc,listImagesInFolder,deleteObject};
