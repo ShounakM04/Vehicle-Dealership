@@ -20,9 +20,18 @@ const RegistrationRoute = require("./adminRoutes/userRegistration.route.js")
 const DashboardRoute = require("./adminRoutes/dashboard.route.js")
 const InsuranceRoute  = require("./adminRoutes/insurance.route.js")
 const MaintainanceRoute = require("./adminRoutes/maintainance.route.js")
+const InstallmentRoute = require("./adminRoutes/installments.route.js")
 
 
-app.use(cors())
+const corsOptions = {
+    origin: '*', // Allow all origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
+
+app.use(cors(corsOptions));
+
+
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -45,7 +54,7 @@ app.use("/register", RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
 app.use("/insurance",InsuranceRoute);
 app.use("/maintainance",MaintainanceRoute);
-
+app.use("/installments",InstallmentRoute);
 
 // Correct `app.listen` without req and res parameters
 app.listen(port, () => {

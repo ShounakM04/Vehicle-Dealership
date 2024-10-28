@@ -1,42 +1,4 @@
-// const { S3Client, GetObjectCommand,  PutObjectCommand} =require ("@aws-sdk/client-s3");
-// const  { getSignedUrl } =require ("@aws-sdk/s3-request-presigner");
-// require('dotenv').config(); 
-
-// const s3Client = new S3Client({
-//     region: "ap-south-1",
-//     credentials: {
-//         accessKeyId: process.env.AMAZON_ACCESS_KEY,
-//         secretAccessKey: process.env.AMAZON_SECRET_KEY,
-//     }
-// });
-
-// async function getObjectURL(key) {
-//     const commmand = new GetObjectCommand({
-//         Bucket: "cardealerbucket",
-//         Key: key,
-//     });
-//     const url = await getSignedUrl(s3Client,commmand);
-//     return url;
-// }
-
-// async function putObject(filename,filetype) {
-//     const commmand =  new PutObjectCommand({
-//         Bucket : "cardealerbucket",
-//         Key: `uploads/${filename}`,
-//         ContentType : filetype,
-//     });
-//     const url = await getSignedUrl(s3Client,commmand);
-//     return url;
-// }
-
-
-// async function init() {
-//     console.log("URL for image",await getObjectURL("audit_ppt.jpg"))
-// }
-
-// init();
-
-const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 require("dotenv").config();
 
@@ -60,16 +22,42 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
     return url;
 }
 
-// Upload file directly to S3
-async function uploadToS3(buffer, filename, filetype) {
-    const command = new PutObjectCommand({
-        Bucket: "cardealerbucket",
-        Key: `${filename}`,
-        Body: buffer,
-        ContentType: filetype,
+    async function uploadToS3(buffer, filename, contentType) {
+        const command = new PutObjectCommand({
+            Bucket: "cardealerbucket",
+            Key: filename,
+            Body: buffer,
+            ContentType: contentType,
+        });
+        const url = await getSignedUrl(s3Client,command,{expiresIn : 1800});
+        // return `https://cardealerbucket.s3.ap-south-1.amazonaws.com/${url}`;
+        return url;
+    }
+
+
+    async function uploadToS3Image(buffer, filename) {
+        const contentType = filename.endsWith('.png') ? "image/png" : "image/jpeg";
+        return await uploadToS3(buffer, filename, contentType);
+    }
+
+
+async function uploadToS3Doc(buffer, filename) {
+    return await uploadToS3(buffer, filename, "application/pdf");
+}
+
+async function  deleteObject(filename) {
+    const command = DeleteObjectCommand({
+        Bucket : "cardealerbucket",
+        Key : filename
     });
-    await s3Client.send(command);
-    return `https://cardealerbucket.s3.ap-south-1.amazonaws.com/${filename}`;
+
+    try {
+        await s3Client.send(command);
+        console.log("Object deleted successfully");
+    } catch (error) {
+        res.status(500).send({message : "Internal Server Error"});
+    }
+    
 }
 
 // List images in a specific folder
@@ -99,5 +87,4 @@ async function listImagesInFolder(carNumber) {
 
 
 
-module.exports = { s3Client, getObjectURL, uploadToS3, listImagesInFolder };
-
+module.exports = { s3Client, getObjectURL, uploadToS3Image,uploadToS3Doc,listImagesInFolder,deleteObject};

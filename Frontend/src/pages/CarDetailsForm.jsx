@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { submitAdminForm } from '../api/adminForm.api.js';
-import { toast } from 'react-toastify'; // Ensure you have react-toastify installed
-import axios from 'axios'; // Ensure axios is imported
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
   const [brandName, setBrandName] = useState('');
@@ -15,11 +16,12 @@ function AdminForm() {
   const [ownerEmail, setOwnerEmail] = useState('');
   const [ownerAddress, setOwnerAddress] = useState('');
   const [carColor, setCarColor] = useState('');
-  const [carPrice, setCarPrice] = useState(''); 
+  const [carPrice, setCarPrice] = useState('');
   const [carType, setCarType] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [DisplayImage, setDisplayImage] = useState(null);
+  const [fuel, setFuel] = useState('');
 
   const navigate = useNavigate();
   const handleGoBack = () => {
@@ -27,97 +29,111 @@ function AdminForm() {
   };
 
   const handleDisplayImageChange = (e) => {
-    const file = e.target.files[0]; // Get the first selected file
+    const file = e.target.files[0];
     if (file) {
-      setDisplayImage(file); // Set the single image to state
+      setDisplayImage(file);
     }
   };
-  const [fuel, setFuel] = useState('');
 
   const handleImageChange = (e) => {
     setImages([...e.target.files]);
   };
 
-  const handleUpload = async () => {
-    setUploading(true);
-    const formData = new FormData();
-    
-    // Append the display image to the form data
-    if (DisplayImage) {
-      formData.append('displayImage', DisplayImage); // Use a unique key for the display image
-    }
-  
-    // Append other images to the form data
-    images.forEach((image) => {
-      formData.append('images[]', image);
-    });
-    
-    formData.append('carNumber', registrationNumber); // Add registration number to the form data
-  
+  const getUploadURL = async (fileName) => {
     try {
-      const response = await axios.post('http://localhost:8000/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      console.log("HEllo hi "+fileName);
+      const response = await axios.post('http://localhost:8000/upload/generate-upload-url', {
+        fileName,
       });
-      return response.data;
+      console.log(response.data.uploadUrl);
+      return response.data.uploadUrl;
     } catch (error) {
-      console.error("Image upload failed:", error);
-      throw new Error("Image upload failed");
-    } finally {
-      setUploading(false);
+      console.error('Error getting upload URL:', error);
+      toast.error("Couldn't get S3 upload URL");
+      throw error;
     }
   };
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  // Check for a negative car price
-  if (carPrice < 0) {
-    toast.error("Car price cannot be negative");
-    return;
-  }
 
-  try {
-    const response = await submitAdminForm({
-      vehicleName,
-      brandName,
-      registrationNumber,
-      insuranceCompany,
-      insuranceNumber: "10",
-      policyNumber,
-      insuranceTenure: policyTenure,
-      ownerName,
-      ownerPhone,
-      ownerEmail,
-      ownerAddress,
-      carColor,
-      carPrice,
-      carType,
-      fuel,
-    });
-
-    await handleUpload(); // Upload images only after form submission
-    toast.success("Car details added successfully!");
-    // console.log(response.data);
-  } catch (error) {
-    // Check if error response is available
-    if (error.response) {
-      // Handle specific error statuses
-      if (error.response.status === 400) {
-        const { error: errorMessage } = error.response.data; // Adjusted to fetch the error message from the response
-        toast.error(errorMessage || "Error submitting the form. Please check your inputs."); // Show the backend error message if available
-      } else {
-        toast.error("An error occurred while saving details. Please try again.");
-      }
-    } else {
-      // Handle network or unexpected errors
-      toast.error("An unexpected error occurred. Please check your network connection.");
+  const uploadToS3 = async (url, file) => {
+    try {
+      await axios.put(url, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+      console.log("Uploaded successfully.")
+    } catch (error) {
+      console.error('Error uploading file to S3:', error);
+      toast.error("Couldn't upload to S3");
+      throw error;
     }
-  }
+  };
+
+  const handleUpload = async () => {
+    setUploading(true);
+
+    try {
+      // Generate the S3 upload URL for the display image
+      if (DisplayImage) {
+        const displayImageFileName = `${registrationNumber}/VehicleImages/0`;
+        const displayImageUploadURL = await getUploadURL(displayImageFileName);
+        console.log(displayImageUploadURL);
+        await uploadToS3(displayImageUploadURL, DisplayImage);
+      }
+
+      // Handle other image uploads if necessary (similar to DisplayImage)
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        const imageFileName = `${registrationNumber}/VehicleImages/${i + 1}`;
+        const imageUploadURL = await getUploadURL(imageFileName);
+        await uploadToS3(imageUploadURL, image);
+      }
+
+      setUploading(false);
+      return true;
+    } catch (error) {
+      setUploading(false);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (carPrice < 0) {
+      toast.error("Car price cannot be negative");
+      return;
+    }
+
+    try {
+      // Upload images first
+      await handleUpload();
+
+      // Submit form data after images are uploaded
+      await submitAdminForm({
+        vehicleName,
+        brandName,
+        registrationNumber,
+        insuranceCompany,
+        insuranceNumber: '10',
+        policyNumber,
+        insuranceTenure: policyTenure,
+        ownerName,
+        ownerPhone,
+        ownerEmail,
+        ownerAddress,
+        carColor,
+        carPrice,
+        carType,
+        fuel,
+      });
+
+      toast.success("Car details added successfully!");
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error("Error submitting form. Please try again.");
+    }
 };
-
-
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
       <div className="mb-4">

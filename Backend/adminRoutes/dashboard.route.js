@@ -1,7 +1,7 @@
 const express = require("express");
 const handleRecordDeletion = require("../controllers/deleteRecord.controller");
 const handleDashboard = require("../adminControllers/dashboard.controller");
-const handleSellCar = require("../adminControllers/sellcar.controller")
+const {handleSellCar, getSoldCarDetails} = require("../adminControllers/sellcar.controller")
 const {handleAddNotice, handleDeleteNotice,handleGetNotice}= require("../controllers/addNotice.controller")
 const upload = require("../middlewares/multer.middleware.js");
 
@@ -22,5 +22,6 @@ router.post("/add-notice",upload.array("images[]",20),handleAddNotice);
 
 router.get("/get-notice",handleGetNotice);
 router.delete("/delete-notice",handleDeleteNotice)
+router.get("/sold-cars", getSoldCarDetails)
 
 module.exports = router;
