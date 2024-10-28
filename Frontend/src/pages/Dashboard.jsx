@@ -148,7 +148,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           <div className="bg-purple-300 p-5 rounded text-white min-h-4">
             Sample Card1
           </div>
@@ -158,7 +158,7 @@ const Dashboard = () => {
           <div className="bg-orange-300 p-5 rounded text-white min-h-4">
             Sample Card3
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-3">Car Details</h3>

@@ -56,20 +56,20 @@ function CarDetails() {
           </div>
 
           <div className="bg-white shadow-md rounded-md p-4">
-            <h2 className="text-2xl font-bold mb-4">{carData.car.carname} Details</h2>
-            <h3 className="text-lg font-semibold mb-2">Car Information</h3>
+            <h2 className="text-2xl font-bold mb-4">{carData.car.carcompany} {carData.car.carname} Details</h2>
+            <h3 className="text-lg font-semibold mb-2">Vehicle Information</h3>
             <ul>
               <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Car Name:</span>
+                <span className="font-semibold">Vehicle Name:</span>
                 <span>{carData.car.carname}</span>
               </li>
               <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Make:</span>
-                <span>{carData.car.carmake}</span>
+                <span className="font-semibold">Company:</span>
+                <span>{carData.car.carcompany}</span>
               </li>
               <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Company:</span>
-                <span>{carData.car.companyname}</span>
+                <span className="font-semibold">Type:</span>
+                <span>{carData.car.carmake}</span>
               </li>
               <li className="flex justify-between items-center mb-2">
                 <span className="font-semibold">Color:</span>
@@ -90,17 +90,17 @@ function CarDetails() {
                 </li>
                 <li className="flex justify-between items-center mb-2">
                   <span className="font-semibold">Policy Number:</span>
-                  <span>{carData.insurance.policynum}</span>
+                  <span>{carData.insurance.insurancenumber}</span>
                 </li>
                 <li className="flex justify-between items-center mb-2">
                   <span className="font-semibold">Policy Tenure:</span>
-                  <span>{carData.insurance.policytenure} years</span>
+                  <span>{carData.insurance.insurancetenure} years</span>
                 </li>
               </ul>
             </>
             }
             {/* Owner Section */}
-            {/* <h3 className="text-lg font-semibold mb-2 mt-4">Owner Information</h3>
+            <h3 className="text-lg font-semibold mb-2 mt-4">Owner Information</h3>
             <ul>
               <li className="flex justify-between items-center mb-2">
                 <span className="font-semibold">Owner Name:</span>
@@ -118,7 +118,7 @@ function CarDetails() {
                 <span className="font-semibold">Address:</span>
                 <span>{carData.owner.owneraddress}</span>
               </li>
-            </ul> */}
+            </ul>
           </div>
         </div>
       </main>
