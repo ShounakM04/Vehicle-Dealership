@@ -2,13 +2,33 @@ const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, Dele
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 require("dotenv").config();
 
+
+
+// Initialize S3 client with specific configurations
 const s3Client = new S3Client({
     region: "ap-south-1",
     credentials: {
         accessKeyId: process.env.AMAZON_ACCESS_KEY,
         secretAccessKey: process.env.AMAZON_SECRET_KEY,
-    },
+    }
 });
+
+async function uploadToS3(filename, contentType) {
+    // Set up the parameters for the S3 upload
+    const s3Params = {
+        Bucket: "cardealerbucket",
+        Key: filename,
+        ContentType: contentType
+    };
+
+    // Create a PutObjectCommand for the S3 upload
+    const command = new PutObjectCommand(s3Params);
+
+    // Generate a pre-signed URL that expires in 1 hour
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
+    return url;
+}
+
 
 // Generate a signed URL to retrieve an object
 async function getObjectURL(key, expiresIn = 3600) { // default expiration set to 1 hour
@@ -22,49 +42,12 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
     return url;
 }
 
-    async function uploadToS3(buffer, filename, contentType) {
-        const command = new PutObjectCommand({
-            Bucket: "cardealerbucket",
-            Key: filename,
-            Body: buffer,
-            ContentType: contentType,
-        });
-        const url = await getSignedUrl(s3Client,command,{expiresIn : 1800});
-        // return `https://cardealerbucket.s3.ap-south-1.amazonaws.com/${url}`;
-        return url;
-    }
 
-
-    async function uploadToS3Image(buffer, filename) {
-        const contentType = filename.endsWith('.png') ? "image/png" : "image/jpeg";
-        return await uploadToS3(buffer, filename, contentType);
-    }
-
-
-async function uploadToS3Doc(buffer, filename) {
-    return await uploadToS3(buffer, filename, "application/pdf");
-}
-
-async function  deleteObject(filename) {
-    const command = DeleteObjectCommand({
-        Bucket : "cardealerbucket",
-        Key : filename
-    });
-
-    try {
-        await s3Client.send(command);
-        console.log("Object deleted successfully");
-    } catch (error) {
-        res.status(500).send({message : "Internal Server Error"});
-    }
-    
-}
-
-// List images in a specific folder
-async function listImagesInFolder(carNumber) {
-    const params = {
+// List images in a specified folder path
+async function listImagesInFolder(path) {
+    const params = { 
         Bucket: 'cardealerbucket', // Replace with your bucket name
-        Prefix: `${carNumber}/VehicleImages/`, // Use the folder structure based on carNumber
+        Prefix: path, // Use the folder structure based on the provided path
     };
 
     try {
@@ -73,18 +56,34 @@ async function listImagesInFolder(carNumber) {
 
         // Check if data.Contents exists and has items
         if (!data.Contents || data.Contents.length === 0) {
-            console.log(`No images found for car ${carNumber}`);
+            console.log(`No images found for path ${path}`);
             return []; // Return an empty array if no images found
         }
 
         // Extract the keys of the images
         return data.Contents.map(item => item.Key); // Returns an array of keys
     } catch (error) {
-        console.error(`Error listing images in folder for car ${carNumber}: ${error.message}`);
+        console.error(`Error listing images in folder for path ${path}: ${error.message}`);
         throw error; // Rethrow to handle in the main function
     }
 }
 
 
+module.exports = { uploadToS3,getObjectURL ,listImagesInFolder};
 
-module.exports = { s3Client, getObjectURL, uploadToS3Image,uploadToS3Doc,listImagesInFolder,deleteObject};
+
+
+// async function  deleteObject(filename) {
+//     const command = DeleteObjectCommand({
+//         Bucket : "cardealerbucket",
+//         Key : filename
+//     });
+
+//     try {
+//         await s3Client.send(command);
+//         console.log("Object deleted successfully");
+//     } catch (error) {
+//         res.status(500).send({message : "Internal Server Error"});
+//     }
+    
+// }

@@ -10,6 +10,7 @@ Imagerouter.get("/", (req, res) => {
 
 // Imagerouter.post("/", upload.fields([{ name: 'displayImage', maxCount: 1 }, { name: 'images[]', maxCount: 10 }]), handleImageUpload);
 
-Imagerouter.post('/generate-upload-url', generatePresignedUploadUrl);
+Imagerouter.get('/generate-upload-url', generatePresignedUploadUrl);
+
 
 module.exports = Imagerouter;

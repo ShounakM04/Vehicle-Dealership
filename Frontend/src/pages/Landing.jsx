@@ -52,7 +52,7 @@ useEffect(() => {
       console.log(response.data);
       const data = response.data.carsWithImages;
       const carsData = data.map((car) => {
-        const firstImage = car.imageurl; // Updated to use imageurl instead of displayImage
+        const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
         return {
           id: car.registrationnumber,
           imgSrc: firstImage, // Set imgSrc to the signed URL

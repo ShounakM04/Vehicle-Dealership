@@ -135,22 +135,7 @@ export default function Installment({ carID }) {
                     "Not Provided"
                   )}
                 </p>
-                <p className="mt-2">
-                  <span className="font-medium">Vehicle Images:</span>{" "}
-                  {car.vehicle_image
-                    ? car.vehicle_image.map((url, index) => (
-                        <a
-                          href={url}
-                          key={index}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline mr-2"
-                        >
-                          Image {index + 1}
-                        </a>
-                      ))
-                    : "Not Provided"}
-                </p>
+                
               </div>
             </div>
           ))
