@@ -20,7 +20,7 @@ const RegistrationRoute = require("./adminRoutes/userRegistration.route.js")
 const DashboardRoute = require("./adminRoutes/dashboard.route.js")
 const InsuranceRoute  = require("./adminRoutes/insurance.route.js")
 const MaintainanceRoute = require("./adminRoutes/maintainance.route.js")
-
+const InstallmentRoute = require("./adminRoutes/installments.route.js")
 
 app.use(cors())
 app.set("view engine", "ejs");
@@ -45,6 +45,7 @@ app.use("/register", RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
 app.use("/insurance",InsuranceRoute);
 app.use("/maintainance",MaintainanceRoute);
+app.use("/installments",InstallmentRoute);
 
 
 // Correct `app.listen` without req and res parameters

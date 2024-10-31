@@ -71,4 +71,30 @@ async function handleSellCar(req, res) {
     }
 }
 
-module.exports = handleSellCar;
+async function getSoldCarDetails(req, res) {
+    try {
+        // If a specific car ID is provided, fetch details for that car only
+        const { carID } = req.query;
+        
+        let query = `SELECT * FROM soldcardetails`;
+        const params = [];
+
+        if (carID) {
+            query += ` WHERE registernumber = $1`;
+            params.push(carID);
+        }
+
+        const result = await db.query(query, params);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Car not found' });
+        }
+
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Error fetching sold car details:", error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+module.exports = { handleSellCar, getSoldCarDetails };

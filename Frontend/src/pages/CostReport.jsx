@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
 import { Maintainance } from "../components/Maintainance";
-import Insurance from "../components/Insurance";
+import Installment from "../components/Installment";
 
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
@@ -126,9 +126,9 @@ const CostReport = () => {
                 <p>Car No: {vehicleData.carDetails.carNo}</p>
                 <p>Car Company: {vehicleData.carDetails.carCompany}</p>
                 <p>Model: {vehicleData.carDetails.model}</p>
-                <p>Type: {vehicleData.carDetails.type}</p>
+                {/* <p>Type: {vehicleData.carDetails.type}</p>
                 <p>Fuel Type: {vehicleData.carDetails.fuelType}</p>
-                <p>Color: {vehicleData.carDetails.color}</p>
+                <p>Color: {vehicleData.carDetails.color}</p> */}
               </div>
               <div className="w-1/2 pl-2">
                 <h4 className="font-semibold">Owner Details</h4>
@@ -141,7 +141,7 @@ const CostReport = () => {
 
           {/* Maintenance Records */}
           <h3 className="text-lg font-semibold mb-2 ">Maintenance Records:</h3>
-          <div className="overflow-y-auto max-h-40">
+          <div className="overflow-y-auto max-h-60">
             {maintainanceData.maintenanceRecords.length > 0 ? (
               <ul className="mt-2">
                 {maintainanceData.maintenanceRecords.map((record, index) => {
@@ -224,7 +224,7 @@ const CostReport = () => {
           {soldStatus === false ? (
             <Maintainance registernumber={vehicleData.carDetails.carNo}  onMaintenanceAdded={handleMaintenanceAdded} />
           ) : (
-            <Insurance />
+            <Installment carID={vehicleData.carDetails.carNo}/>
           )}
 
           {/* <h2 className="text-2xl font-bold mt-6 mb-4">Set Total Amount to be Paid</h2>
