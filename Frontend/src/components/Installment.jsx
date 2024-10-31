@@ -10,16 +10,23 @@ export default function Installment({ carID }) {
   const [error, setError] = useState(null);
   const [viewOption, setViewOption] = useState("view");
   const [loading, setLoading] = useState(true); // Loading state
+  const [insuranceDoc,setInsuranceDoc]= useState([]);
+  const [soldCarImages,setSoldCarImages]= useState([]);
+
 
 
 
   const fetchCarDetails = async () => {
     try {
+      console.log("Params : "+carID);
       const response = await axios.get(
         `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
-      setCarDetails(response.data);
+      setCarDetails(response.data.dbData);
+      setInsuranceDoc(response.data.soldCarInsuranceDocs);
+      
+      setSoldCarImages(response.data.soldCarImages);
     } catch (err) {
       // setError("Error fetching car details");
       console.error(err);
@@ -78,8 +85,8 @@ export default function Installment({ carID }) {
     const fetchData = async () => {
       setLoading(true); // Start loading
       try {
-        await fetchCarDetails(); // Fetch car details
         await fetchInstallments(); // Fetch installments
+        await fetchCarDetails(); // Fetch car details
       } catch (err) {
         console.error('Error fetching data:', err.response ? err.response.data : err.message);
         setError("Error fetching data");
@@ -88,11 +95,13 @@ export default function Installment({ carID }) {
       }
     };
   
-    fetchData();
+   fetchData();
+       console.log(insuranceDoc);
   }, [carID]);
   
   return (
     <>
+
       <div className="bg-white p-2 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold">Sold Vehicle Details</h2>
         {error && <p className="text-red-500">{error}</p>}
@@ -120,17 +129,32 @@ export default function Installment({ carID }) {
                 </p>
               </div>
               <div>
-                <p>
+              <p>
                   <span className="font-medium">Insurance Document:</span>{" "}
-                  {car.insurance_image ? (
-                    <a
-                      href={car.insurance_image}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {insuranceDoc.length > 0 ? (
+                    <button
+                      onClick={() => 
+                        insuranceDoc.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
+                      }
                       className="text-blue-500 underline"
                     >
                       View
-                    </a>
+                    </button>
+                  ) : (
+                    "Not Provided"
+                  )}
+                </p>
+                <p>
+                  <span className="font-medium">Sold Car Images:</span>{" "}
+                  {soldCarImages.length > 0 ? (
+                    <button
+                      onClick={() => 
+                        soldCarImages.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
+                      }
+                      className="text-blue-500 underline"
+                    >
+                      View
+                    </button>
                   ) : (
                     "Not Provided"
                   )}

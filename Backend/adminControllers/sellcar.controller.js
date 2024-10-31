@@ -76,12 +76,14 @@
 
 
 const db = require("../models/database");
-const { uploadToS3 } = require('../amazonS3/s3config'); // Import S3 upload function
+// const { uploadToS3 } = require('../amazonS3/s3config'); // Import S3 upload function
+const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); 
+
 
 async function handleSellCar(req, res) {
     try {
         console.log("Request body:", req.body);
-        console.log("Request files:", req.files);
+        
         
         // Destructure fields from form data in req.body.formData
         const {
@@ -97,29 +99,11 @@ async function handleSellCar(req, res) {
 
         console.log("In controller: CarID - " + carID);
 
-        // Define folder names
-        const vehicleImagesFolder = `${carID}/VehicleImages/SoldVehicle/`;
-        const insuranceDocFolder = `${carID}/InsuranceDoc/`;
-
-        // Upload insurance document if provided
-        const insuranceImageUrl = req.files['insuranceDocument']
-            ? await uploadToS3(req.files['insuranceDocument'][0].buffer, `${insuranceDocFolder}insurance`, req.files['insuranceDocument'][0].mimetype) 
-            : null;
-
-        console.log("Insurance Image URL:", insuranceImageUrl);
-
-        // Upload car photos if provided
-        const carImageUrls = req.files['carPhoto'] // Updated field name to 'carPhotos'
-            ? await Promise.all(req.files['carPhoto'].map((file, index) => 
-                uploadToS3(file.buffer, `${vehicleImagesFolder}${index + 1}`, file.mimetype) // Sequential names starting from '1'
-            ))
-            : [];
-
-        console.log("Car Image URLs:", carImageUrls);
-
         // Update car status to sold in the cardetails table
         const updateQuery = `UPDATE cardetails SET status = true WHERE registernumber = $1`;
         await db.query(updateQuery, [carID]);
+
+        const temp="";
 
         // Insert data into the soldcardetails table, including the URLs
         await db.query(
@@ -138,8 +122,9 @@ async function handleSellCar(req, res) {
                 totalInstallments,
                 installmentAmount,
                 commission,
-                insuranceImageUrl,
-                JSON.stringify(carImageUrls) // Store image URLs as a JSON string if you want multiple URLs in one field
+                temp,
+                temp
+                 // Store image URLs as a JSON string if you want multiple URLs in one field
             ]
         );
 
@@ -148,6 +133,21 @@ async function handleSellCar(req, res) {
         console.error("Error:", error.message);
         res.status(500).json({ error: 'Server error' });
     }
+}
+
+async function listDocHelper(FolderName)
+{
+    // Fetch image keys from the S3 folder
+    const DocsKeys = await listImagesInFolder(FolderName);
+
+    // Generate signed URLs for other images, starting from 1
+    const DocsPromises = DocsKeys.map(async (key, index) => {
+        return await getObjectURL(key); // Generate URL for each image key
+    });
+
+   // Wait for all other image promises to resolve
+    const DocsUrls = await Promise.all(DocsPromises);
+    return DocsUrls;
 }
 
 async function getSoldCarDetails(req, res) {
@@ -165,11 +165,25 @@ async function getSoldCarDetails(req, res) {
 
         const result = await db.query(query, params);
 
+console.log("sellcar.cotroller : "+carID)
+        
+        // S3 folder structure for images (e.g., regisNum/VehicleImages/)
+        const soldCarImagesFolder = `${carID}/SoldCarImages/`;
+        const soldCarInsuranceFolder = `${carID}/InsuranceDocuments/`;
+
+        const soldCarImages= await listDocHelper(soldCarImagesFolder);
+        const soldCarInsuranceDocs= await listDocHelper(soldCarInsuranceFolder);
+
+
+        
+
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Car not found' });
         }
 
-        res.status(200).json(result.rows);
+        const dbData = result.rows ;
+
+        res.status(200).json({dbData, soldCarImages,soldCarInsuranceDocs});
     } catch (error) {
         console.error("Error fetching sold car details:", error.message);
         res.status(500).json({ error: 'Server error' });

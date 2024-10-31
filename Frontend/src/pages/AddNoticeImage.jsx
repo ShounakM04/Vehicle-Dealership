@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import axios from "axios";
 import { FaTrashAlt } from 'react-icons/fa'; 
+import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
 
 function AddNoticeImage() {
   const [images, setImages] = useState([]);
@@ -24,7 +25,7 @@ function AddNoticeImage() {
   // Call fetchImages on component mount
   useEffect(() => {
     fetchImages();
-  }, []); 
+  }, [fetchedImages]); 
 
   const handleImageChange = (e) => {
     setImages([...e.target.files]);
@@ -32,22 +33,18 @@ function AddNoticeImage() {
 
   const handleUpload = async () => {
     setUploading(true);
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append('images[]', image);
-    });
-    formData.append('carNumber', 'MH00AB0000');
+  
 
     try {
-      const response = await axios.post('http://localhost:8000/dashboard/add-notice', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const file = images[0];
+      const uniqueID = Date.now(); 
+      const addNoticePath = `Notices/${uniqueID}`;
+      const NoticeUrl = await getUploadURL(file, addNoticePath);
+      await uploadToS3(NoticeUrl, file);
+
       setImages([]);
       toast.success("Notice Images added successfully!");
       fetchImages(); // Re-fetch images after successful upload
-      return response.data;
     } catch (error) {
       console.error("Notice Image upload failed:", error);
       throw new Error("Notice Image upload failed");
@@ -87,8 +84,24 @@ function AddNoticeImage() {
 
   const handleDelete = async () => {
     try {
+      const deleteUrl =fetchedImages[selectedImageSerial];
+      console.log("Del : "+deleteUrl);
+
+      // To extract the uniqueID back from the URL
+      // Regular expression to match the unique ID
+      const regex = /\/Notices\/(\d+)\?/;
+      const match = deleteUrl.match(regex);
+      let uniqueID;
+
+      if (match) {
+          uniqueID = match[1]; // Extracted unique ID
+          console.log(uniqueID); // Output: 1730365937235
+      } else {
+          console.log('No unique ID found');
+      }
+
       await axios.delete(`http://localhost:8000/dashboard/delete-notice`, {
-        params: { serialnum: selectedImageSerial }
+        params: { uniqueID: uniqueID }
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
       setFetchedImages(fetchedImages.filter(image => image.serialnum !== selectedImageSerial));
@@ -112,7 +125,7 @@ function AddNoticeImage() {
         <h2 className="text-xl font-bold mb-2">Upload Notice Image </h2>
         <input
           type="file"
-          multiple
+          
           accept="image/*"
           onChange={handleImageChange}
           className="mb-4"
@@ -148,12 +161,12 @@ function AddNoticeImage() {
           {fetchedImages.map((image, index) => (
             <div key={index} className="relative border rounded-lg p-4 shadow-lg">
               <img
-                src={image.image_urls}
+                src={image}
                 alt={`Notice ${index + 1}`}
                 className="h-48 w-full object-cover rounded-lg"
               />
               <button
-                onClick={() => confirmDelete(image.serialnum)}
+                onClick={() => confirmDelete(index)}
                 className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white p-2 rounded-full"
               >
                 <FaTrashAlt />

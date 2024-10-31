@@ -43,47 +43,45 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
 }
 
 
-// List images in a specified folder path
-async function listImagesInFolder(path) {
-    const params = { 
-        Bucket: 'cardealerbucket', // Replace with your bucket name
-        Prefix: path, // Use the folder structure based on the provided path
-    };
+    // List images in a specified folder path
+    async function listImagesInFolder(path) {
+        const params = { 
+            Bucket: 'cardealerbucket', // Replace with your bucket name
+            Prefix: path, // Use the folder structure based on the provided path
+        };
+
+        try {
+            const command = new ListObjectsV2Command(params); // Create command
+            const data = await s3Client.send(command); // Send command
+
+            // Check if data.Contents exists and has items
+            if (!data.Contents || data.Contents.length === 0) {
+                console.log(`No images found for path ${path}`);
+                return []; // Return an empty array if no images found
+            }
+
+            // Extract the keys of the images
+            return data.Contents.map(item => item.Key); // Returns an array of keys
+        } catch (error) {
+            console.error(`Error listing images in folder for path ${path}: ${error.message}`);
+            throw error; // Rethrow to handle in the main function
+        }
+    }
+
+
+async function  deleteObject(filename) {
+    const command = new DeleteObjectCommand({
+        Bucket : "cardealerbucket",
+        Key : filename
+    });
 
     try {
-        const command = new ListObjectsV2Command(params); // Create command
-        const data = await s3Client.send(command); // Send command
-
-        // Check if data.Contents exists and has items
-        if (!data.Contents || data.Contents.length === 0) {
-            console.log(`No images found for path ${path}`);
-            return []; // Return an empty array if no images found
-        }
-
-        // Extract the keys of the images
-        return data.Contents.map(item => item.Key); // Returns an array of keys
+        await s3Client.send(command);
+        console.log("Object deleted successfully");
     } catch (error) {
-        console.error(`Error listing images in folder for path ${path}: ${error.message}`);
-        throw error; // Rethrow to handle in the main function
+        res.status(500).send({message : "Internal Server Error"});
     }
+    
 }
 
-
-module.exports = { uploadToS3,getObjectURL ,listImagesInFolder};
-
-
-
-// async function  deleteObject(filename) {
-//     const command = DeleteObjectCommand({
-//         Bucket : "cardealerbucket",
-//         Key : filename
-//     });
-
-//     try {
-//         await s3Client.send(command);
-//         console.log("Object deleted successfully");
-//     } catch (error) {
-//         res.status(500).send({message : "Internal Server Error"});
-//     }
-    
-// }
+module.exports = { uploadToS3,getObjectURL ,listImagesInFolder,deleteObject};

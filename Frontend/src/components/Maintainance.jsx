@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
 
 export function Maintainance({ registernumber, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');
@@ -14,28 +15,11 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('registerNumber', registernumber);
-        formData.append('maintainanceType', description);
-        formData.append('maintainanceCost', price);
-        formData.append('doneby', role);
-        formData.append('maintainancedate', maintainanceDate);
-
-        files.forEach((file) => {
-            formData.append('documents', file);
-        });
-
         try {
             setAdding(true);
-            const response = await axios.post('http://localhost:8000/maintainance', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const response = await axios.post('http://localhost:8000/maintainance', {registernumber,description,price,role,maintainanceDate});
 
-            toast.success('Maintenance record added successfully!');
-            console.log(response.data);
-
+            
             // Clear form fields
             setTitle('');
             setPrice('');
@@ -44,8 +28,21 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
             setMaintainanceDate('');
             setRole('');
 
+            const nextIndex = response.data.nextIndex;
+            // Handle other image uploads if necessary (similar to DisplayImage)
+       
+            const file = files[0];
+            const maintainanceDocPath = `${registernumber}/MaintenanceDoc/${nextIndex}`;
+            const maintainanceDocUrl = await getUploadURL(file, maintainanceDocPath);
+            await uploadToS3(maintainanceDocUrl, file);
+        
+
             // Call the parent callback to refresh maintenance records
             if (onMaintenanceAdded) onMaintenanceAdded();
+
+            toast.success('Maintenance record added successfully!');
+            console.log(response.data);
+
         } catch (error) {
             console.error('Error adding maintenance record:', error);
             toast.error('Failed to add maintenance record.');
@@ -104,7 +101,6 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
                     <label className="block text-sm font-medium mb-2">Upload Documents</label>
                     <input
                         type="file"
-                        multiple
                         onChange={(e) => setFiles([...e.target.files])}
                         className="border border-gray-300 rounded p-2 w-full"
                     />

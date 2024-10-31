@@ -78,8 +78,8 @@ useEffect(() => {
     const fetchNoticeImages = async () => {
       try {
         const response = await axios.get('http://localhost:8000/dashboard/get-notice');
-        const array = response.data;
-        const imageUrls = array.map(item => item.image_urls);
+        const imageUrls = response.data;
+        
         setNoticeImages(imageUrls);  // Set fetched image URLs
         console.log("Notice Images:", imageUrls);
       } catch (error) {
