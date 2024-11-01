@@ -69,7 +69,7 @@ function CarDetails() {
               </li>
               <li className="flex justify-between items-center mb-2">
                 <span className="font-semibold">Company:</span>
-                <span>{carData.car.companyname}</span>
+                <span>{carData.car.carcompany}</span>
               </li>
               <li className="flex justify-between items-center mb-2">
                 <span className="font-semibold">Color:</span>
@@ -77,7 +77,7 @@ function CarDetails() {
               </li>
               <li className="flex justify-between items-center mb-2">
                 <span className="font-semibold">Price:</span>
-                <span>{carData.car.carprice}</span>
+                <span>{carData.car.vehiclesellprice}</span>
               </li>
             </ul>
 
@@ -90,7 +90,7 @@ function CarDetails() {
                 </li>
                 <li className="flex justify-between items-center mb-2">
                   <span className="font-semibold">Policy Number:</span>
-                  <span>{carData.insurance.policynum}</span>
+                  <span>{carData.insurance.insurancenumber}</span>
                 </li>
                 <li className="flex justify-between items-center mb-2">
                   <span className="font-semibold">Policy Tenure:</span>

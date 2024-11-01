@@ -3,6 +3,7 @@ import { submitAdminForm } from '../api/adminForm.api.js';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
+import axios from 'axios';
 
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
@@ -18,6 +19,11 @@ function AdminForm() {
   const [vehicleColor, setVehicleColor] = useState('');
   const [vehicleBuyPrice, setVehicleBuyPrice] = useState('');
   const [vehicleSellPrice, setVehicleSellPrice] = useState('');
+  const [insuranceStartDate, setInsuranceStartDate] = useState("");
+  const [insuranceEndDate, setInsuranceEndDate] = useState("");
+  const [showInsuranceFields, setShowInsuranceFields] = useState(false);
+  const [showOwnerFields, setShowOwnerFields] = useState(false);
+
 
   const [vehicleType, setVehicleType] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -82,7 +88,7 @@ function AdminForm() {
 
 
       // Submit form data after images are uploaded
-      await submitAdminForm({
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -96,8 +102,13 @@ function AdminForm() {
         ownerAddress,
         vehicleColor,
         vehicleBuyPrice,
+        vehicleSellPrice,
         vehicleType,
         fuel,
+        insuranceStartDate,
+        insuranceEndDate,
+        showInsuranceFields,
+        showOwnerFields
       });
 
       // Upload images first
@@ -230,99 +241,179 @@ function AdminForm() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={vehicleSellPrice}
                 onChange={(e) => setVehicleSellPrice(Math.max(0, e.target.value))} // Prevent negative input
-                
+
               />
             </div>
           </div>
         </div>
 
 
-
         {/* Insurance Details */}
-        <h2 className="text-xl font-bold mb-2">Insurance Details</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="insuranceCompany" className="block text-gray-700 text-sm font-bold mb-2">Insurance Company</label>
-            <input
-              type="text"
-              id="insuranceCompany"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={insuranceCompany}
-              onChange={(e) => setInsuranceCompany(e.target.value)}
-            />
+        <div>
+          {/* Checkbox to toggle insurance form */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <input
+                type="checkbox"
+                checked={showInsuranceFields}
+                onChange={() => setShowInsuranceFields(!showInsuranceFields)}
+                className="mr-2 leading-tight"
+              />
+              Add Insurance Details
+            </label>
           </div>
-          <div>
-            <label htmlFor="policyNumber" className="block text-gray-700 text-sm font-bold mb-2">Policy Number</label>
-            <input
-              type="text"
-              id="policyNumber"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={policyNumber}
-              onChange={(e) => setPolicyNumber(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="policyTenure" className="block text-gray-700 text-sm font-bold mb-2">Policy Tenure</label>
-          <input
-            type="number"
-            id="policyTenure"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={policyTenure}
-            onChange={(e) => setPolicyTenure(e.target.value)}
 
-            // Disable mouse wheel increment/decrement
-            onWheel={(e) => e.target.blur()}
-            style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
+          {showInsuranceFields && (
+            <div>
+              {/* Insurance Details */}
+              <h2 className="text-xl font-bold mb-2">Insurance Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label
+                    htmlFor="insuranceCompany"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Insurance Company
+                  </label>
+                  <input
+                    type="text"
+                    id="insuranceCompany"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={insuranceCompany}
+                    onChange={(e) => setInsuranceCompany(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="policyNumber"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Policy Number
+                  </label>
+                  <input
+                    type="text"
+                    id="policyNumber"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={policyNumber}
+                    onChange={(e) => setPolicyNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label
+                    htmlFor="insuranceStartDate"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Insurance Start Date
+                  </label>
+                  <input
+                    type="date"
+                    id="insuranceStartDate"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={insuranceStartDate}
+                    onChange={(e) => setInsuranceStartDate(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="insuranceEndDate"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Insurance End Date
+                  </label>
+                  <input
+                    type="date"
+                    id="insuranceEndDate"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={insuranceEndDate}
+                    onChange={(e) => setInsuranceEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="policyTenure"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  Policy Tenure
+                </label>
+                <input
+                  type="number"
+                  id="policyTenure"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={policyTenure}
+                  onChange={(e) => setPolicyTenure(e.target.value)}
 
-          />
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Owner Details */}
-        <h2 className="text-xl font-bold mb-2">Owner Information</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="ownerName" className="block text-gray-700 text-sm font-bold mb-2">Owner Name</label>
-            <input
-              type="text"
-              id="ownerName"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={ownerName}
-              onChange={(e) => setOwnerName(e.target.value)}
-            />
+        <div>
+          {/* Checkbox to toggle insurance form */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <input
+                type="checkbox"
+                checked={showOwnerFields}
+                onChange={() => setShowOwnerFields(!showOwnerFields)}
+                className="mr-2 leading-tight"
+              />
+              Add Owner Details
+            </label>
           </div>
-          <div>
-            <label htmlFor="ownerPhone" className="block text-gray-700 text-sm font-bold mb-2">Owner Phone</label>
-            <input
-              type="text"
-              id="ownerPhone"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={ownerPhone}
-              onChange={(e) => setOwnerPhone(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="ownerEmail" className="block text-gray-700 text-sm font-bold mb-2">Owner Email</label>
-            <input
-              type="email"
-              id="ownerEmail"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={ownerEmail}
-              onChange={(e) => setOwnerEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="ownerAddress" className="block text-gray-700 text-sm font-bold mb-2">Owner Address</label>
-            <input
-              type="text"
-              id="ownerAddress"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={ownerAddress}
-              onChange={(e) => setOwnerAddress(e.target.value)}
-            />
-          </div>
+          {showOwnerFields && (<>
+            <h2 className="text-xl font-bold mb-2">Owner Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="ownerName" className="block text-gray-700 text-sm font-bold mb-2">Owner Name</label>
+                <input
+                  type="text"
+                  id="ownerName"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={ownerName}
+                  onChange={(e) => setOwnerName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="ownerPhone" className="block text-gray-700 text-sm font-bold mb-2">Owner Phone</label>
+                <input
+                  type="text"
+                  id="ownerPhone"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={ownerPhone}
+                  onChange={(e) => setOwnerPhone(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="ownerEmail" className="block text-gray-700 text-sm font-bold mb-2">Owner Email</label>
+                <input
+                  type="email"
+                  id="ownerEmail"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={ownerEmail}
+                  onChange={(e) => setOwnerEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="ownerAddress" className="block text-gray-700 text-sm font-bold mb-2">Owner Address</label>
+                <input
+                  type="text"
+                  id="ownerAddress"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={ownerAddress}
+                  onChange={(e) => setOwnerAddress(e.target.value)}
+                />
+              </div>
+            </div>
+
+          </>)
+          }
         </div>
 
         {/* Image Upload Section */}

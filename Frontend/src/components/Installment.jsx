@@ -81,6 +81,8 @@ export default function Installment({ carID }) {
 
   const totalInstallmentAmount = installments.reduce((total, inst) => total + parseFloat(inst.amount), 0);
 
+  if(carID)
+  {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Start loading
@@ -98,6 +100,7 @@ export default function Installment({ carID }) {
    fetchData();
        console.log(insuranceDoc);
   }, [carID]);
+}
   
   return (
     <>

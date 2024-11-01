@@ -1,5 +1,5 @@
 const db = require("../models/database")
-const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); 
+const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
 async function handleGetMaintainanceDetails(req, res) {
     const registernumber = req.query.registernumber;
@@ -42,17 +42,17 @@ async function handleGetMaintainanceDetails(req, res) {
             return await getObjectURL(key); // Generate URL for each image key
         });
 
-       // Wait for all other image promises to resolve
-const maintainanceDocs = await Promise.all(maintainanceDocsPromises);
+        // Wait for all other image promises to resolve
+        const maintainanceDocs = await Promise.all(maintainanceDocsPromises);
 
-// Create maintenanceRecords array
-const maintenanceRecords = maintainanceDetails.map((detail, index) => ({
-    description: detail.maintainancedetails,
-    price: detail.maintainancecost,
-    maintainanceDate: detail.maintainancedate,
-    role: detail.maintainancedone,
-    maintainanceReceipt: maintainanceDocs[index], // Use index to get corresponding element from maintainanceDocs
-}));
+        // Create maintenanceRecords array
+        const maintenanceRecords = maintainanceDetails.map((detail, index) => ({
+            description: detail.maintainancedetails,
+            price: detail.maintainancecost,
+            maintainanceDate: detail.maintainancedate,
+            role: detail.maintainancedone,
+            maintainanceReceipt: maintainanceDocs[index], // Use index to get corresponding element from maintainanceDocs
+        }));
 
 
         // Return the maintenance records along with the total cost
@@ -68,85 +68,39 @@ const maintenanceRecords = maintainanceDetails.map((detail, index) => ({
     }
 }
 
-
-
-// async function handlePostMaintainanceDetails(req, res) {
-//     const { registernumber, description, price, maintainanceDate, role } = req.body;
-//     if (!registernumber || !description || !price || !maintainanceDate || !role) {
-//         return res.status(404).send("Enter all the details correctly");
-//     }
-
-//     if (!req.files || req.files.length === 0) {
-//         return res.status(400).send("Please upload the document(s) correctly.");
-//     }
-//     try {
-//         const maintainanceReceipts = [];
-
-//         for (const doc of req.files) {
-//             const path = doc.path;
-//             const result = await cloudin(path); // Upload document to Cloudinary
-//             const docResult = result.secure_url;
-//             maintainanceReceipts.push(docResult); // Store secure URLs
-//         }
-
-//         // Check if documents were successfully uploaded
-//         if (maintainanceReceipts.length === 0) {
-//             return res.status(401).send("Error uploading the documents.");
-//         }
-
-//         const query = `INSERT INTO maintainancedetails 
-//                         (registernumber,price,maintainancedetails,maintainanceDate,maintainancereceipt,maintainancedone)
-//                         VALUES ($1,$2,$3,$4,$5,$6)`;
-//         const values = [registernumber, price, description, maintainanceDate, maintainanceReceipts, role];
-//         const result = await db.query(query, values);
-
-//         if (result.rows.length == 0) {
-//             return res.status(400).send("Error occured in entering the details");
-//         }
-
-//         res.status(200).send("Details Entered Successfully");
-
-
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).send("Internal Server Error");
-//     }
-// }
-
 async function handlePostMaintainanceDetails(req, res) {
-    const {registernumber,description,price,role,maintainanceDate} = req.body;
-    console.log( req.body);
+    const { registernumber, description, price, role, maintainanceDate } = req.body;
+    console.log(req.body);
 
     // Check for missing fields
     if (!registernumber || !description || !price || !maintainanceDate || !role) {
         return res.status(400).send("Enter all the details correctly");
     }
 
-  
+
 
     try {
-        const temp = "";
+
         let nextIndex = 0; // Start with 0 if no records exist
 
         // Query to get the highest maintenance number or default to 0 if it doesn't exist
         const qr = `SELECT COALESCE(MAX(maintainanceNumber), 0) AS maxNumber FROM maintainancedetails WHERE registernumber = $1`;
         const val = [registernumber];
         const result1 = await db.query(qr, val);
-        
+
         if (result1.rows.length > 0) {
             nextIndex = result1.rows[0].maxnumber + 1; // Increment by 1 for the next index
         }
-        
+
         // Insert into the database
         const query = `INSERT INTO maintainancedetails 
-                        (registernumber, maintainancecost, maintainancedetails, maintainancedate, maintainancereceipt, maintainancedone,maintainanceNumber)
-                        VALUES ($1, $2, $3, $4, $5, $6,$7)`;
+                        (registernumber, maintainancecost, maintainancedetails, maintainancedate, maintainancedone,maintainanceNumber)
+                        VALUES ($1, $2, $3, $4, $5, $6)`;
         const values = [
             registernumber,
             price,
             description,
             maintainanceDate,
-            temp, // Convert to JSON string
             role,
             nextIndex
         ];
@@ -157,7 +111,7 @@ async function handlePostMaintainanceDetails(req, res) {
             return res.status(400).send("Error occurred in entering the details");
         }
 
-        return res.status(200).json({nextIndex});
+        return res.status(200).json({ nextIndex });
 
     } catch (error) {
         console.log(error);

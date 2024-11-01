@@ -15,16 +15,18 @@ async function handleCarDetails(req, res) {
       ownerPhone,
       ownerEmail,
       ownerAddress,
-      carColor,
-      carPrice,
-      carType,
+      vehicleColor,
+      vehicleBuyPrice,
+      vehicleSellPrice,
+      vehicleType,
       fuel,
       insuranceNumber,
       insuranceTenure,
       insuranceStartDate,
       insuranceEndDate,
-      soldStatus,
-      documentUrls,
+      showInsuranceFields,
+      showOwnerFields,
+      soldStatus
     } = req.body;
 
     // Validate mandatory fields
@@ -32,17 +34,12 @@ async function handleCarDetails(req, res) {
       registernumber,
       vehicleName,
       brandName,
-      insuranceCompany,
-      ownerName,
-      ownerPhone,
-      ownerEmail,
-      ownerAddress,
-      carColor,
-      carPrice,
-      carType,
-      insuranceNumber,
-      insuranceTenure,
+      vehicleColor,
+      vehicleBuyPrice,
+      vehicleType,
     };
+
+
 
     for (const [field, value] of Object.entries(requiredFields)) {
       if (!value || value.toString().trim() === "") {
@@ -51,16 +48,16 @@ async function handleCarDetails(req, res) {
     }
 
     // Ensure carPrice is a positive number
-    if (carPrice <= 0) {
+    if (vehicleBuyPrice <= 0 ) {
       return res.status(400).send({ error: "Car price must be a positive number" });
     }
 
     // Validate specific formats if needed
-    if (!/^\d{10}$/.test(ownerPhone)) {
+    if (showOwnerFields && ownerPhone && !/^\d{10}$/.test(ownerPhone)) {
       return res.status(400).send({ error: "Owner phone must be a valid 10-digit number" });
     }
 
-    if (!/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(ownerEmail)) {
+    if (showOwnerFields && ownerEmail&& !/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(ownerEmail)) {
       return res.status(400).send({ error: "Owner email is invalid" });
     }
 
@@ -73,12 +70,13 @@ async function handleCarDetails(req, res) {
     }
 
     // Insert car details
-    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, carprice, fuel) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-    const values2 = [registernumber, vehicleName, carType, brandName, carColor, carPrice, fuel];
+    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel,vehicleSellPrice];
     await db.query(query2, values2);
 
-    // Insert insurance details
-    const query3 = `
+    if (showInsuranceFields == true) {
+      // Insert insurance details
+      const query3 = `
       INSERT INTO carinsurance (
         registernum, 
         insurancecompany, 
@@ -86,27 +84,39 @@ async function handleCarDetails(req, res) {
         insurancetenure, 
         insurancestartdate, 
         insuranceenddate, 
-        insurancedocuments, 
         soldstatus
       ) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
-    const values3 = [
-      registernumber,
-      insuranceCompany,
-      insuranceNumber,
-      insuranceTenure,
-      insuranceStartDate,
-      insuranceEndDate,
-      documentUrls || [], // assuming documentUrls is an array
-      soldStatus || false, // set default soldStatus to false if not provided
-    ];
-    await db.query(query3, values3);
+      VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+      const values3 = [
+        registernumber,
+        insuranceCompany,
+        insuranceNumber,
+        insuranceTenure,
+        insuranceStartDate,
+        insuranceEndDate, 
+        soldStatus || false, // set default soldStatus to false if not provided
+      ];
+
+
+
+      await db.query(query3, values3);
+    }
 
     // Insert owner details
     const query4 = `INSERT INTO ownerdetails (ownername, ownerphone, owneremail, owneraddress, registernumber) VALUES ($1, $2, $3, $4, $5)`;
-    const values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registernumber];
-    await db.query(query4, values4);
 
+    let values4;
+    if (showOwnerFields == true) {
+
+      
+       values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registernumber];
+    }
+    else
+    {
+      values4 = ["Nikhil Motors","7058600679","nikhilmotors@gmail.com","Halondi, Kolhapur",registernumber];
+    }
+    
+    await db.query(query4, values4);
     res.status(200).send("Details entered into the database successfully");
   } catch (error) {
     // Log error for debugging

@@ -1,4 +1,4 @@
-const { uploadToS3Image,uploadToS3 } = require('../amazonS3/s3config');
+const { uploadToS3 } = require('../amazonS3/s3config');
 
 // Controller to directly call uploadToS3Image and return pre-signed URL
 async function generatePresignedUploadUrl(req, res) {
@@ -24,31 +24,3 @@ async function generatePresignedUploadUrl(req, res) {
 }
 
 module.exports = { generatePresignedUploadUrl };
-
-/////////////////////////////////
-// const { uploadToS3Image,s3Client } = require('../amazonS3/s3config');
-// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-
-// const {s3} = require('../amazonS3/s3config');
-
-// // Controller to directly call uploadToS3Image and return pre-signed URL
-// async function generatePresignedUploadUrl(req, res) {
-//     try {
-
-
-//         const s3Params = {
-//             Bucket:"cardealerbucket",
-//             Key:req.query.filename,
-//             Expires:60*60,
-//             ContentType:req.query.mimetype
-//         };
-//         const url = await s3.getSignedUrl('putObject',s3Params);
-//         res.json({url});
-
-//     } catch (error) {
-//         console.error("Error generating pre-signed URL:", error);
-//         res.status(500).send({ message: "Failed to generate pre-signed URL" });
-//     }
-// }
-
-// module.exports = { generatePresignedUploadUrl };

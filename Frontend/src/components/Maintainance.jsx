@@ -20,13 +20,7 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
             const response = await axios.post('http://localhost:8000/maintainance', {registernumber,description,price,role,maintainanceDate});
 
             
-            // Clear form fields
-            setTitle('');
-            setPrice('');
-            setDescription('');
-            setFiles([]);
-            setMaintainanceDate('');
-            setRole('');
+            
 
             const nextIndex = response.data.nextIndex;
             // Handle other image uploads if necessary (similar to DisplayImage)
@@ -38,7 +32,15 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
         
 
             // Call the parent callback to refresh maintenance records
-            if (onMaintenanceAdded) onMaintenanceAdded();
+            if (onMaintenanceAdded){ onMaintenanceAdded();}
+
+            // Clear form fields
+            setTitle('');
+            setPrice('');
+            setDescription('');
+            setFiles([]);
+            setMaintainanceDate('');
+            setRole('');
 
             toast.success('Maintenance record added successfully!');
             console.log(response.data);

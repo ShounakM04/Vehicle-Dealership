@@ -1,12 +1,12 @@
 
 const db = require("../models/database");
-const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); // Import the function to get signed URLs and list images
+const { getObjectURL } = require("../amazonS3/s3config"); 
 
 async function handleHomePage(req, res) {
     const { fuelType, carMake, carSearch } = req.query; // Extract parameters from query
     try {
         let query1 = `
-        SELECT c.carname, c.registernumber, c.carcolor, c.carprice, c.status
+        SELECT c.carname, c.registernumber, c.carcolor, c.vehiclebuyprice,c.vehiclesellprice, c.status
         FROM cardetails c 
         WHERE 1=1
         `;
@@ -43,7 +43,7 @@ async function handleHomePage(req, res) {
             return {
                 registernumber: row.registernumber,
                 carname: row.carname,
-                carprice: row.carprice,
+                carprice: row.vehiclesellprice,
                 status: row.status,
                 displayImage: displayImageUrl,
 
