@@ -46,7 +46,7 @@ function AdminForm() {
     try {
       // Generate the S3 upload URL for the display image
       if (DisplayImage) {
-        const displayImageFileName = `${registrationNumber}/VehicleImages/0`;
+        const displayImageFileName = `${registrationNumber}/InventoryVehicleImages/0`;
         const displayImageUploadURL = await getUploadURL(DisplayImage,displayImageFileName);
         console.log(displayImageUploadURL);
         await uploadToS3(displayImageUploadURL, DisplayImage);
@@ -55,7 +55,7 @@ function AdminForm() {
       // Handle other image uploads if necessary (similar to DisplayImage)
       for (let i = 0; i < images.length; i++) {
         const image = images[i];
-        const imageFileName = `${registrationNumber}/VehicleImages/${i + 1}`;
+        const imageFileName = `${registrationNumber}/InventoryVehicleImages/${i + 1}`;
         const imageUploadURL = await getUploadURL(image,imageFileName);
         await uploadToS3(imageUploadURL, image);
       }
@@ -316,7 +316,7 @@ function AdminForm() {
 
 
         <div>
-          <h2 className="text-xl font-bold mb-2">Upload Images (Max 10)</h2>
+          <h2 className="text-xl font-bold mb-2">Upload Images</h2>
           <input
             type="file"
             accept="image/*"

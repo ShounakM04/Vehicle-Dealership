@@ -89,20 +89,7 @@ function SellCarDetails() {
       sellFormData.append("totalInstallments", formData.totalInstallments);
       sellFormData.append("installmentAmount", formData.installmentAmount);
       sellFormData.append("commission", formData.commission);
-      // sellFormData.append("insuranceDocument", formData.insuranceDocument);
-      
-      // Append each selected car photo to FormData
-      // formData.carPhotos.forEach((photo) => {
-      //   sellFormData.append("carPhotos", photo);
-      // });
-      
-      // if (formData.insuranceDocument) {
-      //   const displayImageFileName = `${registrationNumber}/InsuranceDocuments/0`;
-      //   const displayImageUploadURL = await getUploadURL(DisplayImage,displayImageFileName);
-      //   console.log(displayImageUploadURL);
-      //   await uploadToS3(displayImageUploadURL, DisplayImage);
-      // }
-
+    
       const registrationNumber = carData.car.registernumber;
       console.log(registrationNumber);
       // Handle other image uploads if necessary (similar to DisplayImage)

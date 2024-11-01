@@ -25,7 +25,7 @@ async function handleSpecifiPage(req, res) {
             const owner = ownerResults.rows[0]; // Assuming one owner record per car
 
             // S3 folder structure for images (e.g., regisNum/VehicleImages/)
-            const imageFolder = `${regisNum}/VehicleImages/`;
+            const imageFolder = `${regisNum}/InventoryVehicleImages/`;
 
             // Fetch image keys from the S3 folder
             const imageKeys = await listImagesInFolder(imageFolder);

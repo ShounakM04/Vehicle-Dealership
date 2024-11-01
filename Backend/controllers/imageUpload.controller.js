@@ -10,7 +10,7 @@ async function handleImageUpload(req, res) {
 
     try {
         // Define the folder name for the car
-        const folderName = `${carNumber}/VehicleImages/`;
+        const folderName = `${carNumber}/InventoryVehicleImages/`;
 
         // Upload the display image if provided
         const displayImageUrl = req.files['displayImage'] 

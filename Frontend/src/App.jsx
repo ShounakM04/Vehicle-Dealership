@@ -18,6 +18,8 @@ import CustomerEnquiry from './pages/CustomerEnquiry';
 import CostReport from './pages/CostReport';
 import SellCarDetails from './pages/SellCarDetails';
 import { SearchProvider } from './context/SearchContext.jsx';
+import DriverDashboard from './pages/DriverDashboard.jsx';
+import DriverOnsiteImagesAdd from './components/DriverOnsiteImagesAdd.jsx';
   const router = createBrowserRouter([
     {
       path:"/",
@@ -50,6 +52,22 @@ import { SearchProvider } from './context/SearchContext.jsx';
       element:(
         <Layout>
           <Dashboard/>
+        </Layout>
+      )
+    },
+    {
+      path:"/dashboard/driver",
+      element:(
+        <Layout>
+          <DriverDashboard/>
+        </Layout>
+      )
+    },
+    {
+      path:"/dashboard/driver/onsiteVehicleImages",
+      element:(
+        <Layout>
+          <DriverOnsiteImagesAdd/>
         </Layout>
       )
     },

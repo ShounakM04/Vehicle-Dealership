@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import axios from "axios";
-import { FaTrashAlt } from 'react-icons/fa'; 
-import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
+import { FaTrashAlt } from 'react-icons/fa';
+import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 
 function AddNoticeImage() {
   const [images, setImages] = useState([]);
@@ -15,7 +15,8 @@ function AddNoticeImage() {
   const fetchImages = async () => {
     try {
       const response = await axios.get('http://localhost:8000/dashboard/get-notice');
-      setFetchedImages(response.data);  
+      setFetchedImages(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching notice images:", error);
       toast.error("Failed to load notice images");
@@ -25,7 +26,7 @@ function AddNoticeImage() {
   // Call fetchImages on component mount
   useEffect(() => {
     fetchImages();
-  }, [fetchedImages]); 
+  }, []);
 
   const handleImageChange = (e) => {
     setImages([...e.target.files]);
@@ -33,11 +34,11 @@ function AddNoticeImage() {
 
   const handleUpload = async () => {
     setUploading(true);
-  
+
 
     try {
       const file = images[0];
-      const uniqueID = Date.now(); 
+      const uniqueID = Date.now();
       const addNoticePath = `Notices/${uniqueID}`;
       const NoticeUrl = await getUploadURL(file, addNoticePath);
       await uploadToS3(NoticeUrl, file);
@@ -84,8 +85,8 @@ function AddNoticeImage() {
 
   const handleDelete = async () => {
     try {
-      const deleteUrl =fetchedImages[selectedImageSerial];
-      console.log("Del : "+deleteUrl);
+      const deleteUrl = fetchedImages[selectedImageSerial];
+      console.log("Del : " + deleteUrl);
 
       // To extract the uniqueID back from the URL
       // Regular expression to match the unique ID
@@ -94,10 +95,10 @@ function AddNoticeImage() {
       let uniqueID;
 
       if (match) {
-          uniqueID = match[1]; // Extracted unique ID
-          console.log(uniqueID); // Output: 1730365937235
+        uniqueID = match[1]; // Extracted unique ID
+        console.log(uniqueID); // Output: 1730365937235
       } else {
-          console.log('No unique ID found');
+        console.log('No unique ID found');
       }
 
       await axios.delete(`http://localhost:8000/dashboard/delete-notice`, {
@@ -105,6 +106,8 @@ function AddNoticeImage() {
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
       setFetchedImages(fetchedImages.filter(image => image.serialnum !== selectedImageSerial));
+      fetchImages();
+
     } catch (error) {
       console.error("Error deleting notice image:", error);
       toast.error("Failed to delete notice image");
@@ -125,7 +128,7 @@ function AddNoticeImage() {
         <h2 className="text-xl font-bold mb-2">Upload Notice Image </h2>
         <input
           type="file"
-          
+
           accept="image/*"
           onChange={handleImageChange}
           className="mb-4"
@@ -158,15 +161,15 @@ function AddNoticeImage() {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Uploaded Notice Images</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {fetchedImages.map((image, index) => (
-            <div key={index} className="relative border rounded-lg p-4 shadow-lg">
+          {fetchedImages.slice(1).map((image, index) => (
+            <div key={index + 1} className="relative border rounded-lg p-4 shadow-lg">
               <img
                 src={image}
                 alt={`Notice ${index + 1}`}
                 className="h-48 w-full object-cover rounded-lg"
               />
               <button
-                onClick={() => confirmDelete(index)}
+                onClick={() => confirmDelete(index + 1)}
                 className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white p-2 rounded-full"
               >
                 <FaTrashAlt />
@@ -175,6 +178,7 @@ function AddNoticeImage() {
           ))}
         </div>
       </div>
+
 
       {/* Confirmation Modal */}
       {isModalOpen && (
