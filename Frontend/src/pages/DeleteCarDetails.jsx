@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 function DeleteCarDetails() {
-  const [deleteID, setDeleteID] = useState(''); // Holds the current input
+  const [registernumber, setRegisternumber] = useState(''); // Holds the current input
   const [submittedID, setSubmittedID] = useState(''); // Holds the submitted ID for deletion
   const [submitted, setSubmitted] = useState(false); // To control if the form was submitted
   const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
@@ -44,10 +44,10 @@ function DeleteCarDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
-    const currDeleteId = deleteID;
+    const currDeleteId = registernumber;
 
-    setSubmittedID(deleteID); // Store the deleteID for deletion
-    setDeleteID(''); // Clear the input field after submission
+    setSubmittedID(registernumber); // Store the registernumber for deletion
+    setRegisternumber(''); // Clear the input field after submission
     setSubmitted(true); // Set the form as submitted
 
 
@@ -134,8 +134,10 @@ function DeleteCarDetails() {
             required
             maxLength="10" // Restrict input to 10 characters
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={deleteID}
-            onChange={(e) => setDeleteID(e.target.value)}
+            value={registernumber}
+            onChange={(e) => setRegisternumber(e.target.value
+              .replace(/^\s+/, "")
+              .replace(/[a-z]/g, (char) => char.toUpperCase()))}
           />
         </div>
         <button

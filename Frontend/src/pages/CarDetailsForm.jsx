@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { submitAdminForm } from '../api/adminForm.api.js';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
+import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
   const [brandName, setBrandName] = useState('');
-  const [registrationNumber, setRegistrationNumber] = useState('');
+  const [registernumber, setRegisternumber] = useState('');
   const [insuranceCompany, setInsuranceCompany] = useState('');
   const [policyNumber, setPolicyNumber] = useState('');
   const [policyTenure, setPolicyTenure] = useState('');
@@ -15,9 +15,11 @@ function AdminForm() {
   const [ownerPhone, setOwnerPhone] = useState('');
   const [ownerEmail, setOwnerEmail] = useState('');
   const [ownerAddress, setOwnerAddress] = useState('');
-  const [carColor, setCarColor] = useState('');
-  const [carPrice, setCarPrice] = useState('');
-  const [carType, setCarType] = useState('');
+  const [vehicleColor, setVehicleColor] = useState('');
+  const [vehicleBuyPrice, setVehicleBuyPrice] = useState('');
+  const [vehicleSellPrice, setVehicleSellPrice] = useState('');
+
+  const [vehicleType, setVehicleType] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [DisplayImage, setDisplayImage] = useState(null);
@@ -39,15 +41,15 @@ function AdminForm() {
     setImages([...e.target.files]);
   };
 
-  
+
   const handleUpload = async () => {
     setUploading(true);
 
     try {
       // Generate the S3 upload URL for the display image
       if (DisplayImage) {
-        const displayImageFileName = `${registrationNumber}/InventoryVehicleImages/0`;
-        const displayImageUploadURL = await getUploadURL(DisplayImage,displayImageFileName);
+        const displayImageFileName = `${registernumber}/InventoryVehicleImages/0`;
+        const displayImageUploadURL = await getUploadURL(DisplayImage, displayImageFileName);
         console.log(displayImageUploadURL);
         await uploadToS3(displayImageUploadURL, DisplayImage);
       }
@@ -55,8 +57,8 @@ function AdminForm() {
       // Handle other image uploads if necessary (similar to DisplayImage)
       for (let i = 0; i < images.length; i++) {
         const image = images[i];
-        const imageFileName = `${registrationNumber}/InventoryVehicleImages/${i + 1}`;
-        const imageUploadURL = await getUploadURL(image,imageFileName);
+        const imageFileName = `${registernumber}/InventoryVehicleImages/${i + 1}`;
+        const imageUploadURL = await getUploadURL(image, imageFileName);
         await uploadToS3(imageUploadURL, image);
       }
 
@@ -71,39 +73,39 @@ function AdminForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (carPrice < 0) {
-      toast.error("Car price cannot be negative");
+    if (vehicleBuyPrice < 0) {
+      toast.error("Vehicle price cannot be negative");
       return;
     }
 
     try {
-      
+
 
       // Submit form data after images are uploaded
       await submitAdminForm({
         vehicleName,
         brandName,
-        registrationNumber,
+        registernumber,
         insuranceCompany,
-        insuranceNumber: '10',
+        insuranceNumber: policyNumber,
         policyNumber,
         insuranceTenure: policyTenure,
         ownerName,
         ownerPhone,
         ownerEmail,
         ownerAddress,
-        carColor,
-        carPrice,
-        carType,
+        vehicleColor,
+        vehicleBuyPrice,
+        vehicleType,
         fuel,
       });
 
       // Upload images first
       await handleUpload();
 
-      
 
-      toast.success("Car details added successfully!");
+
+      toast.success("Vehicle details added successfully!");
       navigate('/dashboard');
     } catch (error) {
       if (error.response && error.response.status == 400) {
@@ -112,7 +114,7 @@ function AdminForm() {
         toast.error(error.response.data.error);
       }
     }
-};
+  };
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
       <div className="mb-4">
@@ -149,62 +151,92 @@ function AdminForm() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label htmlFor="registrationNumber" className="block text-gray-700 text-sm font-bold mb-2">Registration Number</label>
+            <label htmlFor="registernumber" className="block text-gray-700 text-sm font-bold mb-2">Register Number</label>
             <input
               type="text"
-              id="registrationNumber"
+              id="registernumber"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={registrationNumber}
-              onChange={(e) => setRegistrationNumber(e.target.value)}
+              value={registernumber}
+              onChange={(e) => setRegisternumber(e.target.value
+                .replace(/^\s+/, "")
+                .replace(/[a-z]/g, (char) => char.toUpperCase()))}
             />
           </div>
           <div>
-            <label htmlFor="carType" className="block text-gray-700 text-sm font-bold mb-2">Car Type</label>
-            <input
-              type="text"
-              id="carType"
+            <label htmlFor="vehicleType" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Type</label>
+            <select
+              id="vehicleType"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={carType}
-              onChange={(e) => setCarType(e.target.value)}
-            />
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+            >
+              <option value="">Select Vehicle Type</option>
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
+              <option value="truck">Truck</option>
+              <option value="tempo">Tempo</option>
+
+            </select>
           </div>
+
         </div>
 
-        {/* New fields for Car Color and Car Price side by side */}
+        {/* New fields for Vehicle Color and Vehicle Price side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label htmlFor="carColor" className="block text-gray-700 text-sm font-bold mb-2">Car Color</label>
+            <label htmlFor="vehicleColor" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Color</label>
             <input
               type="text"
-              id="carColor"
+              id="vehicleColor"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={carColor}
-              onChange={(e) => setCarColor(e.target.value)}
+              value={vehicleColor}
+              onChange={(e) => setVehicleColor(e.target.value)}
             />
           </div>
           <div>
-            <label htmlFor="carPrice" className="block text-gray-700 text-sm font-bold mb-2">Car Price</label>
-            <input
-              type="number"
-              id="carPrice"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={carPrice}
-              onChange={(e) => setCarPrice(Math.max(0, e.target.value))} // Prevent negative input
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="carColor" className="block text-gray-700 text-sm font-bold mb-2">Fuel Type</label>
-            <input
-              type="text"
+            <label htmlFor="fuel" className="block text-gray-700 text-sm font-bold mb-2">Fuel Type</label>
+            <select
               id="fuel"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={fuel}
               onChange={(e) => setFuel(e.target.value)}
+            >
+              <option value="">Select Fuel Type</option>
+              <option value="petrol">Petrol</option>
+              <option value="diesel">Diesel</option>
+              <option value="cng">CNG</option>
+            </select>
+          </div>
+
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+          <div>
+            <label htmlFor="vehicleBuyPrice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Buying Price</label>
+            <input
+              type="number"
+              id="vehicleBuyPrice"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={vehicleBuyPrice}
+              onChange={(e) => setVehicleBuyPrice(Math.max(0, e.target.value))} // Prevent negative input
             />
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label htmlFor="buyPrice" className="block text-gray-700 text-sm font-bold mb-2">Buying Price</label>
+              <input
+                type="number"
+                id="vehicleSellPrice"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={vehicleSellPrice}
+                onChange={(e) => setVehicleSellPrice(Math.max(0, e.target.value))} // Prevent negative input
+                
+              />
+            </div>
+          </div>
         </div>
+
+
 
         {/* Insurance Details */}
         <h2 className="text-xl font-bold mb-2">Insurance Details</h2>

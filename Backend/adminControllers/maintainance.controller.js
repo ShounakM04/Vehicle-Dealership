@@ -1,55 +1,13 @@
 const db = require("../models/database")
 const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); 
 
-
-// async function handleGetMaintainanceDetails(req, res) {
-//     const registernumber = req.query.registernumber;
-//     console.log("yeh le", registernumber);
-
-//     try {
-//         //console.log(registernumber);
-//         if (!registernumber) {
-//             return res.status(400).send("Enter a car registration number");
-//         }
-
-//         const query = `SELECT * FROM maintainancedetails WHERE registernumber = $1`;
-//         const value = [registernumber];
-//         const result = await db.query(query, value);
-
-//         //console.log(result.rows[0]);
-//         if (result.rows.length == 0) {
-//             return res.status(400).send("The car does not exist in the system");
-//         }
-
-//         const query1 = `SELECT SUM(price) FROM maintainancedetails WHERE registernumber = $1`;
-//         const value1 = [registernumber];
-//         const totCost = await db.query(query1, value1);
-
-//         const maintainanceDetails = result.rows[0];
-//         const totalCost = totCost.rows[0];
-
-//         return res.status(200).json({
-//             registernumber: maintainanceDetails.registernumber,
-//             description: maintainanceDetails.maintainancedetails,
-//             price: maintainanceDetails.price,
-//             maintainanceDate: maintainanceDetails.maintainanceDate,
-//             role: maintainanceDetails.maintainancedone,
-//             maintainanceReceipt: maintainanceDetails.maintainancereceipt,
-//             totalmaintainance: totalCost.sum,
-//         });
-
-
-//     } catch (error) {
-//         return res.status(500).send("Internal Server Error")
-//     }
-// }
 async function handleGetMaintainanceDetails(req, res) {
     const registernumber = req.query.registernumber;
     console.log("Received register number:", registernumber);
 
     try {
         if (!registernumber) {
-            return res.status(400).send("Enter a car registration number");
+            return res.status(400).send("Enter a car registernumber number");
         }
 
         // Query to get all maintenance records for the given register number

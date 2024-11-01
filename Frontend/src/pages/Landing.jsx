@@ -40,37 +40,37 @@ export default function Landing() {
     setShowFilters((prev) => !prev);
   };
 
- // Fetch cars based on filters
-useEffect(() => {
-  const fetchCars = async () => {
-    try {
-      const params = {};
-      if (fuelType) params.fuelType = fuelType;
-      if (carType) params.carMake = carType;
-      if (query) params.carSearch = query;
-      const response = await axios.get(`http://localhost:8000/`, { params });
-      console.log(response.data);
-      const data = response.data.carsWithImages;
-      const carsData = data.map((car) => {
-        const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
-        return {
-          id: car.registrationnumber,
-          imgSrc: firstImage, // Set imgSrc to the signed URL
-          name: car.carname,
-          number: car.registrationnumber,
-          kilometers: "20,000KM", // You might want to update this with actual data if available
-          price: car.carprice,
-          status: car.status,
-        };
-      });
-      setCars(carsData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // Fetch cars based on filters
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const params = {};
+        if (fuelType) params.fuelType = fuelType;
+        if (carType) params.carMake = carType;
+        if (query) params.carSearch = query;
+        const response = await axios.get(`http://localhost:8000/`, { params });
+        console.log(response.data);
+        const data = response.data.carsWithImages;
+        const carsData = data.map((car) => {
+          const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
+          return {
+            id: car.registernumber,
+            imgSrc: firstImage, // Set imgSrc to the signed URL
+            name: car.carname,
+            number: car.registernumber,
+            kilometers: "20,000KM", // You might want to update this with actual data if available
+            price: car.carprice,
+            status: car.status,
+          };
+        });
+        setCars(carsData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  fetchCars();
-}, [fuelType, carType, query]);
+    fetchCars();
+  }, [fuelType, carType, query]);
 
 
   // Fetch notice images only once on component mount
@@ -79,7 +79,7 @@ useEffect(() => {
       try {
         const response = await axios.get('http://localhost:8000/dashboard/get-notice');
         const imageUrls = response.data;
-        
+
         setNoticeImages(imageUrls);  // Set fetched image URLs
         console.log("Notice Images:", imageUrls);
       } catch (error) {
@@ -150,8 +150,8 @@ useEffect(() => {
         </div>
 
         {/* Filter Toggle Button for Mobile */}
-        <button 
-          onClick={toggleFilters} 
+        <button
+          onClick={toggleFilters}
           className="lg:hidden mb-2 px-4 py-2 bg-blue-500 text-white rounded-md"
         >
           {showFilters ? 'Hide Filters' : 'Show Filters'}

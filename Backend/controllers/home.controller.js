@@ -20,33 +20,33 @@ async function handleHomePage(req, res) {
         if (carMake) {
             query1 += ` AND c.carmake = '${carMake}'`;
         }
-        
+
         // Add condition for carSearch to check both carname and registernumber
         if (carSearch) {
-            query1 += ` AND (LOWER(c.carname) LIKE LOWER('%${carSearch}%') OR LOWER(c.registernumber) LIKE LOWER('%${carSearch}%'))`; 
+            query1 += ` AND (LOWER(c.carname) LIKE LOWER('%${carSearch}%') OR LOWER(c.registernumber) LIKE LOWER('%${carSearch}%'))`;
         }
 
         query1 += ` ORDER BY c.registernumber`;
 
         const result = await db.query(query1);
-        
+
         // Create an array of promises for getting signed URLs
         const carsWithImagesPromises = result.rows.map(async (row) => {
             const carNumber = row.registernumber; // Get the car number from the row
             const displayImageKey = `${carNumber}/InventoryVehicleImages/0`; // Generate key for display image
-            
+
             // Generate signed URL for display image
-            const displayImageUrl = await getObjectURL(displayImageKey); 
+            const displayImageUrl = await getObjectURL(displayImageKey);
             console.log(`Display Image URL: ${displayImageUrl}`);
 
 
             return {
-                registrationnumber: row.registernumber,
+                registernumber: row.registernumber,
                 carname: row.carname,
                 carprice: row.carprice,
                 status: row.status,
                 displayImage: displayImageUrl,
-               
+
             };
         });
 

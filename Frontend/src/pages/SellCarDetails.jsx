@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
+import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 
 Modal.setAppElement('#root');
 
@@ -72,48 +72,40 @@ function SellCarDetails() {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    
+
     setFormData({ ...formData, [name]: Array.from(files) }); // Convert FileList to array
-    
+
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const sellFormData = new FormData();
-      // Append all fields to FormData
-      sellFormData.append("sellingPrice", formData.sellingPrice);
-      sellFormData.append("ownerName", formData.ownerName);
-      sellFormData.append("contactNo", formData.contactNo);
-      sellFormData.append("downPayment", formData.downPayment);
-      sellFormData.append("totalInstallments", formData.totalInstallments);
-      sellFormData.append("installmentAmount", formData.installmentAmount);
-      sellFormData.append("commission", formData.commission);
-    
-      const registrationNumber = carData.car.registernumber;
-      console.log(registrationNumber);
+      
+
+      const registernumber = carData.car.registernumber;
+      console.log(registernumber);
       // Handle other image uploads if necessary (similar to DisplayImage)
       console.log(formData.carPhotos);
       for (let i = 0; i < formData.carPhotos.length; i++) {
         const image = formData.carPhotos[i];
-        const imageFileName = `${registrationNumber}/SoldCarImages/${i + 1}`;
-        const imageUploadURL = await getUploadURL(image,imageFileName);
+        const imageFileName = `${registernumber}/SoldCarImages/${i + 1}`;
+        const imageUploadURL = await getUploadURL(image, imageFileName);
         await uploadToS3(imageUploadURL, image);
       }
 
-       // Handle other image uploads if necessary (similar to DisplayImage)
-       for (let i = 0; i < formData.insuranceDocument.length; i++) {
+      // Handle other image uploads if necessary (similar to DisplayImage)
+      for (let i = 0; i < formData.insuranceDocument.length; i++) {
         const file = formData.insuranceDocument[i];
-        const FileName = `${registrationNumber}/InsuranceDocuments/${i + 1}`;
-        const FileUploadURL = await getUploadURL(file,FileName);
+        const FileName = `${registernumber}/InsuranceDocuments/${i + 1}`;
+        const FileUploadURL = await getUploadURL(file, FileName);
         await uploadToS3(FileUploadURL, file);
       }
 
 
       // sellFormData.append("carID", formData.carID);
-  
+
       await axios.post('http://localhost:8000/dashboard/sell-car', formData);
-  
+
       toast.success('Car sold successfully!', { position: 'top-right' });
       setCarData(null);
       setSubmitted(false);
@@ -123,7 +115,7 @@ function SellCarDetails() {
     setLoading(false);
     setModalOpen(false);
   };
-  
+
   const handleGoBack = () => {
     navigate('/dashboard/sellCarDetails');
   };
@@ -160,7 +152,9 @@ function SellCarDetails() {
             maxLength="10"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={deleteID}
-            onChange={(e) => setDeleteID(e.target.value)}
+            onChange={(e) => setDeleteID(e.target.value
+              .replace(/^\s+/, "")
+              .replace(/[a-z]/g, (char) => char.toUpperCase()))}
           />
         </div>
         <button

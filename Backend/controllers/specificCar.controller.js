@@ -3,7 +3,7 @@ const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); //
 
 async function handleSpecifiPage(req, res) {
     try {
-        const regisNum = req.params.registrationnumber;
+        const regisNum = req.params.registernumber;
         console.log(`Registration Number: ${regisNum}`);
         const values = [regisNum];
 
@@ -36,9 +36,9 @@ async function handleSpecifiPage(req, res) {
                 return await getObjectURL(key); // Generate URL for each image key
             });
 
-           // Wait for all other image promises to resolve
-           const images = await Promise.all(imagesPromises);
-            
+            // Wait for all other image promises to resolve
+            const images = await Promise.all(imagesPromises);
+
 
             res.json({ car, images, insurance, owner });
         } else {

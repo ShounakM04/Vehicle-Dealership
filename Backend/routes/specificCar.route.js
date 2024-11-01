@@ -1,8 +1,8 @@
-const express = require("express"); 
+const express = require("express");
 const handleSpecifiPage = require("../controllers/specificCar.controller.js");
 
 router = express.Router();
 
-router.get("/:registrationnumber",handleSpecifiPage);
+router.get("/:registernumber", handleSpecifiPage);
 
 module.exports = router;
