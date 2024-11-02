@@ -3,8 +3,8 @@ const {handleInsuranceDetails,handleGetInsuranceDetails} = require("../adminCont
 const upload = require("../middlewares/multer.middleware")
 const router = express.Router();
 
-router.get("/",handleGetInsuranceDetails);
+// router.get("/",handleGetInsuranceDetails);
 
-router.post("/",upload.array('insuranceDocument',5),handleInsuranceDetails);
+// router.post("/",handleInsuranceDetails);
 
 module.exports = router;

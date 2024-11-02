@@ -1,47 +1,24 @@
-const db = require('../models/database');
-const { imageUpload } = require('../utils/uploadFunctions.js');
-
-async function handleAddNotice(req, res) {
-    const carNumber = req.body.carNumber;
-    console.log(req.body);
-    
-    if (!req.files) {
-        return res.status(400).send("No files uploaded");
-    }
-    
-    try {
-        // Upload images and get an array of URLs
-        const imageUrls = await imageUpload(carNumber, req.files);
-
-        // Loop through each URL and insert it individually
-        for (const imageUrl of imageUrls) {
-            const query = `INSERT INTO noticeImages (image_urls) VALUES ($1)`;
-            const values = [imageUrl];
-            await db.query(query, values);
-        }
-
-        res.send("Notice Images uploaded successfully");
-    } catch (error) {
-        console.log(`${error} : Error occurred while uploading the file`);
-        res.status(500).send("An error occurred while uploading the images");
-    }
-}
+const {deleteObject,listImagesInFolder,getObjectURL} = require('../amazonS3/s3config.js')
 
 
 async function handleGetNotice(req, res) {
     try {
-        // Query to select all images from the noticeImages table
-        const query = `SELECT serialnum, image_urls FROM noticeImages`;
-        const result = await db.query(query);
 
-        // Check if the result is empty
-        if (result.rows.length === 0) {
-            return res.status(404).send("No notice images found");
-        }
+        // S3 folder structure for images (e.g., regisNum/VehicleImages/)
+        const NoticeFolder = `Notices/`;
 
-        // Send the list of notice images as response
-        console.log(result.rows)
-        res.json(result.rows);
+        // Fetch image keys from the S3 folder
+        const NoticeImagesKeys = await listImagesInFolder(NoticeFolder);
+
+        // Generate signed URLs for other images, starting from 1
+        const NoticeImagesPromises = NoticeImagesKeys.map(async (key, index) => {
+            return await getObjectURL(key); // Generate URL for each image key
+        });
+
+       // Wait for all other image promises to resolve
+        const NoticeImages = await Promise.all(NoticeImagesPromises);
+
+        res.json(NoticeImages);
 
     } catch (error) {
         console.log(`${error} : Error occurred while fetching the notice images`);
@@ -50,25 +27,19 @@ async function handleGetNotice(req, res) {
 }
 
 async function handleDeleteNotice(req, res) {
-    const { serialnum } = req.query;  // Now using query parameter
+    const { uniqueID } = req.query;  // Now using query parameter
 
-    if (!serialnum) {
-        return res.status(400).send("Serial number is required");
+    if (!uniqueID) {
+        return res.status(400).send("uniqueID number is required");
     }
 
     try {
         // Delete the image with the specified serialnum
-        const query = `DELETE FROM noticeImages WHERE serialnum = $1 RETURNING *`;
-        const values = [serialnum];
-        const result = await db.query(query, values);
-
-        // If no row was deleted, the serial number doesn't exist
-        if (result.rowCount === 0) {
-            return res.status(404).send("Notice image not found");
-        }
+        const deletePath = `Notices/${uniqueID}`;
+            await deleteObject(deletePath);
 
         // Return success message if the image was deleted
-        res.send(`Notice image with serial number ${serialnum} deleted successfully`);
+        res.send(`Notice image with serial number ${uniqueID} deleted successfully`);
     } catch (error) {
         console.log(`${error} : Error occurred while deleting the notice image`);
         res.status(500).send("An error occurred while deleting the notice image");
@@ -76,7 +47,7 @@ async function handleDeleteNotice(req, res) {
 }
 
 
-module.exports = {handleAddNotice,
+module.exports = {
     handleGetNotice,
     handleDeleteNotice
 };

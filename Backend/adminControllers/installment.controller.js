@@ -46,9 +46,9 @@ const getInstallments = async (req, res) => {
             [registernumber]
         );
 
-        if (installmentsResponse.rows.length === 0) {
-            return res.status(404).json({ message: "No installments found for this car" });
-        }
+        // if (installmentsResponse.rows.length === 0) {
+        //     return res.status(404).json({ message: "No installments found for this car" });
+        // }
 
         res.status(200).json(installmentsResponse.rows);
     } catch (error) {

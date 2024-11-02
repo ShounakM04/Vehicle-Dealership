@@ -1,13 +1,9 @@
 const express = require("express");
-const handleImageUpload = require("../controllers/imageUpload.controller.js");
-const upload = require("../middlewares/multer.middleware.js");
+const {generatePresignedUploadUrl} = require("../controllers/s3ImageUpload.controller.js");
+const Imagerouter = express.Router();
 
-Imagerouter = express.Router();
 
-Imagerouter.get("/",(req,res)=>{
-    return res.render("upload");
-})
+Imagerouter.get('/generate-upload-url', generatePresignedUploadUrl);
 
-Imagerouter.post("/",upload.fields([{ name: 'displayImage' , maxCount: 1 }, { name: 'images[]', maxCount: 10 }]),handleImageUpload);
 
 module.exports = Imagerouter;

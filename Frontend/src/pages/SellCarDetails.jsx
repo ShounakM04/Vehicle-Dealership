@@ -1,31 +1,32 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Modal from 'react-modal';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Modal from "react-modal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getUploadURL, uploadToS3 } from "../../utils/s3UploadFunctions.jsx";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 function SellCarDetails() {
-  const [deleteID, setDeleteID] = useState('');
+  const [deleteID, setDeleteID] = useState("");
   const [carData, setCarData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    sellingPrice: '',
-    ownerName: '',
-    contactNo: '',
-    downPayment: '',
-    totalInstallments: '',
-    installmentAmount: '',
-    commission: '',
-    insuranceDocument: null,
-    carPhoto: null,
-    carID: ''
+    sellingPrice: "",
+    ownerName: "",
+    contactNo: "",
+    downPayment: "",
+    totalInstallments: "",
+    installmentAmount: "",
+    commission: "",
+    insuranceDocument: [],
+    carPhotos: [], // Change to array for multiple photos
+    carID: "",
   });
-  const [submittedID, setSubmittedID] = useState('');
+  const [submittedID, setSubmittedID] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -36,13 +37,15 @@ function SellCarDetails() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8000/car/${currDeleteId}`);
+      const response = await axios.get(
+        `http://localhost:8000/car/${currDeleteId}`
+      );
       setCarData(response.data);
       console.log(response.data);
     } catch (err) {
       setCarData(null);
-      console.error('Error fetching car details:', err);
-      setError('Error fetching car details');
+      console.error("Error fetching Vehicle details:", err);
+      setError("Error fetching Vehicle details");
     } finally {
       setLoading(false);
     }
@@ -59,7 +62,7 @@ function SellCarDetails() {
     formData.carID = currDeleteId;
 
     setSubmittedID(deleteID);
-    setDeleteID('');
+    setDeleteID("");
     setSubmitted(true);
     await fetchCarDetails(currDeleteId);
   };
@@ -71,42 +74,49 @@ function SellCarDetails() {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+
+    setFormData({ ...formData, [name]: Array.from(files) }); // Convert FileList to array
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const sellFormData = new FormData();
-      // Append all fields to FormData
-      sellFormData.append("sellingPrice", formData.sellingPrice);
-      sellFormData.append("ownerName", formData.ownerName);
-      sellFormData.append("contactNo", formData.contactNo);
-      sellFormData.append("downPayment", formData.downPayment);
-      sellFormData.append("totalInstallments", formData.totalInstallments);
-      sellFormData.append("installmentAmount", formData.installmentAmount);
-      sellFormData.append("commission", formData.commission);
-      sellFormData.append("insuranceDocument", formData.insuranceDocument);
-      sellFormData.append("carPhoto", formData.carPhoto);
-      sellFormData.append("carID", formData.carID);
-  
-      await axios.post('http://localhost:8000/dashboard/sell-car', sellFormData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-  
-      toast.success('Car sold successfully!', { position: 'top-right' });
+
+      const registernumber = carData.car.registernumber;
+      console.log(registernumber);
+      // Handle other image uploads if necessary (similar to DisplayImage)
+      console.log(formData.carPhotos);
+      for (let i = 0; i < formData.carPhotos.length; i++) {
+        const image = formData.carPhotos[i];
+        const imageFileName = `${registernumber}/SoldCarImages/${i + 1}`;
+        const imageUploadURL = await getUploadURL(image, imageFileName);
+        await uploadToS3(imageUploadURL, image);
+      }
+
+      // Handle other image uploads if necessary (similar to DisplayImage)
+      for (let i = 0; i < formData.insuranceDocument.length; i++) {
+        const file = formData.insuranceDocument[i];
+        const FileName = `${registernumber}/InsuranceDocuments/${i + 1}`;
+        const FileUploadURL = await getUploadURL(file, FileName);
+        await uploadToS3(FileUploadURL, file);
+      }
+
+      // sellFormData.append("carID", formData.carID);
+
+      await axios.post("http://localhost:8000/dashboard/sell-car", formData);
+
+      toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);
       setSubmitted(false);
     } catch (error) {
-      toast.error('Error selling car. Try again.', { position: 'top-right' });
+      toast.error("Error selling car. Try again.", { position: "top-right" });
     }
     setLoading(false);
     setModalOpen(false);
   };
-  
 
   const handleGoBack = () => {
-    navigate('/dashboard/sellCarDetails');
+    navigate("/dashboard");
   };
 
   // Close the modal
@@ -141,12 +151,16 @@ function SellCarDetails() {
             maxLength="10"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={deleteID}
-            onChange={(e) => setDeleteID(e.target.value)}
+            onChange={(e) =>
+              setDeleteID(
+                e.target.value
+                  .replace(/^\s+/, "")
+                  .replace(/[a-z]/g, (char) => char.toUpperCase())
+              )
+            }
           />
         </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6"
-        >
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6">
           Submit
         </button>
       </form>
@@ -183,28 +197,34 @@ function SellCarDetails() {
                 </div>
 
                 <div className="bg-white shadow-md rounded-md p-4">
-                  <h2 className="text-2xl font-bold mb-4">{carData.car.carname} Details</h2>
-                  <h3 className="text-lg font-semibold mb-2">Car Information</h3>
-                  <ul>
-                    <li className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Car Name:</span>
+                  <h2 className="text-2xl font-bold mb-4">
+                    {carData.car.carname} Details
+                  </h2>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Vehicle Information
+                  </h3>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold">Vehicle Name:</span>
                       <span>{carData.car.carname}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Make:</span>
+                    <li className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold">Vehicle Type:</span>
                       <span>{carData.car.carmake}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Company:</span>
                       <span>{carData.car.carcompany}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Color:</span>
                       <span>{carData.car.carcolor}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Price:</span>
-                      <span>{carData.car.carprice}</span>
+                      <span className="text-blue-500">
+                        ₹ {carData.car.vehiclesellprice}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -222,141 +242,201 @@ function SellCarDetails() {
 
       {/* Sell Car Form */}
       {submitted && carData && carData.car && carData.car.status === false && (
-        <>
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4">
-            <h2 className="text-xl font-bold mb-4">Sell Car Form</h2>
+        <div className="mt-8 p-4 bg-white rounded-lg shadow">
+          <h2 className="text-2xl font-bold mb-4">Sell Car</h2>
+          <form onSubmit={handleSellConfirmation}>
+            <div className="mb-4">
+              <label
+                htmlFor="sellingPrice"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Selling Price
+              </label>
+              <input
+                type="number"
+                id="sellingPrice"
+                name="sellingPrice"
+                required
+                value={formData.sellingPrice}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="sellingPrice"
-              value={formData.sellingPrice}
-              onChange={handleChange}
-              placeholder="Selling Price"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="ownerName"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Owner Name
+              </label>
+              <input
+                type="text"
+                id="ownerName"
+                name="ownerName"
+                required
+                value={formData.ownerName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="text"
-              name="ownerName"
-              value={formData.ownerName}
-              onChange={handleChange}
-              placeholder="Owner Name"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="contactNo"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Contact No
+              </label>
+              <input
+                type="tel"
+                id="contactNo"
+                name="contactNo"
+                required
+                value={formData.contactNo}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="text"
-              name="contactNo"
-              value={formData.contactNo}
-              onChange={handleChange}
-              placeholder="Contact No"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="downPayment"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Down Payment
+              </label>
+              <input
+                type="number"
+                id="downPayment"
+                name="downPayment"
+                required
+                value={formData.downPayment}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="downPayment"
-              value={formData.downPayment}
-              onChange={handleChange}
-              placeholder="Down Payment"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="totalInstallments"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Total Installments
+              </label>
+              <input
+                type="number"
+                id="totalInstallments"
+                name="totalInstallments"
+                required
+                value={formData.totalInstallments}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="totalInstallments"
-              value={formData.totalInstallments}
-              onChange={handleChange}
-              placeholder="Total Installments"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="installmentAmount"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Installment Amount
+              </label>
+              <input
+                type="number"
+                id="installmentAmount"
+                name="installmentAmount"
+                required
+                value={formData.installmentAmount}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="installmentAmount"
-              value={formData.installmentAmount}
-              onChange={handleChange}
-              placeholder="Installment Amount"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="commission"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Commission
+              </label>
+              <input
+                type="number"
+                id="commission"
+                name="commission"
+                required
+                value={formData.commission}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="commission"
-              value={formData.commission}
-              onChange={handleChange}
-              placeholder="Commission"
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="insuranceDocument"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Insurance Document
+              </label>
+              <input
+                type="file"
+                id="insuranceDocument"
+                name="insuranceDocument"
+                multiple
+                // accept=".pdf, .doc, .docx"
+                onChange={handleFileChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <input
-              type="file"
-              name="insuranceDocument"
-              onChange={handleFileChange}
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
-
-            <input
-              type="file"
-              name="carPhoto"
-              onChange={handleFileChange}
-              className="shadow border rounded w-full py-2 px-3 mb-4"
-              required
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="carPhotos"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Car Photos
+              </label>
+              <input
+                type="file"
+                id="carPhotos"
+                name="carPhotos"
+                multiple // Allow multiple files
+                onChange={handleFileChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
             <button
-              type="button" // Prevent form submission
-              onClick={handleSellConfirmation} // Show confirmation modal
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              type="button"
+              onClick={handleSellConfirmation}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Sell
+              Sell Car
             </button>
           </form>
-        </>
+        </div>
       )}
 
-      {/* Modal for final confirmation */}
+      {/* Confirmation Modal */}
       <Modal
         isOpen={modalOpen}
         onRequestClose={closeModal}
-        contentLabel="Confirm Sell"
-        className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto mt-20"
-        overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+        contentLabel="Confirmation Modal"
       >
-        <h3 className="text-lg font-semibold mb-4">Confirm Sale</h3>
-        <p>Are you sure you want to sell the vehicle with reg No.: {submittedID}?</p>
-        <div className="mt-6">
-          {/* Loading Overlay */}
-  {loading && (
-    <div className="absolute inset-0 bg-gray-500 opacity-50 z-10" />
-  )}
-          <button
-            onClick={async () => {
-              await handleSubmit(); // Call the handleSubmit function
-              closeModal(); // Close the modal after submitting
-            }}
-            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={loading}
-          >
-            
-            {loading ? 'Selling...' : 'Confirm Sell'}
-          </button>
-          <button
-            onClick={closeModal}
-            className="bg-gray-300 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            disabled={loading}
-          >
-            Cancel
-          </button>
-        </div>
+        <h2 className="text-xl font-bold mb-4">Confirm Sale</h2>
+        <p>Are you sure you want to sell this car?</p>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+        >
+          Confirm
+        </button>
+        <button
+          onClick={closeModal}
+          className="bg-gray-300 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 ml-2"
+        >
+          Cancel
+        </button>
       </Modal>
 
       <ToastContainer />

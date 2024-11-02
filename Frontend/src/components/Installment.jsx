@@ -10,16 +10,20 @@ export default function Installment({ carID }) {
   const [error, setError] = useState(null);
   const [viewOption, setViewOption] = useState("view");
   const [loading, setLoading] = useState(true); // Loading state
-
-
-
+  const [insuranceDoc, setInsuranceDoc] = useState([]);
+  const [soldCarImages, setSoldCarImages] = useState([]);
+  const [profit, setProfit] = useState(0);
   const fetchCarDetails = async () => {
     try {
+      console.log("Params : " + carID);
       const response = await axios.get(
         `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
-      setCarDetails(response.data);
+      setCarDetails(response.data.dbData);
+      setInsuranceDoc(response.data.soldCarInsuranceDocs);
+
+      setSoldCarImages(response.data.soldCarImages);
     } catch (err) {
       // setError("Error fetching car details");
       console.error(err);
@@ -31,10 +35,9 @@ export default function Installment({ carID }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(
-        `http://localhost:8000/installments`,
-        { params: { registernumber: carID } }
-      );
+      const response = await axios.get(`http://localhost:8000/installments`, {
+        params: { registernumber: carID },
+      });
       setInstallments(response.data);
     } catch (err) {
       // setError("Error fetching installment details");
@@ -68,32 +71,62 @@ export default function Installment({ carID }) {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const totalInstallmentAmount = installments.reduce((total, inst) => total + parseFloat(inst.amount), 0);
+  const totalInstallmentAmount = installments.reduce(
+    (total, inst) => total + parseFloat(inst.amount),
+    0
+  );
+
+  if (carID) {
+    useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true); // Start loading
+        try {
+          await fetchInstallments(); // Fetch installments
+          await fetchCarDetails(); // Fetch car details
+        } catch (err) {
+          console.error(
+            "Error fetching data:",
+            err.response ? err.response.data : err.message
+          );
+          setError("Error fetching data");
+        } finally {
+          setLoading(false); // End loading
+        }
+      };
+
+      fetchData();
+      console.log(insuranceDoc);
+    }, [carID]);
+  }
+
+  const fetchProfit = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/profits", {
+        params: { registernumber:carID },
+      });
+      setProfit(response.data.profit);
+      console.log(response.data.profit); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // Start loading
-      try {
-        await fetchCarDetails(); // Fetch car details
-        await fetchInstallments(); // Fetch installments
-      } catch (err) {
-        console.error('Error fetching data:', err.response ? err.response.data : err.message);
-        setError("Error fetching data");
-      } finally {
-        setLoading(false); // End loading
-      }
-    };
-  
-    fetchData();
+    if (carID) {
+      fetchProfit();
+    }
   }, [carID]);
-  
+
+  function abs(num){
+    return num > 0 ? num : -num;
+  }
   return (
     <>
-      <div className="bg-white p-2 rounded-lg shadow-lg">
+      <div className="bg-white pr-2 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold">Sold Vehicle Details</h2>
         {error && <p className="text-red-500">{error}</p>}
         {loading ? ( // Show loading state
@@ -102,13 +135,15 @@ export default function Installment({ carID }) {
           carDetails.map((car) => (
             <div
               key={car.registernumber}
-              className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg"
+              className="grid grid-cols-2 gap-4 bg-gray-50 p-2 rounded-lg"
             >
               <div>
-                <h3 className="text-xl font-semibold mb-2">{car.owner_name}</h3>
+                <p>
+                  <span className="font-medium">Owner: </span> {car.owner_name}
+                </p>
                 <p>
                   <span className="font-medium">Selling Price:</span>{" "}
-                  {car.selling_price}
+                  ₹{car.selling_price}
                 </p>
                 <p>
                   <span className="font-medium">Contact No:</span>{" "}
@@ -116,40 +151,43 @@ export default function Installment({ carID }) {
                 </p>
                 <p>
                   <span className="font-medium">Commission:</span>{" "}
-                  {car.commission}
+                  ₹{car.commission}
                 </p>
               </div>
               <div>
                 <p>
                   <span className="font-medium">Insurance Document:</span>{" "}
-                  {car.insurance_image ? (
-                    <a
-                      href={car.insurance_image}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {insuranceDoc.length > 0 ? (
+                    <button
+                      onClick={() =>
+                        insuranceDoc.forEach((doc) =>
+                          window.open(doc, "_blank", "noopener,noreferrer")
+                        )
+                      }
                       className="text-blue-500 underline"
                     >
                       View
-                    </a>
+                    </button>
                   ) : (
                     "Not Provided"
                   )}
                 </p>
-                <p className="mt-2">
-                  <span className="font-medium">Vehicle Images:</span>{" "}
-                  {car.vehicle_image
-                    ? car.vehicle_image.map((url, index) => (
-                        <a
-                          href={url}
-                          key={index}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline mr-2"
-                        >
-                          Image {index + 1}
-                        </a>
-                      ))
-                    : "Not Provided"}
+                <p>
+                  <span className="font-medium">Sold Vehicle Images:</span>{" "}
+                  {soldCarImages.length > 0 ? (
+                    <button
+                      onClick={() =>
+                        soldCarImages.forEach((doc) =>
+                          window.open(doc, "_blank", "noopener,noreferrer")
+                        )
+                      }
+                      className="text-blue-500 underline"
+                    >
+                      View
+                    </button>
+                  ) : (
+                    "Not Provided"
+                  )}
                 </p>
               </div>
             </div>
@@ -158,7 +196,9 @@ export default function Installment({ carID }) {
           <p>No car details available</p>
         )}
       </div>
-
+      <div className="bg-white p-2 mt-2 rounded-lg shadow-lg">
+        Estimated {profit >= 0 ? "Profit" : "Loss"}: ₹{abs(profit)}
+      </div>
       <div className="mt-6">
         <label className="mr-4">
           <input
@@ -187,20 +227,24 @@ export default function Installment({ carID }) {
             <div className="max-h-60 overflow-y-auto">
               {installments.length > 0 ? (
                 installments.map((inst, index) => (
-                    <div key={index} className="p-4 border-b border-gray-200 flex items-center">
-                    <span className="font-medium mr-2">{index + 1}</span>
-                    <span className="font-medium mr-2">Amount:</span> 
+                  <div
+                    key={index}
+                    className="p-4 border-b border-gray-200 flex items-center"
+                  >
+                    <span className="font-medium mr-2">{index + 1})</span>
+                    <span className="font-medium mr-2">Amount:</span>
                     <span className="mr-14">{inst.amount}</span>
                     <span className="font-medium mr-2">Date:</span>
                     <span>{formatDate(inst.installment_date)}</span>
                   </div>
-                  
                 ))
               ) : (
-                <p>No installments available</p>
+                <p className="p-2">No installments available</p>
               )}
             </div>
-            <p className="p-2 text-xl">Total Installment Amount: {totalInstallmentAmount.toFixed(2)}</p>
+            <p className="p-2 text-xl">
+              Total Installment Amount: {totalInstallmentAmount.toFixed(2)}
+            </p>
           </div>
         </>
       )}
