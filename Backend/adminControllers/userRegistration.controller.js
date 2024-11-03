@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt")
+// const bcrypt = require("bcrypt")
 const db = require("../models/database");
 const { generateAdminToken, generateDriverToken, generateEmployeeToken } = require("../middlewares/auth-jwt");
 const saltRounds = 10;
@@ -7,9 +7,11 @@ async function handleUserRegistration(req,res) {
     const {userID,userName,userPassword,userDesignation} = req.body;
     const {isAdmin , isEmployee, isDriver} = req.query;
     try{
-        const hashedPassword = await bcrypt.hash(userPassword,saltRounds);
+        // const hashedPassword = await bcrypt.hash(userPassword,saltRounds);
         const query = `INSERT INTO users (userID, userName, userPassword, userDesignation) VALUES ($1,$2,$3,$4) RETURNING *`;
-        const values = [userID,userName,hashedPassword,userDesignation]
+        // const values = [userID,userName,hashedPassword,userDesignation]
+        const values = [userID,userName,userPassword,userDesignation]
+
         const user = await db.query(query,values);
         if(isAdmin){
            return  res.json(generateAdminToken(user.rows[0]));
@@ -46,9 +48,9 @@ async function handleUserLogin(req,res) {
         }
 
         //console.log(userDetails );
-        const result = await bcrypt.compare(userPass,userDetails.userpassword);
+        // const result = await bcrypt.compare(userPass,userDetails.userpassword);
         
-        if(!result) {
+        if(userPass != userDetails.userpassword) {
             return res.status(401).send("Access Denied");
         }
 
