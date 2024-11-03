@@ -13,7 +13,7 @@ function CarDetails() {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${params.id}`);
+        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/car/${params.id}`);
         setCarData(response.data);
         console.log(response.data);
         setLoading(false);

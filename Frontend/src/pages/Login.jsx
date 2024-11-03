@@ -18,10 +18,10 @@ function Login() {
             return;
         }
 
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        const endpoint = "https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/login"; // Update with your actual endpoint
 
         try {
-            const response = await axios.post(endpoint, { userID: username, userPass:password });
+            const response = await axios.post(endpoint, { userID: username, userPass: password });
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
             alert("Login successful");
@@ -31,7 +31,7 @@ function Login() {
             if (error.response) {
                 // Server responded with a status other than 2xx
                 console.error("Login failed: ", error.response.data);
-                
+
                 if (error.response.status === 400) {
                     setErrorMessage("User does not exist or details are missing.");
                 } else if (error.response.status === 401) {
@@ -49,7 +49,7 @@ function Login() {
                 setErrorMessage("There was an error during the login process.");
             }
 
-            alert(errorMessage);  
+            alert(errorMessage);
         }
 
         // setUsername('');

@@ -37,7 +37,7 @@ function SellCarDetails() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8000/car/${currDeleteId}`);
+      const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/car/${currDeleteId}`);
       setCarData(response.data);
       console.log(response.data);
     } catch (err) {
@@ -80,7 +80,7 @@ function SellCarDetails() {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      
+
 
       const registernumber = carData.car.registernumber;
       console.log(registernumber);
@@ -104,7 +104,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post('http://localhost:8000/dashboard/sell-car', formData);
+      await axios.post('https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/sell-car', formData);
 
       toast.success('Car sold successfully!', { position: 'top-right' });
       setCarData(null);

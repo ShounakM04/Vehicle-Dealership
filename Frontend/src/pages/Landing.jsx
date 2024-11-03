@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000/`, { params });
+        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
@@ -77,7 +77,7 @@ export default function Landing() {
   useEffect(() => {
     const fetchNoticeImages = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/dashboard/get-notice');
+        const response = await axios.get('https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/get-notice');
         const imageUrls = response.data;
 
         setNoticeImages(imageUrls);  // Set fetched image URLs

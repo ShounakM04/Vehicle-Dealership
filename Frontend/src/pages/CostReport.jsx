@@ -47,7 +47,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`);
+        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/car/${id}`);
         const { car, images, insurance, owner } = response.data;
         setSoldStatus(response.data.car.status);
 
@@ -76,19 +76,18 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
-      console.log("hi+"+id);
-      const response = await axios.get("http://localhost:8000/maintainance", {
+      console.log("hi+" + id);
+      const response = await axios.get("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/maintainance", {
         params: { registernumber: id },
       });
 
 
       console.log("hi");
 
-      if(response.status === 201)
-        {
-            return;
-        }
-      
+      if (response.status === 201) {
+        return;
+      }
+
 
       const { maintenanceRecords, totalmaintainance } = response.data;
 
@@ -152,9 +151,8 @@ const CostReport = () => {
           <div className="overflow-y-auto max-h-60">
             {maintainanceData.maintenanceRecords.length > 0 ? (
               <ul className="mt-2">
-                {maintainanceData.maintenanceRecords.map((record, index) => 
-                {
-                
+                {maintainanceData.maintenanceRecords.map((record, index) => {
+
 
                   return (
                     <li
@@ -163,7 +161,7 @@ const CostReport = () => {
                     >
                       <div>
                         <p className="font-medium text-black">
-                          Type: {record.description }
+                          Type: {record.description}
                         </p>
                         <p>Cost: ₹{record.price}</p>
                         <p>
@@ -214,9 +212,9 @@ const CostReport = () => {
         {/* Form Section */}
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg">
           {soldStatus === false ? (
-            <Maintainance registernumber={id}  onMaintenanceAdded={handleMaintenanceAdded} />
+            <Maintainance registernumber={id} onMaintenanceAdded={handleMaintenanceAdded} />
           ) : (
-            <Installment carID={id}/>
+            <Installment carID={id} />
           )}
 
           {/* <h2 className="text-2xl font-bold mt-6 mb-4">Set Total Amount to be Paid</h2>

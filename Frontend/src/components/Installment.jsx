@@ -10,22 +10,22 @@ export default function Installment({ carID }) {
   const [error, setError] = useState(null);
   const [viewOption, setViewOption] = useState("view");
   const [loading, setLoading] = useState(true); // Loading state
-  const [insuranceDoc,setInsuranceDoc]= useState([]);
-  const [soldCarImages,setSoldCarImages]= useState([]);
+  const [insuranceDoc, setInsuranceDoc] = useState([]);
+  const [soldCarImages, setSoldCarImages] = useState([]);
 
 
 
 
   const fetchCarDetails = async () => {
     try {
-      console.log("Params : "+carID);
+      console.log("Params : " + carID);
       const response = await axios.get(
-        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
+        `https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
       setCarDetails(response.data.dbData);
       setInsuranceDoc(response.data.soldCarInsuranceDocs);
-      
+
       setSoldCarImages(response.data.soldCarImages);
     } catch (err) {
       // setError("Error fetching car details");
@@ -39,7 +39,7 @@ export default function Installment({ carID }) {
     if (!carID) return;
     try {
       const response = await axios.get(
-        `http://localhost:8000/installments`,
+        `https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/installments`,
         { params: { registernumber: carID } }
       );
       setInstallments(response.data);
@@ -54,7 +54,7 @@ export default function Installment({ carID }) {
   const handleInstallmentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/installments", {
+      const response = await axios.post("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -81,27 +81,26 @@ export default function Installment({ carID }) {
 
   const totalInstallmentAmount = installments.reduce((total, inst) => total + parseFloat(inst.amount), 0);
 
-  if(carID)
-  {
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // Start loading
-      try {
-        await fetchInstallments(); // Fetch installments
-        await fetchCarDetails(); // Fetch car details
-      } catch (err) {
-        console.error('Error fetching data:', err.response ? err.response.data : err.message);
-        setError("Error fetching data");
-      } finally {
-        setLoading(false); // End loading
-      }
-    };
-  
-   fetchData();
-       console.log(insuranceDoc);
-  }, [carID]);
-}
-  
+  if (carID) {
+    useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true); // Start loading
+        try {
+          await fetchInstallments(); // Fetch installments
+          await fetchCarDetails(); // Fetch car details
+        } catch (err) {
+          console.error('Error fetching data:', err.response ? err.response.data : err.message);
+          setError("Error fetching data");
+        } finally {
+          setLoading(false); // End loading
+        }
+      };
+
+      fetchData();
+      console.log(insuranceDoc);
+    }, [carID]);
+  }
+
   return (
     <>
 
@@ -132,11 +131,11 @@ export default function Installment({ carID }) {
                 </p>
               </div>
               <div>
-              <p>
+                <p>
                   <span className="font-medium">Insurance Document:</span>{" "}
                   {insuranceDoc.length > 0 ? (
                     <button
-                      onClick={() => 
+                      onClick={() =>
                         insuranceDoc.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
                       }
                       className="text-blue-500 underline"
@@ -151,7 +150,7 @@ export default function Installment({ carID }) {
                   <span className="font-medium">Sold Car Images:</span>{" "}
                   {soldCarImages.length > 0 ? (
                     <button
-                      onClick={() => 
+                      onClick={() =>
                         soldCarImages.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
                       }
                       className="text-blue-500 underline"
@@ -162,7 +161,7 @@ export default function Installment({ carID }) {
                     "Not Provided"
                   )}
                 </p>
-                
+
               </div>
             </div>
           ))
@@ -199,14 +198,14 @@ export default function Installment({ carID }) {
             <div className="max-h-60 overflow-y-auto">
               {installments.length > 0 ? (
                 installments.map((inst, index) => (
-                    <div key={index} className="p-4 border-b border-gray-200 flex items-center">
+                  <div key={index} className="p-4 border-b border-gray-200 flex items-center">
                     <span className="font-medium mr-2">{index + 1})</span>
-                    <span className="font-medium mr-2">Amount:</span> 
+                    <span className="font-medium mr-2">Amount:</span>
                     <span className="mr-14">{inst.amount}</span>
                     <span className="font-medium mr-2">Date:</span>
                     <span>{formatDate(inst.installment_date)}</span>
                   </div>
-                  
+
                 ))
               ) : (
                 <p>No installments available</p>
