@@ -158,7 +158,7 @@ export default function Landing() {
         </button>
 
         {/* Carousel Section */}
-        <div className="w-full lg:w-3/4 mt-2 m-10 p-4">
+        <div className="w-full lg:w-3/4 mt-2 sm:m-10 p-4">
           {noticeImages.length > 0 ? (
             <Carousel
               showArrows={true}
