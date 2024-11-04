@@ -1,5 +1,4 @@
 const express = require("express");
-const serverlessExpress = require('@vendia/serverless-express'); // Import serverless-express
 const logResReq = require("./log"); // Import without destructuring
 const cors = require("cors");
 const PORT = 8000
