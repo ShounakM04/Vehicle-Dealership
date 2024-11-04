@@ -45,10 +45,12 @@ export default function Landing() {
     const fetchCars = async () => {
       try {
         const params = {};
-        if (fuelType) params.fuelType = fuelType;
-        if (carType) params.carMake = carType;
-        if (query) params.carSearch = query;
-        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/`, { params });
+
+        if(fuelType) params.fuelType = fuelType;
+        if(carType) params.carMake = carType;
+        if(query) params.carSearch = query;
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/`, { params });
+
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
@@ -58,7 +60,7 @@ export default function Landing() {
             imgSrc: firstImage, // Set imgSrc to the signed URL
             name: car.carname,
             number: car.registernumber,
-            kilometers: "20,000KM", // You might want to update this with actual data if available
+            kilometers: "", // You might want to update this with actual data if available
             price: car.carprice,
             status: car.status,
           };
@@ -77,7 +79,9 @@ export default function Landing() {
   useEffect(() => {
     const fetchNoticeImages = async () => {
       try {
-        const response = await axios.get('https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/get-notice');
+
+        const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice');
+
         const imageUrls = response.data;
 
         setNoticeImages(imageUrls);  // Set fetched image URLs

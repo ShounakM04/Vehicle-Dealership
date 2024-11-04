@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Modal from 'react-modal';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Modal from "react-modal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getUploadURL, uploadToS3 } from "../../utils/s3UploadFunctions.jsx";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 function SellCarDetails() {
-  const [deleteID, setDeleteID] = useState('');
+  const [deleteID, setDeleteID] = useState("");
   const [carData, setCarData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    sellingPrice: '',
-    ownerName: '',
-    contactNo: '',
-    downPayment: '',
-    totalInstallments: '',
-    installmentAmount: '',
-    commission: '',
+    sellingPrice: "",
+    ownerName: "",
+    contactNo: "",
+    downPayment: "",
+    totalInstallments: "",
+    installmentAmount: "",
+    commission: "",
     insuranceDocument: [],
     carPhotos: [], // Change to array for multiple photos
-    carID: ''
+    carID: "",
   });
-  const [submittedID, setSubmittedID] = useState('');
+  const [submittedID, setSubmittedID] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -37,13 +37,15 @@ function SellCarDetails() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/car/${currDeleteId}`);
+      const response = await axios.get(
+        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
+      );
       setCarData(response.data);
       console.log(response.data);
     } catch (err) {
       setCarData(null);
-      console.error('Error fetching car details:', err);
-      setError('Error fetching car details');
+      console.error("Error fetching Vehicle details:", err);
+      setError("Error fetching Vehicle details");
     } finally {
       setLoading(false);
     }
@@ -60,7 +62,7 @@ function SellCarDetails() {
     formData.carID = currDeleteId;
 
     setSubmittedID(deleteID);
-    setDeleteID('');
+    setDeleteID("");
     setSubmitted(true);
     await fetchCarDetails(currDeleteId);
   };
@@ -74,13 +76,11 @@ function SellCarDetails() {
     const { name, files } = e.target;
 
     setFormData({ ...formData, [name]: Array.from(files) }); // Convert FileList to array
-
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-
 
       const registernumber = carData.car.registernumber;
       console.log(registernumber);
@@ -101,23 +101,22 @@ function SellCarDetails() {
         await uploadToS3(FileUploadURL, file);
       }
 
-
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post('https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/sell-car', formData);
+      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData);
 
-      toast.success('Car sold successfully!', { position: 'top-right' });
+      toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);
       setSubmitted(false);
     } catch (error) {
-      toast.error('Error selling car. Try again.', { position: 'top-right' });
+      toast.error("Error selling car. Try again.", { position: "top-right" });
     }
     setLoading(false);
     setModalOpen(false);
   };
 
   const handleGoBack = () => {
-    navigate('/dashboard/sellCarDetails');
+    navigate("/dashboard");
   };
 
   // Close the modal
@@ -152,14 +151,16 @@ function SellCarDetails() {
             maxLength="10"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={deleteID}
-            onChange={(e) => setDeleteID(e.target.value
-              .replace(/^\s+/, "")
-              .replace(/[a-z]/g, (char) => char.toUpperCase()))}
+            onChange={(e) =>
+              setDeleteID(
+                e.target.value
+                  .replace(/^\s+/, "")
+                  .replace(/[a-z]/g, (char) => char.toUpperCase())
+              )
+            }
           />
         </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6"
-        >
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6">
           Submit
         </button>
       </form>
@@ -196,28 +197,34 @@ function SellCarDetails() {
                 </div>
 
                 <div className="bg-white shadow-md rounded-md p-4">
-                  <h2 className="text-2xl font-bold mb-4">{carData.car.carname} Details</h2>
-                  <h3 className="text-lg font-semibold mb-2">Car Information</h3>
-                  <ul>
-                    <li className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Car Name:</span>
+                  <h2 className="text-2xl font-bold mb-4">
+                    {carData.car.carname} Details
+                  </h2>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Vehicle Information
+                  </h3>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold">Vehicle Name:</span>
                       <span>{carData.car.carname}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Make:</span>
+                    <li className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold">Vehicle Type:</span>
                       <span>{carData.car.carmake}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Company:</span>
                       <span>{carData.car.carcompany}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Color:</span>
                       <span>{carData.car.carcolor}</span>
                     </li>
-                    <li className="flex justify-between items-center mb-2">
+                    <li className="flex justify-between items-center border-b pb-2">
                       <span className="font-semibold">Price:</span>
-                      <span>{carData.car.carprice}</span>
+                      <span className="text-blue-500">
+                        ₹ {carData.car.vehiclesellprice}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -403,6 +410,7 @@ function SellCarDetails() {
               type="button"
               onClick={handleSellConfirmation}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              disabled={loading}
             >
               Sell Car
             </button>
@@ -411,14 +419,22 @@ function SellCarDetails() {
       )}
 
       {/* Confirmation Modal */}
-      <Modal isOpen={modalOpen} onRequestClose={closeModal} contentLabel="Confirmation Modal">
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirmation Modal"
+        className="bg-white w-full sm:w-2/3 lg:w-1/3 mx-4 sm:mx-auto mt-32 p-4 rounded-lg shadow-lg"
+        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center"
+      >
         <h2 className="text-xl font-bold mb-4">Confirm Sale</h2>
         <p>Are you sure you want to sell this car?</p>
         <button
           onClick={handleSubmit}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+          disabled={loading}
         >
-          Confirm
+        {loading ? "Submitting..." : "Confirm"}
+
         </button>
         <button
           onClick={closeModal}

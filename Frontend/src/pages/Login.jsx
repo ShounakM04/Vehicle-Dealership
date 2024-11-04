@@ -18,7 +18,8 @@ function Login() {
             return;
         }
 
-        const endpoint = "https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/login"; // Update with your actual endpoint
+
+        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {
             const response = await axios.post(endpoint, { userID: username, userPass: password });

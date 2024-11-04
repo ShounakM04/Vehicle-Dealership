@@ -35,13 +35,13 @@ export default function DriverOnsiteImagesAdd() {
             // Upload images first
             await handleUpload();
 
-            toast.success("Car images added successfully!");
+            toast.success("Vehilce images added successfully!");
             navigate('/driverdashboard');
         } catch (error) {
             
                 // Display error message in toast
-                console.log("Error in adding car Images. Please try again!")
-                toast.error("Error in adding car Images. Please try again!");
+                console.log("Error in adding Vehicle Images. Please try again!")
+                toast.error("Error in adding Vehicle Images. Please try again!");
             
         }
 

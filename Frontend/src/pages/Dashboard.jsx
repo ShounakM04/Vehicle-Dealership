@@ -6,13 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
+import { jwtDecode } from "jwt-decode";
+
+// const token = localStorage.getItem('authToken');
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
-  const { query, setQuery } = useContext(SearchContext);
 
+
+  const {query, setQuery} = useContext(SearchContext);
   const navigate = useNavigate();
+  
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -35,8 +40,10 @@ const Dashboard = () => {
         const params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard`, { params });
-        // console.log(response);
+
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`,{params});
+        console.log(response.data);
+
         setCarDetails(response.data); // Assuming the response contains an array of car details
       } catch (error) {
         console.error('Error fetching car details:', error);
@@ -45,7 +52,9 @@ const Dashboard = () => {
 
     fetchCarDetails();
   }, [query]);
-
+  const currentDate = new Date();
+  const soldCarsCount = carDetails.filter(car => car.status === true).length;
+  const totalCars = carDetails.filter(car => car.status === false).length
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
       <div
@@ -95,32 +104,32 @@ const Dashboard = () => {
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
         <NavLink to={'/dashboard/carDetailsForm'}>
-          <button className="mt-10 bg-blue-500 text-white w-36 px-7 py-2 rounded hover:bg-blue-600">
+          <button className="mt-6 bg-blue-500 text-white w-36 px-7 py-2 rounded hover:bg-blue-600">
             Add Vehicle
           </button>
         </NavLink>
 
         <NavLink to={'/dashboard/deleteCarDetails'}>
-          <button className="mt-10 bg-red-500 text-white w-36 px-4 py-2 rounded hover:bg-red-600">
+          <button className="mt-6 bg-red-500 text-white w-36 px-4 py-2 rounded hover:bg-red-600">
             Remove Vehicle
           </button>
         </NavLink>
 
         <NavLink to={'/dashboard/addNoticeImage'}>
-          <button className="mt-10 bg-yellow-500 text-white w-36 px-4 py-2 rounded hover:bg-yellow-600">
+          <button className="mt-6 bg-yellow-500 text-white w-36 px-4 py-2 rounded hover:bg-yellow-600">
             Add Notice
           </button>
         </NavLink>
 
         <NavLink to={'/dashboard/sellCarDetails'}>
-          <button className="mt-10 bg-blue-500 text-white w-36 px-4 py-2 rounded hover:bg-blue-600">
-            Sell Car
+          <button className="mt-6 bg-blue-500 text-white w-36 px-4 py-2 rounded hover:bg-blue-600">
+            Sell Vehicle
           </button>
         </NavLink>
 
-        <div className="min-h-[2px] mt-10 bg-black"></div>
+        <div className="min-h-[2px] mt-6   bg-black"></div>
         <NavLink to={'/dashboard/customerEnquiry'}>
-          <button className="mt-10 bg-green-500 text-white w-36 px-10 py-2 rounded hover:bg-green-600">
+          <button className="mt-6 bg-green-500 text-white w-36 px-10 py-2 rounded hover:bg-green-600">
             Enquiry
           </button>
         </NavLink>
@@ -147,10 +156,11 @@ const Dashboard = () => {
             <span>Nikhil Motors</span>
           </div>
         </div>
-
+        <h2 className='mb-4'>{currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-          <div className="bg-purple-300 p-5 rounded text-white min-h-4">
-            Sample Card1
+          <div className="bg-purple-300  pl-5 p-3 rounded text-white min-h-4">
+            <p>Vehicle Inventory: {totalCars}</p>
+            <p>Sold Vehicles: {soldCarsCount}</p>
           </div>
           <div className="bg-blue-300 p-5 rounded text-white min-h-4">
             Sample Card2
@@ -198,10 +208,10 @@ const Dashboard = () => {
               <tr className="text-left bg-gray-200">
                 <th className="p-2">Owner Name</th>
                 <th className="p-2">Email</th>
-                <th className="p-2">Phone</th>
-                <th className="p-2">Car Make</th>
-                <th className="p-2">Car Name</th>
-                <th className="p-2">Register No</th>
+                <th className="p-2">Phone No.</th>
+                <th className="p-2">Vehicle Type</th>
+                <th className="p-2">Vehicle Name</th>
+                <th className="p-2">Registration No.</th>
                 <th className="p-2">Status</th>
                 <th className="p-2">View</th>
 

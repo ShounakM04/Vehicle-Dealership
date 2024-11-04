@@ -12,15 +12,14 @@ export default function Installment({ carID }) {
   const [loading, setLoading] = useState(true); // Loading state
   const [insuranceDoc, setInsuranceDoc] = useState([]);
   const [soldCarImages, setSoldCarImages] = useState([]);
-
-
-
+  const [profit, setProfit] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const fetchCarDetails = async () => {
     try {
       console.log("Params : " + carID);
       const response = await axios.get(
-        `https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
+        `https://vehicle-dealership.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
       setCarDetails(response.data.dbData);
@@ -38,10 +37,9 @@ export default function Installment({ carID }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(
-        `https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/installments`,
-        { params: { registernumber: carID } }
-      );
+      const response = await axios.get(`https://vehicle-dealership.vercel.app/installments`, {
+        params: { registernumber: carID },
+      });
       setInstallments(response.data);
     } catch (err) {
       // setError("Error fetching installment details");
@@ -53,8 +51,9 @@ export default function Installment({ carID }) {
 
   const handleInstallmentSubmit = async (e) => {
     e.preventDefault();
+    setUploading(true);
     try {
-      const response = await axios.post("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/installments", {
+      const response = await axios.post("https://vehicle-dealership.vercel.app/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -67,6 +66,7 @@ export default function Installment({ carID }) {
         setViewOption("view");
         // Optionally fetch installments again
         fetchInstallments();
+        setUploading(false);
       }
     } catch (error) {
       toast.error("Failed to add installment. Please try again.");
@@ -75,11 +75,14 @@ export default function Installment({ carID }) {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const totalInstallmentAmount = installments.reduce((total, inst) => total + parseFloat(inst.amount), 0);
+  const totalInstallmentAmount = installments.reduce(
+    (total, inst) => total + parseFloat(inst.amount),
+    0
+  );
 
   if (carID) {
     useEffect(() => {
@@ -89,7 +92,10 @@ export default function Installment({ carID }) {
           await fetchInstallments(); // Fetch installments
           await fetchCarDetails(); // Fetch car details
         } catch (err) {
-          console.error('Error fetching data:', err.response ? err.response.data : err.message);
+          console.error(
+            "Error fetching data:",
+            err.response ? err.response.data : err.message
+          );
           setError("Error fetching data");
         } finally {
           setLoading(false); // End loading
@@ -101,10 +107,30 @@ export default function Installment({ carID }) {
     }, [carID]);
   }
 
+  const fetchProfit = async () => {
+    try {
+      const response = await axios.get("https://vehicle-dealership.vercel.app/profits", {
+        params: { registernumber:carID },
+      });
+      setProfit(response.data.profit);
+      console.log(response.data.profit); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (carID) {
+      fetchProfit();
+    }
+  }, [carID]);
+
+  function abs(num){
+    return num > 0 ? num : -num;
+  }
   return (
     <>
-
-      <div className="bg-white p-2 rounded-lg shadow-lg">
+      <div className="bg-white pr-2 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold">Sold Vehicle Details</h2>
         {error && <p className="text-red-500">{error}</p>}
         {loading ? ( // Show loading state
@@ -113,13 +139,15 @@ export default function Installment({ carID }) {
           carDetails.map((car) => (
             <div
               key={car.registernumber}
-              className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg"
+              className="grid grid-cols-2 gap-4 bg-gray-50 p-2 rounded-lg"
             >
               <div>
-                <h3 className="text-xl font-semibold mb-2">{car.owner_name}</h3>
+                <p>
+                  <span className="font-medium">Owner: </span> {car.owner_name}
+                </p>
                 <p>
                   <span className="font-medium">Selling Price:</span>{" "}
-                  {car.selling_price}
+                  ₹{car.selling_price}
                 </p>
                 <p>
                   <span className="font-medium">Contact No:</span>{" "}
@@ -127,7 +155,7 @@ export default function Installment({ carID }) {
                 </p>
                 <p>
                   <span className="font-medium">Commission:</span>{" "}
-                  {car.commission}
+                  ₹{car.commission}
                 </p>
               </div>
               <div>
@@ -136,7 +164,9 @@ export default function Installment({ carID }) {
                   {insuranceDoc.length > 0 ? (
                     <button
                       onClick={() =>
-                        insuranceDoc.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
+                        insuranceDoc.forEach((doc) =>
+                          window.open(doc, "_blank", "noopener,noreferrer")
+                        )
                       }
                       className="text-blue-500 underline"
                     >
@@ -147,13 +177,16 @@ export default function Installment({ carID }) {
                   )}
                 </p>
                 <p>
-                  <span className="font-medium">Sold Car Images:</span>{" "}
+                  <span className="font-medium">Sold Vehicle Images:</span>{" "}
                   {soldCarImages.length > 0 ? (
                     <button
                       onClick={() =>
-                        soldCarImages.forEach((doc) => window.open(doc, "_blank", "noopener,noreferrer"))
+                        soldCarImages.forEach((doc) =>
+                          window.open(doc, "_blank", "noopener,noreferrer")
+                        )
                       }
                       className="text-blue-500 underline"
+                      
                     >
                       View
                     </button>
@@ -161,7 +194,6 @@ export default function Installment({ carID }) {
                     "Not Provided"
                   )}
                 </p>
-
               </div>
             </div>
           ))
@@ -169,7 +201,9 @@ export default function Installment({ carID }) {
           <p>No car details available</p>
         )}
       </div>
-
+      <div className="bg-white p-2 mt-2 rounded-lg shadow-lg">
+        Estimated {profit >= 0 ? "Profit" : "Loss"}: ₹{abs(profit)}
+      </div>
       <div className="mt-6">
         <label className="mr-4">
           <input
@@ -198,20 +232,24 @@ export default function Installment({ carID }) {
             <div className="max-h-60 overflow-y-auto">
               {installments.length > 0 ? (
                 installments.map((inst, index) => (
-                  <div key={index} className="p-4 border-b border-gray-200 flex items-center">
+                  <div
+                    key={index}
+                    className="p-4 border-b border-gray-200 flex items-center"
+                  >
                     <span className="font-medium mr-2">{index + 1})</span>
                     <span className="font-medium mr-2">Amount:</span>
                     <span className="mr-14">{inst.amount}</span>
                     <span className="font-medium mr-2">Date:</span>
                     <span>{formatDate(inst.installment_date)}</span>
                   </div>
-
                 ))
               ) : (
-                <p>No installments available</p>
+                <p className="p-2">No installments available</p>
               )}
             </div>
-            <p className="p-2 text-xl">Total Installment Amount: {totalInstallmentAmount.toFixed(2)}</p>
+            <p className="p-2 text-xl">
+              Total Installment Amount: {totalInstallmentAmount.toFixed(2)}
+            </p>
           </div>
         </>
       )}
@@ -250,8 +288,9 @@ export default function Installment({ carID }) {
             <button
               type="submit"
               className="bg-green-500 text-white p-2 rounded w-full"
+              disabled={uploading}
             >
-              Add Installment
+              {uploading ? 'Adding...' : 'Add Installment'}
             </button>
           </form>
         </div>

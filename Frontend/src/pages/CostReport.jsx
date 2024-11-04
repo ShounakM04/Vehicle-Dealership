@@ -47,7 +47,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/car/${id}`);
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
         const { car, images, insurance, owner } = response.data;
         setSoldStatus(response.data.car.status);
 
@@ -76,8 +76,8 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
-      console.log("hi+" + id);
-      const response = await axios.get("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/maintainance", {
+      console.log("hi+"+id);
+      const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
         params: { registernumber: id },
       });
 
@@ -126,19 +126,19 @@ const CostReport = () => {
           {/* Car Details */}
           {/* Car Details and Owner Details */}
           <div className="mb-4 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
-            <h3 className="text-xl">Car & Owner Details</h3>
+            {/* <h3 className="text-xl">Vehicle & Owner Details</h3> */}
             <div className="flex justify-between">
               <div className="w-1/2 pr-2">
-                <h4 className="font-semibold">Car Details</h4>
-                <p>Car No: {vehicleData.carDetails.carNo}</p>
-                <p>Car Company: {vehicleData.carDetails.carCompany}</p>
+                <h2 className="font-bold text-xl">Vehicle Details</h2>
+                <p>Registration Number: {vehicleData.carDetails.carNo}</p>
+                <p>Vehicle Company: {vehicleData.carDetails.carCompany}</p>
                 <p>Model: {vehicleData.carDetails.model}</p>
                 {/* <p>Type: {vehicleData.carDetails.type}</p>
                 <p>Fuel Type: {vehicleData.carDetails.fuelType}</p>
                 <p>Color: {vehicleData.carDetails.color}</p> */}
               </div>
               <div className="w-1/2 pl-2">
-                <h4 className="font-semibold">Owner Details</h4>
+                <h4 className="font-bold text-xl">Owner Details</h4>
                 <p>Owner: {vehicleData.carDetails.ownerName}</p>
                 <p>Phone: {vehicleData.carDetails.ownerPhone}</p>
                 <p>Email: {vehicleData.carDetails.ownerEmail}</p>
@@ -161,7 +161,7 @@ const CostReport = () => {
                     >
                       <div>
                         <p className="font-medium text-black">
-                          Type: {record.description}
+                         {index+1}) {record.description }
                         </p>
                         <p>Cost: ₹{record.price}</p>
                         <p>

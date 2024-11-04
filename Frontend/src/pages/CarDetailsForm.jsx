@@ -88,7 +88,7 @@ function AdminForm() {
 
 
       // Submit form data after images are uploaded
-      await axios.post("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/details", {
+      await axios.post("https://vehicle-dealership.vercel.app/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -234,7 +234,7 @@ function AdminForm() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label htmlFor="buyPrice" className="block text-gray-700 text-sm font-bold mb-2">Buying Price</label>
+              <label htmlFor="buyPrice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Selling Price</label>
               <input
                 type="number"
                 id="vehicleSellPrice"
