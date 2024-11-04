@@ -16,6 +16,29 @@ export default function DriverDashboard() {
       };
 
       
+      useEffect(()=>{
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+            if (token) {
+              try {
+                 decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+          
+              } catch (error) {
+                console.error("Invalid token", error);
+               
+              }
+            }
+          if(decodedToken?.isAdmin == true)
+          {
+            setUserRole("Admin");
+    
+          }
+          else if(decodedToken?.isEmployee == true)
+          {
+            setUserRole("Employee");
+          }
+      })
 
     return (
         <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
@@ -47,7 +70,7 @@ export default function DriverDashboard() {
                 <nav>
                     <ul className="space-y-4">
                         <li>
-                            <NavLink className="text-blue-500 font-semibold" to="/dashboard">
+                            <NavLink className="text-blue-500 font-semibold" to="/driverdashboard">
                                 Driver Dashboard
                             </NavLink>
                         </li>
@@ -89,7 +112,7 @@ export default function DriverDashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-                <NavLink className="text-gray-600 font-semibold" to="/dashboard/driver/onsiteVehicleImages">
+                <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/onsiteVehicleImages">
                     <div className="bg-purple-500 p-5 rounded text-white min-h-4">
                         Add Onsite Vehicle Images
                     </div>

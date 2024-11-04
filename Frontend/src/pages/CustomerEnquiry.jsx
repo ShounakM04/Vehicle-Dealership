@@ -22,7 +22,7 @@ function CustomerEnquiry() {
   };
 
   const validatePhoneNumber = (phone) => {
-    const phoneRegex = /^[0-9]{10}$/; 
+    const phoneRegex = /^[0-9]{10}$/;
     return phoneRegex.test(phone);
   };
 
@@ -41,26 +41,27 @@ function CustomerEnquiry() {
 
     try {
       const { serialnum, customerPhone } = selectedEnquiry;
-      
+
+
       await axios.delete('https://vehicle-dealership.vercel.app/customer', {
         data: {
           serialnum: serialnum,
           custcontact: customerPhone
         }
-      }); 
-      
+      });
+
       // Update the state to remove the deleted enquiry
-      setEnquiries(enquiries.filter((enquiry) => 
+      setEnquiries(enquiries.filter((enquiry) =>
         enquiry.serialnum !== serialnum || enquiry.customerPhone !== customerPhone
-      )); 
+      ));
       toast.success('Enquiry deleted successfully!');
-      
+
       // Re-fetch enquiries after deletion
       fetchEnquiries();
     } catch (error) {
-      toast.error('Failed to delete enquiry'); 
+      toast.error('Failed to delete enquiry');
     } finally {
-      closeModal(); 
+      closeModal();
     }
   };
 
@@ -135,7 +136,7 @@ function CustomerEnquiry() {
       <div className="p-8 shadow-lg rounded-lg bg-gray-100">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold mb-4 text-teal-700">Customer Enquiry Form</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label htmlFor="customerName" className="block text-gray-700 text-sm font-semibold mb-2">Customer Name</label>
@@ -194,7 +195,7 @@ function CustomerEnquiry() {
               customerName={enquiry.customerName}
               customerPhone={enquiry.customerPhone}
               description={enquiry.description}
-              date={enquiry.date} 
+              date={enquiry.date}
               onDelete={() => openDeleteModal(enquiry)}
             />
           ))}

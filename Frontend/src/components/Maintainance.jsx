@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {getUploadURL,uploadToS3} from '../../utils/s3UploadFunctions.jsx';
+import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 
 export function Maintainance({ registernumber, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');
@@ -17,22 +17,20 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
 
         try {
             setAdding(true);
-            const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance', {registernumber,description,price,role,maintainanceDate});
+            const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance', { registernumber, description, price, role, maintainanceDate });
 
-            
-            
 
             const nextIndex = response.data.nextIndex;
             // Handle other image uploads if necessary (similar to DisplayImage)
-       
+
             const file = files[0];
             const maintainanceDocPath = `${registernumber}/MaintenanceDoc/${nextIndex}`;
             const maintainanceDocUrl = await getUploadURL(file, maintainanceDocPath);
             await uploadToS3(maintainanceDocUrl, file);
-        
+
 
             // Call the parent callback to refresh maintenance records
-            if (onMaintenanceAdded){ onMaintenanceAdded();}
+            if (onMaintenanceAdded) { onMaintenanceAdded(); }
 
             // Clear form fields
             setTitle('');

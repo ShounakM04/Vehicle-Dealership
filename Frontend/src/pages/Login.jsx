@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -21,17 +22,38 @@ function Login() {
         const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {
-            const response = await axios.post(endpoint, { userID: username, userPass:password });
+            const response = await axios.post(endpoint, { userID: username, userPass: password });
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
             alert("Login successful");
-            navigate("/dashboard");  // Navigate to dashboard upon success
+
+           
+            let decodedToken;
+            if (token) {
+              try {
+                 decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+          
+              } catch (error) {
+                console.error("Invalid token", error);
+               
+              }
+            }
+            if(decodedToken.isAdmin == true || decodedToken.isEmployee == true )
+            {
+
+                navigate("/dashboard");  // Navigate to dashboard upon success
+            }
+            else if(decodedToken.isDriver == true)
+            {
+                navigate("/driverdashboard");
+            }
         } catch (error) {
             // Enhanced error handling
             if (error.response) {
                 // Server responded with a status other than 2xx
                 console.error("Login failed: ", error.response.data);
-                
+
                 if (error.response.status === 400) {
                     setErrorMessage("User does not exist or details are missing.");
                 } else if (error.response.status === 401) {
@@ -49,7 +71,7 @@ function Login() {
                 setErrorMessage("There was an error during the login process.");
             }
 
-            alert(errorMessage);  
+            alert(errorMessage);
         }
 
         // setUsername('');

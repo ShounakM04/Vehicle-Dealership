@@ -1,6 +1,8 @@
 import { useState } from "react";
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "./context/AuthContext";
+import { SearchProvider } from "./context/SearchContext";
 import Layout from "./components/Layout";
 import Landing from "./pages/Landing";
 import CarDetails from "./pages/CarDetails";
@@ -9,16 +11,14 @@ import CarDetailsForm from "./pages/CarDetailsForm";
 import DeleteCarDetails from "./pages/DeleteCarDetails";
 import Dashboard from "./pages/Dashboard";
 import AddNoticeImage from "./pages/AddNoticeImage";
-import { ToastContainer } from "react-toastify"; // Import ToastContainer
-import "react-toastify/dist/ReactToastify.css";
 import CustomerEnquiry from "./pages/CustomerEnquiry";
 import CostReport from "./pages/CostReport";
 import SellCarDetails from "./pages/SellCarDetails";
-import { SearchProvider } from "./context/SearchContext.jsx";
-import DriverDashboard from "./pages/DriverDashboard.jsx";
-import DriverOnsiteImagesAdd from "./components/DriverOnsiteImagesAdd.jsx";
-import ProtectedRoute from "./Auth/ProtectedRoute.jsx";
-import ProtectedUserRoute from "./Auth/ProtectedUserRoute.jsx";
+import DriverDashboard from "./pages/DriverDashboard";
+import DriverOnsiteImagesAdd from "./components/DriverOnsiteImagesAdd";
+import ProtectedRoute from "./Auth/ProtectedRoute";
+import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "car/:id",
+    path: "/car/:id",
     element: (
       <Layout>
         <CarDetails />
@@ -48,78 +48,126 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <ProtectedRoute>
-        {/* <ProtectedUserRoute requiredRole="employee">
-          <ProtectedUserRoute requiredRole="admin"> */}
-            <Layout>
-              <Dashboard />
-            </Layout>
-          {/* </ProtectedUserRoute>
-        </ProtectedUserRoute> */}
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+        <Layout>
+          <Dashboard />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+
+
+    ),
+  },
+  {
+    path: "/driverdashboard",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
+        <Layout>
+          <DriverDashboard />
+        </Layout>
+        </ProtectedUserRoute>
       </ProtectedRoute>
     ),
-  },
-  {
-    path: "/dashboard/driver",
+},
+{
+    path: "/driverdashboard/onsiteVehicleImages",
     element: (
-      <Layout>
-        <DriverDashboard />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
+
+        <Layout>
+          <DriverOnsiteImagesAdd />
+        </Layout>
+        </ProtectedUserRoute >
+
+      </ProtectedRoute>
     ),
-  },
-  {
-    path: "/dashboard/driver/onsiteVehicleImages",
-    element: (
-      <Layout>
-        <DriverOnsiteImagesAdd />
-      </Layout>
-    ),
-  },
+},
   {
     path: "/dashboard/carDetailsForm",
     element: (
-      <Layout>
-        <CarDetailsForm />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <CarDetailsForm />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/DeleteCarDetails",
     element: (
-      <Layout>
-        <DeleteCarDetails />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+      
+        <Layout>
+          <DeleteCarDetails />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+      
     ),
   },
   {
     path: "/dashboard/customerEnquiry",
     element: (
-      <Layout>
-        <CustomerEnquiry />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <CustomerEnquiry />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/addNoticeImage",
     element: (
-      <Layout>
-        <AddNoticeImage />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <AddNoticeImage />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/sellCarDetails",
     element: (
-      <Layout>
-        <SellCarDetails />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <SellCarDetails />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
     ),
   },
   {
     path: "/costReport/:id",
     element: (
-      <Layout>
-        <CostReport />
-      </Layout>
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <CostReport />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
     ),
   },
   {
@@ -134,10 +182,12 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <SearchProvider>
-      <ToastContainer />
-      <RouterProvider router={router} />
-    </SearchProvider>
+    <AuthProvider>
+      <SearchProvider>
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </SearchProvider>
+    </AuthProvider>
   );
 }
 

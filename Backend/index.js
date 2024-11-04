@@ -1,12 +1,14 @@
 const express = require("express");
+const serverlessExpress = require('@vendia/serverless-express'); // Import serverless-express
 const logResReq = require("./log"); // Import without destructuring
-const port = 8000;
-const app = express();
 const cors = require("cors");
+const PORT = 8000
+
+const app = express();
 
 //routers
 const HomeRoute = require("./routes/home.route.js");
-const Imageroute = require("../Backend/routes/image.route.js");
+const Imageroute = require("./routes/image.route.js");
 const DetailsRoute = require("./routes/carDetails.route.js");
 const SpecificPageRoute = require("./routes/specificCar.route.js");
 const DeleteRecordRoute = require("./routes/deleteRecord.route.js")
@@ -47,12 +49,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 // Use your custom logging middleware
 app.use(logResReq("logs.txt"));
 
 // Using Routes
-app.use("/", HomeRoute)
+app.use("/", HomeRoute);
 app.use("/upload", Imageroute);
 app.use("/details", DetailsRoute);
 app.use("/car", SpecificPageRoute);
@@ -67,8 +68,8 @@ app.use("/installments",InstallmentRoute);
 app.use("/profits", ProfitRoute)
 
 // Correct `app.listen` without req and res parameters
-// app.listen(port, () => {
-//     console.log(`Server connected to port ${port}`);
+// app.listen(PORT, () => {
+//     console.log(`Server connected to port ${PORT}`);
 // });
 
 module.exports = app;

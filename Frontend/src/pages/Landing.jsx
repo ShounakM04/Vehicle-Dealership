@@ -45,9 +45,9 @@ export default function Landing() {
     const fetchCars = async () => {
       try {
         const params = {};
-        if(fuelType) params.fuelType = fuelType;
-        if(carType) params.carMake = carType;
-        if(query) params.carSearch = query;
+        if (fuelType) params.fuelType = fuelType;
+        if (carType) params.carMake = carType;
+        if (query) params.carSearch = query;
         const response = await axios.get(`https://vehicle-dealership.vercel.app/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
