@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export default function DriverDashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const [userRole,setUserRole] = useState("");
 
 
 
@@ -38,6 +38,10 @@ export default function DriverDashboard() {
           {
             setUserRole("Employee");
           }
+          else if(decodedToken?.isDriver == true)
+            {
+              setUserRole("Driver");
+            }
       })
 
     return (
@@ -63,7 +67,7 @@ export default function DriverDashboard() {
                     />
                     <div>
                         <h3 className="font-semibold">Nikhil Motors</h3>
-                        <span className="text-gray-500">Admin</span>
+                        <span className="text-gray-500">{userRole}</span>
                     </div>
                 </div>
 

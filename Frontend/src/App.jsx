@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "./context/AuthContext";
 import { SearchProvider } from "./context/SearchContext";
 import Layout from "./components/Layout";
 import Landing from "./pages/Landing";
@@ -182,12 +181,10 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <AuthProvider>
       <SearchProvider>
         <ToastContainer />
         <RouterProvider router={router} />
       </SearchProvider>
-    </AuthProvider>
   );
 }
 
