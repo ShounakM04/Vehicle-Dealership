@@ -7,7 +7,7 @@ export async function getUploadURL (file,path)
       const filename = file.name;
       const filetype = file.type;
       
-      const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
+      const response = await axios.get('https://vehicle-dealership.vercel.app/upload/generate-upload-url', {
         params :{filename,
         filetype,path}
       });
