@@ -19,13 +19,31 @@ const MaintainanceRoute = require("./adminRoutes/maintainance.route.js")
 const InstallmentRoute = require("./adminRoutes/installments.route.js")
 const ProfitRoute = require("./adminRoutes/profit.route.js")
 
-const corsOptions = {
-    origin: '*', // Allow all origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-};
+// const corsOptions = {
+//     origin: '*', // Allow all origins
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+//     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+// };
 
-app.use(cors(corsOptions));
+// const port = process.env.PORT || 3001;
+
+// Explicitly handle OPTIONS requests
+app.options('*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200); // Important: Ensure this is 200 OK
+});
+
+// CORS middleware
+app.use(cors({
+  origin: 'http://localhost:5173', // No trailing slash
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
