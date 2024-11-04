@@ -49,6 +49,8 @@ app.use("/installments",InstallmentRoute);
 app.use("/profits", ProfitRoute)
 
 // Correct `app.listen` without req and res parameters
-app.listen(port, () => {
-    console.log(`Server connected to port ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server connected to port ${port}`);
+// });
+
+module.exports = app;
