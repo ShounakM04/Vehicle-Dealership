@@ -1,5 +1,6 @@
-const cloudin = require("../controllers/cloud.controller");
-const { uploadToS3 } = require("../amazonS3/s3config");
+import cloudin from "../controllers/cloud.controller.js";
+import { uploadToS3 } from "../amazonS3/s3config.js";
+
 
 // async function imageUpload(registerNumber, files) {
 //     const imageUrls = [];

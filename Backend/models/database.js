@@ -1,5 +1,8 @@
-const pg = require("pg")
-require('dotenv').config();
+import pg from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 
 const db =  new pg.Client({
@@ -11,4 +14,4 @@ const db =  new pg.Client({
 });
 
 db.connect();
-module.exports = db;
+export default db;

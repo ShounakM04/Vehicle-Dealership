@@ -1,8 +1,9 @@
-const express = require("express");
-const handleSpecifiPage = require("../controllers/specificCar.controller.js");
+import express from "express";
+import handleSpecifiPage from "../controllers/specificCar.controller.js";
 
-router = express.Router();
+const router = express.Router();
 
 router.get("/:registernumber", handleSpecifiPage);
 
-module.exports = router;
+// module.exports = router;
+export default router

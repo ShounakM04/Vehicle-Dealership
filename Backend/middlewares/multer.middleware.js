@@ -24,7 +24,8 @@
 // // Export the upload middleware
 // module.exports = upload;
 
-const multer = require("multer");
+import multer from "multer";
+
 
 // Set up Multer storage in memory for serverless
 const storage = multer.memoryStorage();

@@ -1,5 +1,5 @@
-const db = require("../models/database");
-
+// const db = require("../models/database");
+import db from "../models/database.js";
 async function handleDashboard(req, res) {
     const { carSearch } = req.query;
     try {
@@ -35,4 +35,6 @@ async function handleDashboard(req, res) {
     }
 }
 
-module.exports = handleDashboard;
+// module.exports = handleDashboard;
+export default handleDashboard;
+

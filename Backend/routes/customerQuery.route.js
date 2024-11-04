@@ -1,5 +1,5 @@
-const express = require("express")
-const {handleGetQuery,handleNewCustomerQuery,handleDeleteCustomerQuery} = require("../controllers/customerQuery.controller")
+import express from "express";
+import { handleGetQuery, handleNewCustomerQuery, handleDeleteCustomerQuery } from "../controllers/customerQuery.controller.js";
 
 
 const customerReviewRouter = express.Router();
@@ -11,4 +11,5 @@ customerReviewRouter.post("/", handleNewCustomerQuery);
 customerReviewRouter.delete("/", handleDeleteCustomerQuery  );
 
 
-module.exports = customerReviewRouter;
+// module.exports = customerReviewRouter;
+export default customerReviewRouter

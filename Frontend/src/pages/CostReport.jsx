@@ -47,7 +47,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`);
+        const response = await axios.get(`https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/car/${id}`);
         const { car, images, insurance, owner } = response.data;
         setSoldStatus(response.data.car.status);
 
@@ -77,7 +77,7 @@ const CostReport = () => {
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+"+id);
-      const response = await axios.get("http://localhost:8000/maintainance", {
+      const response = await axios.get("https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/maintainance", {
         params: { registernumber: id },
       });
 

@@ -1,23 +1,23 @@
-const express = require("express");
-const logResReq = require("./log"); // Import without destructuring
-const port = 8000;
-const app = express();
-const cors = require("cors");
+import express from "express";
+import logResReq from "./log.js"; // Import without destructuring
+import cors from "cors";
 
-//routers
-const HomeRoute = require("./routes/home.route.js");
-const Imageroute = require("../Backend/routes/image.route.js");
-const DetailsRoute = require("./routes/carDetails.route.js");
-const SpecificPageRoute = require("./routes/specificCar.route.js");
-const DeleteRecordRoute = require("./routes/deleteRecord.route.js")
-const customerQueryRoute = require("./routes/customerQuery.route.js")
-const LoginRoute = require("./adminRoutes/userLogin.route.js")
-const RegistrationRoute = require("./adminRoutes/userRegistration.route.js")
-const DashboardRoute = require("./adminRoutes/dashboard.route.js")
-const InsuranceRoute  = require("./adminRoutes/insurance.route.js")
-const MaintainanceRoute = require("./adminRoutes/maintainance.route.js")
-const InstallmentRoute = require("./adminRoutes/installments.route.js")
-const ProfitRoute = require("./adminRoutes/profit.route.js")
+// Routers
+import HomeRoute from "./routes/home.route.js";
+import Imageroute from "../Backend/routes/image.route.js";
+import DetailsRoute from "./routes/carDetails.route.js";
+import SpecificPageRoute from "./routes/specificCar.route.js";
+import DeleteRecordRoute from "./routes/deleteRecord.route.js";
+import customerQueryRoute from "./routes/customerQuery.route.js";
+import LoginRoute from "./adminRoutes/userLogin.route.js";
+import RegistrationRoute from "./adminRoutes/userRegistration.route.js";
+import DashboardRoute from "./adminRoutes/dashboard.route.js";
+import InsuranceRoute from "./adminRoutes/insurance.route.js";
+import MaintainanceRoute from "./adminRoutes/maintainance.route.js";
+import InstallmentRoute from "./adminRoutes/installments.route.js";
+import ProfitRoute from "./adminRoutes/profit.route.js";
+
+const app = express();
 
 const corsOptions = {
     origin: '*', // Allow all origins
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 // Use your custom logging middleware
-app.use(logResReq("logs.txt"));
+// app.use(logResReq("logs.txt"));
 
 // Using Routes
 app.use("/", HomeRoute)
@@ -48,7 +48,7 @@ app.use("/maintainance",MaintainanceRoute);
 app.use("/installments",InstallmentRoute);
 app.use("/profits", ProfitRoute)
 
-// Correct `app.listen` without req and res parameters
-app.listen(port, () => {
-    console.log(`Server connected to port ${port}`);
-});
+import serverless from 'serverless-http';
+
+// module.exports.handler = serverless(app);
+export const handler = serverless(app);

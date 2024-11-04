@@ -72,7 +72,7 @@
 // module.exports = uploadOnCloudinary;
 
 
-const { uploadToS3 } = require("../amazonS3/s3config");
+import { uploadToS3 } from "../amazonS3/s3config.js";
 
 const uploadOnS3 = async (buffer, filename, filetype) => {
     try {

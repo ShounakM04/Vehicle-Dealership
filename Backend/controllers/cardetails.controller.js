@@ -1,4 +1,6 @@
-const db = require("../models/database");
+// const db = require("../models/database");
+import db from "../models/database.js";
+
 
 async function handleCarDetails(req, res) {
   try {
@@ -127,4 +129,4 @@ async function handleCarDetails(req, res) {
   }
 }
 
-module.exports = handleCarDetails;
+export default handleCarDetails;

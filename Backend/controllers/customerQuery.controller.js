@@ -1,4 +1,5 @@
-const db = require("../models/database");
+// const db = require("../models/database");
+import db from "../models/database.js";
 
 async function handleGetQuery(req, res) {
     try {
@@ -53,7 +54,7 @@ async function handleDeleteCustomerQuery(req, res) {
 
 
 
-module.exports = {
+export {
     handleGetQuery,
     handleNewCustomerQuery,
     handleDeleteCustomerQuery 

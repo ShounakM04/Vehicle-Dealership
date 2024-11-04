@@ -34,7 +34,7 @@ const Dashboard = () => {
         const params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-        const response = await axios.get(`http://localhost:8000/dashboard`,{params});
+        const response = await axios.get(`https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/dashboard`,{params});
         console.log(response.data);
         setCarDetails(response.data); // Assuming the response contains an array of car details
       } catch (error) {

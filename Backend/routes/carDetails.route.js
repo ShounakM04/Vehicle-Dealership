@@ -1,7 +1,8 @@
-const express = require("express");
-const handleCarDetails = require("../controllers/cardetails.controller.js");
+import express from "express";
+import handleCarDetails from "../controllers/cardetails.controller.js";
 
-router = express.Router();
+
+const router = express.Router();
 
 router.get("/",(req,res)=>{
     res.status(200).send("Displayed");
@@ -9,4 +10,4 @@ router.get("/",(req,res)=>{
 
 router.post("/",handleCarDetails);
 
-module.exports = router;
+export default router;

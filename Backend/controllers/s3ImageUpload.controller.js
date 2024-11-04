@@ -1,4 +1,4 @@
-const { uploadToS3 } = require('../amazonS3/s3config');
+import { uploadToS3 } from '../amazonS3/s3config.js';
 
 // Controller to directly call uploadToS3Image and return pre-signed URL
 async function generatePresignedUploadUrl(req, res) {
@@ -23,4 +23,4 @@ async function generatePresignedUploadUrl(req, res) {
     }
 }
 
-module.exports = { generatePresignedUploadUrl };
+export { generatePresignedUploadUrl };

@@ -14,7 +14,7 @@ function CarDetails() {
     const fetchCarDetails = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get(`http://localhost:8000/car/${params.id}`);
+        const response = await axios.get(`https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/car/${params.id}`);
         if (response.status === 200) {
           setCarData(response.data);
           console.log(response.data);

@@ -1,4 +1,6 @@
-const db = require("../models/database")
+// const db = require("../models/database")
+import db from "../models/database.js";
+
 
 async function handleRecordDeletion(req,res) {
     const registerNum = req.body.deletedID;

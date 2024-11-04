@@ -38,7 +38,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:8000/car/${currDeleteId}`
+        `https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/car/${currDeleteId}`
       );
       setCarData(response.data);
       console.log(response.data);
@@ -103,7 +103,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("http://localhost:8000/dashboard/sell-car", formData);
+      await axios.post("https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/dashboard/sell-car", formData);
 
       toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);

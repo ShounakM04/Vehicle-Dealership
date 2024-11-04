@@ -17,7 +17,7 @@ export default function Installment({ carID }) {
     try {
       console.log("Params : " + carID);
       const response = await axios.get(
-        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
+        `https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
       setCarDetails(response.data.dbData);
@@ -35,7 +35,7 @@ export default function Installment({ carID }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`http://localhost:8000/installments`, {
+      const response = await axios.get(`https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/installments`, {
         params: { registernumber: carID },
       });
       setInstallments(response.data);
@@ -50,7 +50,7 @@ export default function Installment({ carID }) {
   const handleInstallmentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/installments", {
+      const response = await axios.post("https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -105,7 +105,7 @@ export default function Installment({ carID }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/profits", {
+      const response = await axios.get("https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/profits", {
         params: { registernumber:carID },
       });
       setProfit(response.data.profit);

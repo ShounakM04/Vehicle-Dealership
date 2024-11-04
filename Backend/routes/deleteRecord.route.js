@@ -1,11 +1,13 @@
-const express = require("express");
-const handleSpecifiPage = require("../controllers/specificCar.controller");
-const handleRecordDeletion = require("../controllers/deleteRecord.controller");
-const db = require("../models/database");
-const { authenticateToken, authorizeEmployeeOrAdmin } = require("../controllers/userRole-auth");
+import express from "express";
+// import handleSpecifiPage from "../controllers/specificCar.controller";
+// import handleRecordDeletion from "../controllers/deleteRecord.controller";
+// import db from "../models/database";
+import db from "../models/database.js"
+import { authenticateToken, authorizeEmployeeOrAdmin } from "../controllers/userRole-auth.js";
 
 
-DeleteRecordRoute = express.Router();
+
+const DeleteRecordRoute = express.Router();
 
 DeleteRecordRoute.get("/",authenticateToken,authorizeEmployeeOrAdmin,(req,res)=>{
     res.send("Delete page")
@@ -58,4 +60,4 @@ DeleteRecordRoute.delete("/" , (req,res) => {
 
 //DeleteRecordRoute.delete("/:registernum/",handleRecordDeletion);
 
-module.exports = DeleteRecordRoute;
+export default DeleteRecordRoute;

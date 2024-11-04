@@ -1,5 +1,5 @@
 
-const { uploadToS3 } = require('../amazonS3/s3config'); // Import S3 upload function
+import { uploadToS3 } from '../amazonS3/s3config.js'; // Import S3 upload function
 
 async function handleImageUpload(req, res) {
     const carNumber = req.body.carNumber;

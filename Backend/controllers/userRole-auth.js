@@ -1,5 +1,8 @@
-const jwt = require("jsonwebtoken")
-require('dotenv').config();
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+// Configure environment variables
+dotenv.config();
 
 
 const authenticateToken = (req,res,next) => {
@@ -38,8 +41,7 @@ const authorizeAdmin = (req,res,next) => {
         return res.status(403).send("Access Denied. Only the Admin can access this")
     }
 }
-
-module.exports = {
+export {
     authenticateToken,
     authorizeAdmin,
     authorizeDriverOrAdmin,

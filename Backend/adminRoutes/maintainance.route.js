@@ -1,5 +1,5 @@
-const express = require("express")
-const {handleGetMaintainanceDetails,handlePostMaintainanceDetails} = require("../adminControllers/maintainance.controller")
+import express from "express";
+import { handleGetMaintainanceDetails, handlePostMaintainanceDetails } from "../adminControllers/maintainance.controller.js";
 
 const router = express.Router();
 
@@ -8,4 +8,4 @@ router.get("/",handleGetMaintainanceDetails);
 
 router.post("/",handlePostMaintainanceDetails);
 
-module.exports = router;
+export default router

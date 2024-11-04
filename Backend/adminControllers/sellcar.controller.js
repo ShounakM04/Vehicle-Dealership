@@ -1,6 +1,8 @@
 
-const db = require("../models/database");
-const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); 
+// const db = require("../models/database");
+// const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); 
+import db from "../models/database.js";
+import { getObjectURL, listImagesInFolder } from "../amazonS3/s3config.js"; 
 
 
 async function handleSellCar(req, res) {
@@ -111,4 +113,4 @@ console.log("sellcar.cotroller : "+carID)
 }
 
 
-module.exports = {handleSellCar,getSoldCarDetails};
+export {handleSellCar,getSoldCarDetails};

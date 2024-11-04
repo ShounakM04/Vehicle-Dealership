@@ -1,4 +1,5 @@
-const fs = require("fs");
+// const fs = require("fs");
+import fs from "fs";
 
 function logResReq(filename) {
     return (req, res, next) => {
@@ -14,5 +15,5 @@ function logResReq(filename) {
         );
     };
 }
-
-module.exports = logResReq; // Export the function correctly
+ // Export the function correctly
+export default {logResReq}

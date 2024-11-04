@@ -1,5 +1,5 @@
-const db = require("../models/database");
-
+// const db = require("../models/database");
+import db from "../models/database.js";
 async function addInstallments(req,res){
     const {registernumber, amount, installmentdate, } = req.body;
     try {
@@ -58,7 +58,7 @@ const getInstallments = async (req, res) => {
 };
 
 // Export the controllers
-module.exports = {
+export {
     addInstallments,
     getInstallments
 };

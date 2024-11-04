@@ -7,7 +7,7 @@ export async function getUploadURL (file,path)
       const filename = file.name;
       const filetype = file.type;
       
-      const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
+      const response = await axios.get('https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/upload/generate-upload-url', {
         params :{filename,
         filetype,path}
       });

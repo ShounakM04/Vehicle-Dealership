@@ -1,4 +1,5 @@
-const db = require("../models/database");
+// const db = require("../models/database");
+import db from "../models/database.js";
 
 async function calculateProfit(req, res){
     const { registernumber } = req.query;
@@ -39,4 +40,4 @@ async function calculateProfit(req, res){
     }
 };
 
-module.exports = { calculateProfit };
+export { calculateProfit };

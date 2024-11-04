@@ -48,9 +48,11 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000/`, { params });
-        console.log(response.data);
-        const data = response.data.carsWithImages;
+        const response = await axios.get(`https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/landing`, { params });
+        // console.log(response.data.body);
+        // const data = response.data.body.carsWithImages;
+        const data1 = JSON.parse(response.data.body);
+        const data = data1.carsWithImages;
         const carsData = data.map((car) => {
           const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
           return {
@@ -74,21 +76,21 @@ export default function Landing() {
 
 
   // Fetch notice images only once on component mount
-  useEffect(() => {
-    const fetchNoticeImages = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/dashboard/get-notice');
-        const imageUrls = response.data;
+  // useEffect(() => {
+  //   const fetchNoticeImages = async () => {
+  //     try {
+  //       const response = await axios.get('https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/dashboard/get-notice');
+  //       const imageUrls = response.data;
+  //       console.log("Notice Images:", response.data.body);
+  //       const data1 = JSON.parse(response.data.body)
+  //       setNoticeImages(data1);  // Set fetched image URLs
+  //     } catch (error) {
+  //       console.error("Error fetching notice images:", error);
+  //     }
+  //   };
 
-        setNoticeImages(imageUrls);  // Set fetched image URLs
-        console.log("Notice Images:", imageUrls);
-      } catch (error) {
-        console.error("Error fetching notice images:", error);
-      }
-    };
-
-    fetchNoticeImages();
-  }, []); // Empty dependency array to run only once
+  //   fetchNoticeImages();
+  // }, []); // Empty dependency array to run only once
 
   return (
     <div className="container mx-auto max-w-full">

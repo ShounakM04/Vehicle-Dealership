@@ -1,5 +1,7 @@
-const db = require("../models/database")
-const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
+// const db = require("../models/database")
+// const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
+import db from "../models/database.js";
+import { getObjectURL, listImagesInFolder } from "../amazonS3/s3config.js";
 
 async function handleGetMaintainanceDetails(req, res) {
     const registernumber = req.query.registernumber;
@@ -120,7 +122,7 @@ async function handlePostMaintainanceDetails(req, res) {
 }
 
 
-module.exports = {
+export {
     handleGetMaintainanceDetails,
     handlePostMaintainanceDetails
-}
+};

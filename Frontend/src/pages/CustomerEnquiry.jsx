@@ -42,7 +42,7 @@ function CustomerEnquiry() {
     try {
       const { serialnum, customerPhone } = selectedEnquiry;
       
-      await axios.delete('http://localhost:8000/customer', {
+      await axios.delete('https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/customer', {
         data: {
           serialnum: serialnum,
           custcontact: customerPhone
@@ -75,7 +75,7 @@ function CustomerEnquiry() {
     try {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
-      await axios.post('http://localhost:8000/customer', {
+      await axios.post('https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/customer', {
         custName: customerName,
         custContact: customerPhone,
         custQuery: description,
@@ -102,7 +102,7 @@ function CustomerEnquiry() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/customer');
+      const response = await axios.get('https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/customer');
       const formattedEnquiries = response.data.enquiries.map(enquiry => ({
         serialnum: enquiry.serialnum,
         customerName: enquiry.custname,

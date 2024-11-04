@@ -1,6 +1,8 @@
 
-const db = require("../models/database");
-const { getObjectURL } = require("../amazonS3/s3config"); 
+// const db = require("../models/database");
+import db from "../models/database.js";
+
+import { getObjectURL } from "../amazonS3/s3config.js"; 
 
 async function handleHomePage(req, res) {
     const { fuelType, carMake, carSearch } = req.query; // Extract parameters from query
@@ -63,4 +65,4 @@ async function handleHomePage(req, res) {
     }
 }
 
-module.exports = handleHomePage;
+export default handleHomePage;

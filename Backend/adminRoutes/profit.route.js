@@ -1,9 +1,10 @@
-const express = require("express")
-const {calculateProfit} = require("../adminControllers/profit.controller.js")
+import express from "express";
+import { calculateProfit } from "../adminControllers/profit.controller.js";
 
 const router = express.Router();
 
 
 router.get("/",calculateProfit);
 
-module.exports = router;
+// module.exports = router;
+export default router

@@ -1,5 +1,8 @@
-require("dotenv").config();
-const jwt = require("jsonwebtoken")
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
+
 
 
 
@@ -17,8 +20,7 @@ const generateDriverToken = ({userID, password}) =>{
     return jwt.sign({userID,password, isDriver :true},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'6h'});
 }
 
-
-module.exports = {
+export {
     generateAdminToken,
     generateEmployeeToken,
     generateDriverToken

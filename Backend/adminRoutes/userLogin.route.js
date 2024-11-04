@@ -1,5 +1,5 @@
-const express = require("express");
-const { handleUserLogin } = require("../adminControllers/userRegistration.controller");
+import express from "express";
+import { handleUserLogin } from "../adminControllers/userRegistration.controller.js";
  
 
 const router = express.Router()
@@ -11,4 +11,5 @@ router.get("/",(req,res)=>{
 
 router.post("/",handleUserLogin);
 
-module.exports = router;
+// module.exports = router;/
+export default router

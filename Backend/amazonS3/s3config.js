@@ -1,6 +1,7 @@
-const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-require("dotenv").config();
+import { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import dotenv from "dotenv";
+dotenv.config();
 
 
 
@@ -84,4 +85,4 @@ async function  deleteObject(filename) {
     
 }
 
-module.exports = { uploadToS3,getObjectURL ,listImagesInFolder,deleteObject};
+export { uploadToS3,getObjectURL ,listImagesInFolder,deleteObject};

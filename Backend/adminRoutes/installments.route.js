@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 
-const {addInstallments, getInstallments} = require('../adminControllers/installment.controller.js')
+import {addInstallments, getInstallments} from '../adminControllers/installment.controller.js'
 
 const router = express.Router();
 
 router.post("/", addInstallments);
 router.get("/", getInstallments);
 
-module.exports = router
+export default router

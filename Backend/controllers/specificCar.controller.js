@@ -1,5 +1,7 @@
-const db = require("../models/database");
-const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); // Import S3 functions
+// const db = require("../models/database");
+import db from "../models/database.js";
+
+import { getObjectURL, listImagesInFolder } from "../amazonS3/s3config.js"; // Import S3 functions
 
 async function handleSpecifiPage(req, res) {
     try {
@@ -50,4 +52,4 @@ async function handleSpecifiPage(req, res) {
     }
 }
 
-module.exports = handleSpecifiPage;
+export default handleSpecifiPage;

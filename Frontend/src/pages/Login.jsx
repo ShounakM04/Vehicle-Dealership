@@ -18,7 +18,7 @@ function Login() {
             return;
         }
 
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        const endpoint = "https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/login"; // Update with your actual endpoint
 
         try {
             const response = await axios.post(endpoint, { userID: username, userPass:password });

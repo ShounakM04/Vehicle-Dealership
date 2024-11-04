@@ -88,7 +88,7 @@ function AdminForm() {
 
 
       // Submit form data after images are uploaded
-      await axios.post("http://localhost:8000/details", {
+      await axios.post("https://hg6el8z6a5.execute-api.ap-south-1.amazonaws.com/default/details", {
         vehicleName,
         brandName,
         registernumber,

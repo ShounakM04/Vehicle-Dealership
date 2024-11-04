@@ -1,4 +1,4 @@
-const {deleteObject,listImagesInFolder,getObjectURL} = require('../amazonS3/s3config.js')
+import {deleteObject,listImagesInFolder,getObjectURL} from '../amazonS3/s3config.js'
 
 
 async function handleGetNotice(req, res) {
@@ -47,7 +47,7 @@ async function handleDeleteNotice(req, res) {
 }
 
 
-module.exports = {
+export {
     handleGetNotice,
     handleDeleteNotice
 };
