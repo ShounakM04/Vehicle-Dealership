@@ -1,31 +1,35 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
+// src/Auth/ProtectedUserRoute.jsx
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
+const ProtectedUserRoute = ({ children, requiredRoles }) => {
+  const navigate = useNavigate();
+  console.log(requiredRoles)
 
-const ProtectedUserRoute = ({ children, requiredRole }) => {
-  // Check for the token
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem("authToken");
+  let decodedToken;
+  if (token) {
+    try {
+       decodedToken = jwtDecode(token);
+  console.log(decodedToken);
 
-  if (!token) {
-    return <Navigate to="/admin" replace />;
+    } catch (error) {
+      console.error("Invalid token", error);
+     
+    }
   }
 
-  // Decode the token to check the user's role
-  const decoded = jwtDecode(token);
+  useEffect(() => {
+    if (!decodedToken || (requiredRoles && !requiredRoles.some(role => 
+        (role === "driver" && decodedToken.isDriver) || (role === "admin" && decodedToken.isAdmin) || (role === "employee" && decodedToken.isEmployee)
+      ))) {
+      navigate("/admin"); // Redirect to /admin if not authorized
+    }
+  }, [token, requiredRoles, navigate]);
 
-  // Check if the user has the required role
-  if (requiredRole === 'driver' && decoded.isDriver) {
-    return <Navigate to="/dashboard/driver" replace />;
-  }
-  else if (requiredRole === 'admin' && decoded.isAdmin) {
-    return <Navigate to="/dashboard" replace />;
-  }
-  else if (requiredRole === 'employee' && decoded.isEmployee) {
-    return <Navigate to="/dashboard" replace />;
-  }
-  // If role matches, render the child component
-  return children;
+  return token ? children : null; // Render children if authorized
 };
 
 export default ProtectedUserRoute;
+

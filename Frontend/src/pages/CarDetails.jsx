@@ -14,7 +14,7 @@ function CarDetails() {
     const fetchCarDetails = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${params.id}`);
+        const response = await axios.get(`http://localhost:8000/car/${params.id}`);
         if (response.status === 200) {
           setCarData(response.data);
           console.log(response.data);
@@ -30,7 +30,7 @@ function CarDetails() {
         setLoading(false); // End loading regardless of success or error
       }
     };
-    
+
 
     fetchCarDetails();
   }, [params.id]);
@@ -64,30 +64,30 @@ function CarDetails() {
           </div>
 
           <div className="bg-white shadow-md rounded-md p-4">
-          <h2 className="text-2xl font-bold mb-4 text-center">Vehicle Details</h2>
-          <h3 className="text-lg font-semibold mb-2">Vehicle Information</h3>
-          <ul className="space-y-2">
-            <li className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">Vehicle Name:</span>
-              <span>{carData.car.carname}</span>
-            </li>
-            <li className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">Vehicle Type:</span>
-              <span>{carData.car.carmake}</span>
-            </li>
-            <li className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">Company:</span>
-              <span>{carData.car.carcompany}</span>
-            </li>
-            <li className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">Color:</span>
-              <span>{carData.car.carcolor}</span>
-            </li>
-            <li className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">Price:</span>
-              <span className="text-blue-500">₹ {carData.car.vehiclesellprice}</span>
-            </li>
-          </ul>
+            <h2 className="text-2xl font-bold mb-4 text-center">Vehicle Details</h2>
+            <h3 className="text-lg font-semibold mb-2">Vehicle Information</h3>
+            <ul className="space-y-2">
+              <li className="flex justify-between items-center border-b pb-2">
+                <span className="font-semibold">Vehicle Name:</span>
+                <span>{carData.car.carname}</span>
+              </li>
+              <li className="flex justify-between items-center border-b pb-2">
+                <span className="font-semibold">Vehicle Type:</span>
+                <span>{carData.car.carmake}</span>
+              </li>
+              <li className="flex justify-between items-center border-b pb-2">
+                <span className="font-semibold">Company:</span>
+                <span>{carData.car.carcompany}</span>
+              </li>
+              <li className="flex justify-between items-center border-b pb-2">
+                <span className="font-semibold">Color:</span>
+                <span>{carData.car.carcolor}</span>
+              </li>
+              <li className="flex justify-between items-center border-b pb-2">
+                <span className="font-semibold">Price:</span>
+                <span className="text-blue-500">₹ {carData.car.vehiclesellprice}</span>
+              </li>
+            </ul>
 
             {/* Insurance Section */}
             {carData.insurance && <><h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+
 
 export default function Installment({ carID }) {
   const [installmentAmount, setInstallmentAmount] = useState("");
@@ -14,12 +16,13 @@ export default function Installment({ carID }) {
   const [soldCarImages, setSoldCarImages] = useState([]);
   const [profit, setProfit] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const [isAdmin,setIsAdmin] = useState(false);
 
   const fetchCarDetails = async () => {
     try {
       console.log("Params : " + carID);
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
+        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
         { params: { carID } }
       );
       setCarDetails(response.data.dbData);
@@ -37,7 +40,7 @@ export default function Installment({ carID }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`https://vehicle-dealership.vercel.app/installments`, {
+      const response = await axios.get(`http://localhost:8000/installments`, {
         params: { registernumber: carID },
       });
       setInstallments(response.data);
@@ -53,7 +56,7 @@ export default function Installment({ carID }) {
     e.preventDefault();
     setUploading(true);
     try {
-      const response = await axios.post("https://vehicle-dealership.vercel.app/installments", {
+      const response = await axios.post("http://localhost:8000/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -103,17 +106,40 @@ export default function Installment({ carID }) {
       };
 
       fetchData();
+
+      
       console.log(insuranceDoc);
     }, [carID]);
   }
 
+  useEffect(()=>{
+    
+    const token = localStorage.getItem("authToken");
+    let decodedToken;
+        if (token) {
+          try {
+             decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+      
+          } catch (error) {
+            console.error("Invalid token", error);
+           
+          }
+        }
+        if(decodedToken?.isAdmin && decodedToken.isAdmin == true )
+        {
+          setIsAdmin(true);
+        }
+
+  },[]);
+
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("https://vehicle-dealership.vercel.app/profits", {
-        params: { registernumber:carID },
+      const response = await axios.get("http://localhost:8000/profits", {
+        params: { registernumber: carID },
       });
       setProfit(response.data.profit);
-      console.log(response.data.profit); 
+      console.log(response.data.profit);
     } catch (error) {
       console.log(error);
     }
@@ -125,7 +151,7 @@ export default function Installment({ carID }) {
     }
   }, [carID]);
 
-  function abs(num){
+  function abs(num) {
     return num > 0 ? num : -num;
   }
   return (
@@ -186,7 +212,7 @@ export default function Installment({ carID }) {
                         )
                       }
                       className="text-blue-500 underline"
-                      
+
                     >
                       View
                     </button>
@@ -201,9 +227,11 @@ export default function Installment({ carID }) {
           <p>No car details available</p>
         )}
       </div>
+      {isAdmin == true && <>
       <div className="bg-white p-2 mt-2 rounded-lg shadow-lg">
         Estimated {profit >= 0 ? "Profit" : "Loss"}: ₹{abs(profit)}
       </div>
+      </>}
       <div className="mt-6">
         <label className="mr-4">
           <input

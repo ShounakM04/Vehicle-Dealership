@@ -13,9 +13,10 @@ import { jwtDecode } from "jwt-decode";
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
-  const {query, setQuery} = useContext(SearchContext);
+  const { query, setQuery } = useContext(SearchContext);
+  const [userRole,setUserRole] = useState("");
   const navigate = useNavigate();
-  
+
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -38,9 +39,11 @@ const Dashboard = () => {
         const params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`,{params});
+        const response = await axios.get(`http://localhost:8000/dashboard`, { params });
         console.log(response.data);
         setCarDetails(response.data); // Assuming the response contains an array of car details
+
+       
       } catch (error) {
         console.error('Error fetching car details:', error);
       }
@@ -48,6 +51,30 @@ const Dashboard = () => {
 
     fetchCarDetails();
   }, [query]);
+
+  useEffect(()=>{
+    const token = localStorage.getItem("authToken");
+    let decodedToken;
+        if (token) {
+          try {
+             decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+      
+          } catch (error) {
+            console.error("Invalid token", error);
+           
+          }
+        }
+      if(decodedToken?.isAdmin &&decodedToken.isAdmin   == true)
+      {
+        setUserRole("Admin");
+
+      }
+      else if(decodedToken?.isEmployee &&  decodedToken.isEmployee == true)
+      {
+        setUserRole("Employee");
+      }
+  })
   const currentDate = new Date();
   const soldCarsCount = carDetails.filter(car => car.status === true).length;
   const totalCars = carDetails.filter(car => car.status === false).length
@@ -74,7 +101,7 @@ const Dashboard = () => {
           />
           <div>
             <h3 className="font-semibold">Nikhil Motors</h3>
-            <span className="text-gray-500">Admin</span>
+            <span className="text-gray-500">{userRole}</span>
           </div>
         </div>
 

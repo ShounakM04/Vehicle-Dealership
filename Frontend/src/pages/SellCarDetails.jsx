@@ -38,7 +38,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
+        `http://localhost:8000/car/${currDeleteId}`
       );
       setCarData(response.data);
       console.log(response.data);
@@ -103,7 +103,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData);
+      await axios.post("http://localhost:8000/dashboard/sell-car", formData);
 
       toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);
@@ -433,7 +433,7 @@ function SellCarDetails() {
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
           disabled={loading}
         >
-        {loading ? "Submitting..." : "Confirm"}
+          {loading ? "Submitting..." : "Confirm"}
 
         </button>
         <button

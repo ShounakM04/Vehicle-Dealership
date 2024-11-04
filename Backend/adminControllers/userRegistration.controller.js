@@ -56,13 +56,13 @@ async function handleUserLogin(req,res) {
 
 
         let token;
-        if(result && userDetails.userdesignation === 'Admin'){
+        if(userDetails.userdesignation === 'Admin'){
             token = generateAdminToken(user);
         }
-        if(result && userDetails.userdesignation === 'Employee'){
+        if(userDetails.userdesignation === 'Employee'){
             token = generateEmployeeToken(user);
         }
-        if(result && userDetails.userdesignation === 'Driver'){
+        if(userDetails.userdesignation === 'Driver'){
             token = generateDriverToken(user);
         }
         console.log(token)

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -18,14 +19,35 @@ function Login() {
             return;
         }
 
-        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
+        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
 
         try {
             const response = await axios.post(endpoint, { userID: username, userPass: password });
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
             alert("Login successful");
-            navigate("/dashboard");  // Navigate to dashboard upon success
+
+           
+            let decodedToken;
+            if (token) {
+              try {
+                 decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+          
+              } catch (error) {
+                console.error("Invalid token", error);
+               
+              }
+            }
+            if(decodedToken.isAdmin == true || decodedToken.isEmployee == true )
+            {
+
+                navigate("/dashboard");  // Navigate to dashboard upon success
+            }
+            else if(decodedToken.isDriver == true)
+            {
+                navigate("/driverdashboard");
+            }
         } catch (error) {
             // Enhanced error handling
             if (error.response) {

@@ -9,7 +9,7 @@ export default function Insurance() {
     const handleInstallmentSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("https://amol-29102-vehicle-dealership-server-vercel-host.vercel.app/installments/add", {
+            const response = await axios.post("http://localhost:8000/installments/add", {
                 amount: installmentAmount,
                 date: installmentDate,
             });

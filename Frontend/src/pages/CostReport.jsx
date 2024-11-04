@@ -47,7 +47,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
+        const response = await axios.get(`http://localhost:8000/car/${id}`);
         const { car, images, insurance, owner } = response.data;
         setSoldStatus(response.data.car.status);
 
@@ -76,8 +76,8 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
-      console.log("hi+"+id);
-      const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
+      console.log("hi+" + id);
+      const response = await axios.get("http://localhost:8000/maintainance", {
         params: { registernumber: id },
       });
 
@@ -161,7 +161,7 @@ const CostReport = () => {
                     >
                       <div>
                         <p className="font-medium text-black">
-                         {index+1}) {record.description }
+                          {index + 1}) {record.description}
                         </p>
                         <p>Cost: ₹{record.price}</p>
                         <p>

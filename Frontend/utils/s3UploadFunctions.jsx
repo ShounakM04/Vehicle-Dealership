@@ -1,24 +1,25 @@
 import axios from "axios";
 
-export async function getUploadURL (file,path)
-{
-    try {
-      // console.log("HEllo hi "+fileName);
-      const filename = file.name;
-      const filetype = file.type;
-      
-      const response = await axios.get('https://vehicle-dealership.vercel.app/upload/generate-upload-url', {
-        params :{filename,
-        filetype,path}
-      });
-      // console.log(response.data.uploadUrl);
-      console.log(response)
-      return response.data.uploadUrl;
-    } catch (error) {
-      console.error('Error getting upload URL:', error);
-      toast.error("Couldn't get S3 upload URL");
-      throw error;
-    }
+export async function getUploadURL(file, path) {
+  try {
+    // console.log("HEllo hi "+fileName);
+    const filename = file.name;
+    const filetype = file.type;
+
+    const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
+      params: {
+        filename,
+        filetype, path
+      }
+    });
+    // console.log(response.data.uploadUrl);
+    console.log(response)
+    return response.data.uploadUrl;
+  } catch (error) {
+    console.error('Error getting upload URL:', error);
+    toast.error("Couldn't get S3 upload URL");
+    throw error;
+  }
 }
 
 export async function uploadToS3(url, file) {

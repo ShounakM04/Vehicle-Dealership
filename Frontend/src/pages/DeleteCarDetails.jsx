@@ -25,7 +25,7 @@ function DeleteCarDetails() {
     setError(null); // Reset error before fetch
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
+        `http://localhost:8000/car/${currDeleteId}`
       );
       setCarData(response.data); // Store the fetched car data
       console.log(response.data); // Log the fetched car data
@@ -56,7 +56,7 @@ function DeleteCarDetails() {
     // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
     try {
       console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-      const response = await axios.delete(`https://vehicle-dealership.vercel.app/delete`, {
+      const response = await axios.delete(`http://localhost:8000/delete`, {
         params: {
           deletedID: submittedID,
         },
