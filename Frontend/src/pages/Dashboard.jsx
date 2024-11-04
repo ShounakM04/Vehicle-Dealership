@@ -6,12 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
+import { jwtDecode } from "jwt-decode";
+
+// const token = localStorage.getItem('authToken');
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
   const {query, setQuery} = useContext(SearchContext);
   const navigate = useNavigate();
+  
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

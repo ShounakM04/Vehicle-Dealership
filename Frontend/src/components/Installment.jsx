@@ -13,6 +13,8 @@ export default function Installment({ carID }) {
   const [insuranceDoc, setInsuranceDoc] = useState([]);
   const [soldCarImages, setSoldCarImages] = useState([]);
   const [profit, setProfit] = useState(0);
+  const [uploading, setUploading] = useState(false);
+
   const fetchCarDetails = async () => {
     try {
       console.log("Params : " + carID);
@@ -49,6 +51,7 @@ export default function Installment({ carID }) {
 
   const handleInstallmentSubmit = async (e) => {
     e.preventDefault();
+    setUploading(true);
     try {
       const response = await axios.post("https://vehicle-dealership.vercel.app/installments", {
         registernumber: carID,
@@ -63,6 +66,7 @@ export default function Installment({ carID }) {
         setViewOption("view");
         // Optionally fetch installments again
         fetchInstallments();
+        setUploading(false);
       }
     } catch (error) {
       toast.error("Failed to add installment. Please try again.");
@@ -182,6 +186,7 @@ export default function Installment({ carID }) {
                         )
                       }
                       className="text-blue-500 underline"
+                      
                     >
                       View
                     </button>
@@ -283,8 +288,9 @@ export default function Installment({ carID }) {
             <button
               type="submit"
               className="bg-green-500 text-white p-2 rounded w-full"
+              disabled={uploading}
             >
-              Add Installment
+              {uploading ? 'Adding...' : 'Add Installment'}
             </button>
           </form>
         </div>

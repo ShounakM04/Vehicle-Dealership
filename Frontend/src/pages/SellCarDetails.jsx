@@ -410,6 +410,7 @@ function SellCarDetails() {
               type="button"
               onClick={handleSellConfirmation}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              disabled={loading}
             >
               Sell Car
             </button>
@@ -422,14 +423,18 @@ function SellCarDetails() {
         isOpen={modalOpen}
         onRequestClose={closeModal}
         contentLabel="Confirmation Modal"
+        className="bg-white w-full sm:w-2/3 lg:w-1/3 mx-4 sm:mx-auto mt-32 p-4 rounded-lg shadow-lg"
+        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center"
       >
         <h2 className="text-xl font-bold mb-4">Confirm Sale</h2>
         <p>Are you sure you want to sell this car?</p>
         <button
           onClick={handleSubmit}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+          disabled={loading}
         >
-          Confirm
+        {loading ? "Submitting..." : "Confirm"}
+
         </button>
         <button
           onClick={closeModal}
