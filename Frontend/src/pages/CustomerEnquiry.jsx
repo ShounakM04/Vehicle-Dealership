@@ -76,7 +76,6 @@ function CustomerEnquiry() {
     try {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
-
       await axios.post('https://vehicle-dealership.vercel.app/customer', {
         custName: customerName,
         custContact: customerPhone,

@@ -48,9 +48,13 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <ProtectedRoute>
+        {/* <ProtectedUserRoute requiredRole="employee">
+          <ProtectedUserRoute requiredRole="admin"> */}
             <Layout>
               <Dashboard />
             </Layout>
+          {/* </ProtectedUserRoute>
+        </ProtectedUserRoute> */}
       </ProtectedRoute>
     ),
   },

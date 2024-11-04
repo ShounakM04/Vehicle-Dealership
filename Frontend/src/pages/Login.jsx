@@ -18,7 +18,6 @@ function Login() {
             return;
         }
 
-
         const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {

@@ -13,8 +13,6 @@ import { jwtDecode } from "jwt-decode";
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
-
-
   const {query, setQuery} = useContext(SearchContext);
   const navigate = useNavigate();
   
@@ -40,10 +38,8 @@ const Dashboard = () => {
         const params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-
         const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`,{params});
         console.log(response.data);
-
         setCarDetails(response.data); // Assuming the response contains an array of car details
       } catch (error) {
         console.error('Error fetching car details:', error);
