@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import { jwtDecode } from 'jwt-decode';
 
 export default function DriverDashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
