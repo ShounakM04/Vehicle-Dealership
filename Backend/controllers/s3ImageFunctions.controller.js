@@ -1,4 +1,4 @@
-const { uploadToS3 } = require('../amazonS3/s3config');
+const { uploadToS3 ,deleteObject} = require('../amazonS3/s3config');
 
 // Controller to directly call uploadToS3Image and return pre-signed URL
 async function generatePresignedUploadUrl(req, res) {
@@ -23,4 +23,25 @@ async function generatePresignedUploadUrl(req, res) {
     }
 }
 
-module.exports = { generatePresignedUploadUrl };
+async function handleDeleteImage(req, res) {
+    const { path } = req.query;  // Now using query parameter
+
+    if (!path) {
+        return res.status(400).send("uniqueID number is required");
+    }
+
+    try {
+        // Delete the image with the specified serialnum
+        const deletePath = path;
+            await deleteObject(deletePath);
+
+        // Return success message if the image was deleted
+        res.send(`Image deleted successfully`);
+    } catch (error) {
+        console.log(`${error} : Error occurred while deleting the  image`);
+        res.status(500).send("An error occurred while deleting the  image");
+    }
+}
+
+
+module.exports = { generatePresignedUploadUrl ,handleDeleteImage};

@@ -1,11 +1,24 @@
-import React, { useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchContext } from '../context/SearchContext.jsx';
+import { jwtDecode } from "jwt-decode";
+import { toast } from 'react-toastify';
+
+
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const {query, setQuery} = useContext(SearchContext);
+  const { query, setQuery } = useContext(SearchContext);
+  const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation(); // Get current location
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setLoggedIn(true);
+    }
+  })
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -13,14 +26,60 @@ function Navbar() {
 
   const handleSearchInputChange = (e) => {
     setQuery(e.target.value);
-    
+
   };
 
   const handleSearch = () => {
     console.log('Searching for:', query);
     // Implement your search logic here
-    
+
   };
+
+  const handleAdmin = () => {
+
+    const token = localStorage.getItem("authToken");
+    let decodedToken;
+    if (token) {
+
+      try {
+        decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+
+      } catch (error) {
+        console.error("Invalid token", error);
+
+      }
+    }
+    if (decodedToken?.isAdmin == true || decodedToken?.isEmployee == true) {
+
+      navigate("/dashboard");  // Navigate to dashboard upon success
+    }
+    else if (decodedToken?.isDriver == true) {
+      navigate("/driverdashboard");
+    }
+    else {
+      navigate("/admin");
+    }
+  }
+
+  // Function to handle logout
+  const handleLogout = () => {
+    try {
+      // Remove the token from localStorage or sessionStorage
+      localStorage.removeItem('authToken'); // or sessionStorage.removeItem('authToken');
+
+      // Redirect to the login page
+      // window.location.href = '/admin';
+      // navigate("/admin");
+      toast.success('Logged out successfully!');
+      setLoggedIn(false);
+
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast.error('An error occurred while logging out.');
+    }
+  }
+
 
   const isHomeRoute = location.pathname === '/'; // Check if on the home route
 
@@ -88,16 +147,20 @@ function Navbar() {
               </div>
             </div>
           )}
-          
+
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4">
               <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact us</a>
-              <Link to="/admin" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</Link>
+              {loggedIn == true && (<Link to="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</Link>)}
+              {loggedIn == true ?
+                (<Link to="#" onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log Out</Link>)
+                :
+                (<Link to="/admin" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</Link>)}
             </div>
           </div>
         </div>
       </div>
-      
+
       {isOpen && (
         <div className="sm:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1">
@@ -105,7 +168,11 @@ function Navbar() {
             <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
             <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
             <a href="/contact" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
-            <a href="/admin" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Admin</a>
+            <a href="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+            {loggedIn == true ?
+              (<a href="#" onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Log Out</a>)
+              :
+              (<a href="/admin" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Log In</a>)}
           </div>
 
           {/* Search bar in the hamburger menu */}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 export async function getUploadURL(file, path) {
   try {
@@ -6,7 +7,7 @@ export async function getUploadURL(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.get('https://vehicle-dealership.vercel.app/upload/generate-upload-url', {
+    const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
       params: {
         filename,
         filetype, path
@@ -40,3 +41,26 @@ export async function uploadToS3(url, file) {
 }
 
 
+
+
+export async function deleteFromS3(file, path) {
+  try {
+    // console.log("HEllo hi "+fileName);
+    const filename = file.name;
+    const filetype = file.type;
+
+    const response = await axios.delete('http://localhost:8000/delete-image', {
+      params: {
+        filename,
+        filetype, path
+      }
+    });
+    // console.log(response.data.uploadUrl);
+    console.log(response)
+    return ;
+  } catch (error) {
+    console.error('Error in deleting image:', error);
+    toast.error("Couldn't delete image");
+    throw error;
+  }
+}

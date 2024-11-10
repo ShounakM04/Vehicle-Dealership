@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 Modal.setAppElement("#root");
 
 function DeleteCarDetails() {
-  const [registernumber, setRegisternumber] = useState(""); // Holds the current input
+  const [registernumber, setregisternumber] = useState(""); // Holds the current input
   const [submittedID, setSubmittedID] = useState(""); // Holds the submitted ID for deletion
   const [submitted, setSubmitted] = useState(false); // To control if the form was submitted
   const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
@@ -25,7 +25,7 @@ function DeleteCarDetails() {
     setError(null); // Reset error before fetch
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
+        `http://localhost:8000/car/${currDeleteId}`
       );
       setCarData(response.data); // Store the fetched car data
       console.log(response.data); // Log the fetched car data
@@ -45,7 +45,7 @@ function DeleteCarDetails() {
     const currDeleteId = registernumber;
 
     setSubmittedID(registernumber); // Store the registernumber for deletion
-    setRegisternumber(""); // Clear the input field after submission
+    setregisternumber(""); // Clear the input field after submission
     setSubmitted(true); // Set the form as submitted
 
     await fetchCarDetails(currDeleteId); // Call the fetch function
@@ -56,7 +56,7 @@ function DeleteCarDetails() {
     // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
     try {
       console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-      const response = await axios.delete(`https://vehicle-dealership.vercel.app/delete`, {
+      const response = await axios.delete(`http://localhost:8000/delete`, {
         params: {
           deletedID: submittedID,
         },
@@ -130,7 +130,7 @@ function DeleteCarDetails() {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={registernumber}
             onChange={(e) =>
-              setRegisternumber(
+              setregisternumber(
                 e.target.value
                   .replace(/^\s+/, "")
                   .replace(/[a-z]/g, (char) => char.toUpperCase())

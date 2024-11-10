@@ -4,7 +4,7 @@
 // const db = require("../models/database");
 // async function handleInsuranceDetails(req, res) {
 //     const {
-//       registerNumber,
+//       registernumber,
 //       insuranceCompany,
 //       insuranceNumber,
 //       insuranceValidity,
@@ -15,7 +15,7 @@
   
 //     // Check for missing input data
 //     if (
-//       !registerNumber ||
+//       !registernumber ||
 //       !insuranceCompany ||
 //       !insuranceNumber ||
 //       !insuranceValidity ||
@@ -29,7 +29,7 @@
 //     }
   
 //     try {
-//         const documentUrls = await documentUpload(registerNumber, req.files);
+//         const documentUrls = await documentUpload(registernumber, req.files);
 
 //         // Check if documents were successfully uploaded
 //         if (documentUrls.length === 0) {
@@ -39,7 +39,7 @@
 //       // Insert data into the carinsurance table
 //       const query = `
 //       INSERT INTO carinsurance (
-//           registernum, 
+//           registernumber, 
 //           insurancecompany, 
 //           insurancenumber, 
 //           insurancetenure, 
@@ -50,7 +50,7 @@
 //       VALUES ($1, $2, $3, $4, $5, $6, $7)`;
   
 //       const values = [
-//         registerNumber,
+//         registernumber,
 //         insuranceCompany,
 //         insuranceNumber,
 //         insuranceValidity,
@@ -75,14 +75,14 @@
 //   }
   
 // async function handleGetInsuranceDetails(req, res) {
-//   const registernum = req.query.registernum;
+//   const registernumber = req.query.registernumber;
 //   try {
-//     if (!registernum) {
+//     if (!registernumber) {
 //       return res.status(400).send("Enter the correct value");
 //     }
 
-//     const query = `SELECT * FROM carinsurance WHERE registernum = $1`;
-//     const value = [registernum];
+//     const query = `SELECT * FROM carinsurance WHERE registernumber = $1`;
+//     const value = [registernumber];
 //     const result = await db.query(query, value);
 
 //     if (result.rows.length === 0) {
@@ -91,7 +91,7 @@
 
 //     const insuranceData = result.rows[0];
 //     return res.status(200).json({
-//       registernum: insuranceData.registernum,
+//       registernumber: insuranceData.registernumber,
 //       insurancecompany: insuranceData.insurancecompany,
 //       insurancenumber: insuranceData.insurancenumber,
 //       insurancetenure: insuranceData.insurancetenure,

@@ -17,7 +17,7 @@ export function Maintainance({ registernumber, onMaintenanceAdded }) {
 
         try {
             setAdding(true);
-            const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance', { registernumber, description, price, role, maintainanceDate });
+            const response = await axios.post('http://localhost:8000/maintainance', { registernumber, description, price, role, maintainanceDate });
 
 
             const nextIndex = response.data.nextIndex;

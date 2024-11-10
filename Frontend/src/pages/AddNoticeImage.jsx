@@ -10,11 +10,12 @@ function AddNoticeImage() {
   const [fetchedImages, setFetchedImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageSerial, setSelectedImageSerial] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // State for screen overlay
 
   // Fetch images function to be called on mount and after upload
   const fetchImages = async () => {
     try {
-      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice');
+      const response = await axios.get('http://localhost:8000/dashboard/get-notice');
       setFetchedImages(response.data);
       console.log(response.data);
     } catch (error) {
@@ -34,8 +35,6 @@ function AddNoticeImage() {
 
   const handleUpload = async () => {
     setUploading(true);
-
-
     try {
       const file = images[0];
       const uniqueID = Date.now();
@@ -63,6 +62,7 @@ function AddNoticeImage() {
     }
 
     try {
+      setIsLoading(true); // Start fade-up effect
       await handleUpload();
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -75,6 +75,8 @@ function AddNoticeImage() {
         toast.error("An error occurred while saving details");
       }
       console.log(error);
+    } finally {
+      setIsLoading(false); // Remove fade-up effect
     }
   };
 
@@ -85,33 +87,37 @@ function AddNoticeImage() {
 
   const handleDelete = async () => {
     try {
+      setIsLoading(true); // Start fade-up effect
       const deleteUrl = fetchedImages[selectedImageSerial];
       console.log("Del : " + deleteUrl);
 
-      // To extract the uniqueID back from the URL
-      // Regular expression to match the unique ID
+      // Extract the uniqueID from the URL
       const regex = /\/Notices\/(\d+)\?/;
       const match = deleteUrl.match(regex);
       let uniqueID;
 
       if (match) {
-        uniqueID = match[1]; // Extracted unique ID
-        console.log(uniqueID); // Output: 1730365937235
+        uniqueID = match[1];
+        console.log(uniqueID);
       } else {
         console.log('No unique ID found');
       }
 
-      await axios.delete(`https://vehicle-dealership.vercel.app/dashboard/delete-notice`, {
+      await axios.delete(`http://localhost:8000/dashboard/delete-notice`, {
         params: { uniqueID: uniqueID }
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
-      setFetchedImages(fetchedImages.filter(image => image.serialnum !== selectedImageSerial));
-      fetchImages();
+
+      // Update the state to reflect the change
+      setFetchedImages((prevImages) =>
+        prevImages.filter((_, index) => index !== selectedImageSerial)
+      );
 
     } catch (error) {
       console.error("Error deleting notice image:", error);
       toast.error("Failed to delete notice image");
     } finally {
+      setIsLoading(false); // Remove fade-up effect
       setIsModalOpen(false);
       setSelectedImageSerial(null);
     }
@@ -124,11 +130,17 @@ function AddNoticeImage() {
 
   return (
     <div className="m-8">
+      {/* Screen Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+          <span className="text-white text-xl">Processing...</span>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-bold mb-2">Upload Notice Image </h2>
         <input
           type="file"
-
           accept="image/*"
           onChange={handleImageChange}
           className="mb-4"
@@ -151,7 +163,7 @@ function AddNoticeImage() {
         <button
           type="submit"
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          disabled={uploading}
+          disabled={uploading || isLoading}
         >
           {uploading ? 'Uploading...' : 'Submit'}
         </button>
@@ -161,15 +173,15 @@ function AddNoticeImage() {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Uploaded Notice Images</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {fetchedImages.slice(1).map((image, index) => (
-            <div key={index + 1} className="relative border rounded-lg p-4 shadow-lg">
+          {fetchedImages.map((image, index) => (
+            <div key={index} className="relative border rounded-lg p-4 shadow-lg">
               <img
                 src={image}
-                alt={`Notice ${index + 1}`}
+                alt={`Notice ${index}`}
                 className="h-48 w-full object-cover rounded-lg"
               />
               <button
-                onClick={() => confirmDelete(index + 1)}
+                onClick={() => confirmDelete(index)}
                 className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white p-2 rounded-full"
               >
                 <FaTrashAlt />
@@ -178,7 +190,6 @@ function AddNoticeImage() {
           ))}
         </div>
       </div>
-
 
       {/* Confirmation Modal */}
       {isModalOpen && (
@@ -189,12 +200,14 @@ function AddNoticeImage() {
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
                 onClick={handleDelete}
+                disabled={isLoading}
               >
                 Yes, Delete
               </button>
               <button
                 className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
                 onClick={closeModal}
+                disabled={isLoading}
               >
                 Cancel
               </button>

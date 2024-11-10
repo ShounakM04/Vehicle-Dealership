@@ -48,7 +48,7 @@ async function handleCarDetails(req, res) {
     }
 
     // Ensure carPrice is a positive number
-    if (vehicleBuyPrice <= 0 ) {
+    if (vehicleBuyPrice <= 0) {
       return res.status(400).send({ error: "Car price must be a positive number" });
     }
 
@@ -57,7 +57,7 @@ async function handleCarDetails(req, res) {
       return res.status(400).send({ error: "Owner phone must be a valid 10-digit number" });
     }
 
-    if (showOwnerFields && ownerEmail&& !/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(ownerEmail)) {
+    if (showOwnerFields && ownerEmail && !/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(ownerEmail)) {
       return res.status(400).send({ error: "Owner email is invalid" });
     }
 
@@ -71,14 +71,14 @@ async function handleCarDetails(req, res) {
 
     // Insert car details
     const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
-    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel,vehicleSellPrice];
+    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice];
     await db.query(query2, values2);
 
     if (showInsuranceFields == true) {
       // Insert insurance details
       const query3 = `
       INSERT INTO carinsurance (
-        registernum, 
+        registernumber, 
         insurancecompany, 
         insurancenumber, 
         insurancetenure, 
@@ -93,7 +93,7 @@ async function handleCarDetails(req, res) {
         insuranceNumber,
         insuranceTenure,
         insuranceStartDate,
-        insuranceEndDate, 
+        insuranceEndDate,
         soldStatus || false, // set default soldStatus to false if not provided
       ];
 
@@ -108,14 +108,13 @@ async function handleCarDetails(req, res) {
     let values4;
     if (showOwnerFields == true) {
 
-      
-       values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registernumber];
+
+      values4 = [ownerName, ownerPhone, ownerEmail, ownerAddress, registernumber];
     }
-    else
-    {
-      values4 = ["Nikhil Motors","7058600679","nikhilmotors@gmail.com","Halondi, Kolhapur",registernumber];
+    else {
+      values4 = ["Nikhil Motors", "7058600679", "nikhilmotors@gmail.com", "Halondi, Kolhapur", registernumber];
     }
-    
+
     await db.query(query4, values4);
     res.status(200).send("Details entered into the database successfully");
   } catch (error) {

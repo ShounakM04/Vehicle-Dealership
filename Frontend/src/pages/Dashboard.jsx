@@ -14,7 +14,7 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
   const { query, setQuery } = useContext(SearchContext);
-  const [userRole,setUserRole] = useState("");
+  const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
 
@@ -23,7 +23,11 @@ const Dashboard = () => {
   };
 
   const handleView = (url) => {
-    navigate(`/costReport/${url}`)
+    navigate(`/dashboard/costReport/${url}`)
+  }
+
+  const handleEdit = (url) => {
+    navigate(`/dashboard/edit/${url}`)
   }
 
   const handleSearchInputChange = (e) => {
@@ -39,11 +43,11 @@ const Dashboard = () => {
         const params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`, { params });
+        const response = await axios.get(`http://localhost:8000/dashboard`, { params });
         console.log(response.data);
         setCarDetails(response.data); // Assuming the response contains an array of car details
 
-       
+
       } catch (error) {
         console.error('Error fetching car details:', error);
       }
@@ -52,28 +56,26 @@ const Dashboard = () => {
     fetchCarDetails();
   }, [query]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = localStorage.getItem("authToken");
     let decodedToken;
-        if (token) {
-          try {
-             decodedToken = jwtDecode(token);
+    if (token) {
+      try {
+        decodedToken = jwtDecode(token);
         console.log(decodedToken);
-      
-          } catch (error) {
-            console.error("Invalid token", error);
-           
-          }
-        }
-      if(decodedToken?.isAdmin &&decodedToken.isAdmin   == true)
-      {
-        setUserRole("Admin");
+
+      } catch (error) {
+        console.error("Invalid token", error);
 
       }
-      else if(decodedToken?.isEmployee &&  decodedToken.isEmployee == true)
-      {
-        setUserRole("Employee");
-      }
+    }
+    if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+      setUserRole("Admin");
+
+    }
+    else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+      setUserRole("Employee");
+    }
   })
   const currentDate = new Date();
   const soldCarsCount = carDetails.filter(car => car.status === true).length;
@@ -237,6 +239,8 @@ const Dashboard = () => {
                 <th className="p-2">Registration No.</th>
                 <th className="p-2">Status</th>
                 <th className="p-2">View</th>
+                <th className="p-2">Edit</th>
+
 
               </tr>
             </thead>
@@ -260,6 +264,8 @@ const Dashboard = () => {
                     </span>
                   </td>
                   <td className="p-2"><button onClick={() => handleView(car.registernumber)}><i className={'fas fa-eye'}></i></button></td>
+                  <td className="p-2"><button onClick={() => handleEdit(car.registernumber)}><i className="fas fa-pencil-alt"></i></button></td>
+
                 </tr>
               ))}
             </tbody>

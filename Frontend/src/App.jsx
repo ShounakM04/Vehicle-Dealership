@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import AddNoticeImage from "./pages/AddNoticeImage";
 import CustomerEnquiry from "./pages/CustomerEnquiry";
 import CostReport from "./pages/CostReport";
+import EditVehicleDetailsForm from "./pages/EditVehicleDetailsForm";
 import SellCarDetails from "./pages/SellCarDetails";
 import DriverDashboard from "./pages/DriverDashboard";
 import DriverOnsiteImagesAdd from "./components/DriverOnsiteImagesAdd";
@@ -156,13 +157,27 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/costReport/:id",
+    path: "/dashboard/costReport/:id",
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
         <Layout>
           <CostReport />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/edit/:id",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+           <EditVehicleDetailsForm/>
         </Layout>
         </ProtectedUserRoute>
 

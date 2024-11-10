@@ -1,9 +1,9 @@
 const db = require("../models/database");
 
-async function calculateProfit(req, res){
+async function calculateProfit(req, res) {
     const { registernumber } = req.query;
     console.log(registernumber);
-    
+
     try {
         const profitResponse = await db.query(
             `SELECT 

@@ -1,7 +1,7 @@
 const db = require("../models/database");
 
-async function addInstallments(req,res){
-    const {registernumber, amount, installmentdate, } = req.body;
+async function addInstallments(req, res) {
+    const { registernumber, amount, installmentdate, } = req.body;
     try {
         const sellingPriceResponse = await db.query(
             `SELECT selling_price FROM soldcardetails WHERE registernumber = $1`,

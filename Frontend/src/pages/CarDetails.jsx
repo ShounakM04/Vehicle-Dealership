@@ -14,7 +14,7 @@ function CarDetails() {
     const fetchCarDetails = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${params.id}`);
+        const response = await axios.get(`http://localhost:8000/car/${params.id}`);
         if (response.status === 200) {
           setCarData(response.data);
           console.log(response.data);

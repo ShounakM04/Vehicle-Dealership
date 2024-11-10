@@ -8,7 +8,7 @@ import axios from 'axios';
 function AdminForm() {
   const [vehicleName, setVehicleName] = useState('');
   const [brandName, setBrandName] = useState('');
-  const [registernumber, setRegisternumber] = useState('');
+  const [registernumber, setregisternumber] = useState('');
   const [insuranceCompany, setInsuranceCompany] = useState('');
   const [policyNumber, setPolicyNumber] = useState('');
   const [policyTenure, setPolicyTenure] = useState('');
@@ -88,7 +88,7 @@ function AdminForm() {
 
 
       // Submit form data after images are uploaded
-      await axios.post("https://vehicle-dealership.vercel.app/details", {
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -168,7 +168,7 @@ function AdminForm() {
               id="registernumber"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={registernumber}
-              onChange={(e) => setRegisternumber(e.target.value
+              onChange={(e) => setregisternumber(e.target.value
                 .replace(/^\s+/, "")
                 .replace(/[a-z]/g, (char) => char.toUpperCase()))}
             />

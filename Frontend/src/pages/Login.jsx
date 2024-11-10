@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
+
+
+    
 
     async function loginHandler(event) {
         event.preventDefault();
@@ -19,7 +22,9 @@ function Login() {
             return;
         }
 
-        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
+        //http://localhost:8000/
+        //https://vehicle-dealership.vercel.app/
+        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
 
         try {
             const response = await axios.post(endpoint, { userID: username, userPass: password });
@@ -27,25 +32,23 @@ function Login() {
             localStorage.setItem('authToken', token);
             alert("Login successful");
 
-           
+
             let decodedToken;
             if (token) {
-              try {
-                 decodedToken = jwtDecode(token);
-            console.log(decodedToken);
-          
-              } catch (error) {
-                console.error("Invalid token", error);
-               
-              }
+                try {
+                    decodedToken = jwtDecode(token);
+                    console.log(decodedToken);
+
+                } catch (error) {
+                    console.error("Invalid token", error);
+
+                }
             }
-            if(decodedToken.isAdmin == true || decodedToken.isEmployee == true )
-            {
+            if (decodedToken.isAdmin == true || decodedToken.isEmployee == true) {
 
                 navigate("/dashboard");  // Navigate to dashboard upon success
             }
-            else if(decodedToken.isDriver == true)
-            {
+            else if (decodedToken.isDriver == true) {
                 navigate("/driverdashboard");
             }
         } catch (error) {

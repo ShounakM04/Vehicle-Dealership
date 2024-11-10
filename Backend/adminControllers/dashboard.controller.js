@@ -27,7 +27,7 @@ async function handleDashboard(req, res) {
             carname: row.carname,
             registernumber: row.registernumber
         }));
-        
+
         res.send(carDetails);
     } catch (error) {
         console.error("Error occurred while loading car details:", error);
