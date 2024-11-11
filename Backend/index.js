@@ -40,7 +40,7 @@ app.options('*', (req, res) => {
 
 // CORS middleware
 app.use(cors({
-  origin: '*', // No trailing slash
+  origin: 'https://vehicle-dealership-12sr.vercel.app', // No trailing slash
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
