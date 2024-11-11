@@ -7,7 +7,7 @@ export async function getUploadURL(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
+    const response = await axios.get('https://vehicle-dealership.vercel.app/upload/generate-upload-url', {
       params: {
         filename,
         filetype, path
@@ -49,7 +49,7 @@ export async function deleteFromS3(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.delete('http://localhost:8000/delete-image', {
+    const response = await axios.delete('https://vehicle-dealership.vercel.app/delete-image', {
       params: {
         filename,
         filetype, path
@@ -57,7 +57,7 @@ export async function deleteFromS3(file, path) {
     });
     // console.log(response.data.uploadUrl);
     console.log(response)
-    return ;
+    return;
   } catch (error) {
     console.error('Error in deleting image:', error);
     toast.error("Couldn't delete image");

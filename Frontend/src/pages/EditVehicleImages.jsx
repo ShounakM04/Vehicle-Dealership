@@ -24,7 +24,7 @@ const EditVehicleImages = ({ id }) => {
     // Fetch images function to be called on mount and after upload
     const fetchImages = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/car/${id}`);
+            const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
             const allImageUrls = response.data.images;
             setFetchedImages(allImageUrls);
 
@@ -38,12 +38,11 @@ const EditVehicleImages = ({ id }) => {
             } else {
                 console.log('No unique ID found');
             }
-            if(checkDisplayImage == 0)
-            {
+            if (checkDisplayImage == 0) {
                 setDisplayImage(response.data.images[0]);
 
             }
-            else{
+            else {
                 setDisplayImage("No Image");
             }
             console.log(response.data);
@@ -74,12 +73,11 @@ const EditVehicleImages = ({ id }) => {
 
     const handleSubmitDisplayImage = async () => {
 
-        if(!NewDisplayImage)
-            {
-                toast.error("Select Display Image to update.")
-                return;
-    
-            }
+        if (!NewDisplayImage) {
+            toast.error("Select Display Image to update.")
+            return;
+
+        }
 
         setUploading(true);
 
@@ -109,7 +107,7 @@ const EditVehicleImages = ({ id }) => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedImageSerial(null);
-      };
+    };
 
     const confirmDelete = (serialnum) => {
         setSelectedImageSerial(serialnum);
@@ -118,8 +116,7 @@ const EditVehicleImages = ({ id }) => {
 
     const handleSubmitImages = async () => {
 
-        if(images.length == 0)
-        {
+        if (images.length == 0) {
             toast.error("Select Images to update.")
             return;
 
@@ -168,7 +165,7 @@ const EditVehicleImages = ({ id }) => {
 
             const path = `${id}/InventoryVehicleImages/${uniqueID}`
 
-            await axios.delete(`http://localhost:8000/delete-image`, {
+            await axios.delete(`https://vehicle-dealership.vercel.app/delete-image`, {
                 params: {
                     path: path
 
@@ -181,8 +178,7 @@ const EditVehicleImages = ({ id }) => {
                 prevImages.filter((_, index) => index !== selectedImageSerial)
             );
 
-            if(uniqueID==0)
-            {
+            if (uniqueID == 0) {
                 setDisplayImage("no image")
             }
 

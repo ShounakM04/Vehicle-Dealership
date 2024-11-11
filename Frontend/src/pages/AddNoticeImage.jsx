@@ -15,7 +15,7 @@ function AddNoticeImage() {
   // Fetch images function to be called on mount and after upload
   const fetchImages = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/dashboard/get-notice');
+      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice');
       setFetchedImages(response.data);
       console.log(response.data);
     } catch (error) {
@@ -103,7 +103,7 @@ function AddNoticeImage() {
         console.log('No unique ID found');
       }
 
-      await axios.delete(`http://localhost:8000/dashboard/delete-notice`, {
+      await axios.delete(`https://vehicle-dealership.vercel.app/dashboard/delete-notice`, {
         params: { uniqueID: uniqueID }
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);

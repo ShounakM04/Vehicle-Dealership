@@ -10,7 +10,7 @@ function Login() {
     const [errorMessage, setErrorMessage] = useState('');
 
 
-    
+
 
     async function loginHandler(event) {
         event.preventDefault();
@@ -24,7 +24,7 @@ function Login() {
 
         //http://localhost:8000/
         //https://vehicle-dealership.vercel.app/
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {
             const response = await axios.post(endpoint, { userID: username, userPass: password });

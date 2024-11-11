@@ -43,7 +43,7 @@ function CustomerEnquiry() {
       const { serialnum, customerPhone } = selectedEnquiry;
 
 
-      await axios.delete('http://localhost:8000/customer', {
+      await axios.delete('https://vehicle-dealership.vercel.app/customer', {
         data: {
           serialnum: serialnum,
           custcontact: customerPhone
@@ -76,7 +76,7 @@ function CustomerEnquiry() {
     try {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
-      await axios.post('http://localhost:8000/customer', {
+      await axios.post('https://vehicle-dealership.vercel.app/customer', {
         custName: customerName,
         custContact: customerPhone,
         custQuery: description,
@@ -103,7 +103,7 @@ function CustomerEnquiry() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/customer');
+      const response = await axios.get('https://vehicle-dealership.vercel.app/customer');
       const formattedEnquiries = response.data.enquiries.map(enquiry => ({
         serialnum: enquiry.serialnum,
         customerName: enquiry.custname,

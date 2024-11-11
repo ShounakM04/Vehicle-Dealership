@@ -38,7 +38,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:8000/car/${currDeleteId}`
+        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
       );
       setCarData(response.data);
       console.log(response.data);
@@ -103,7 +103,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("http://localhost:8000/dashboard/sell-car", formData);
+      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData);
 
       toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);
