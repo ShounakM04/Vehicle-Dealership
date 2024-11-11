@@ -15,7 +15,7 @@ const customerQueryRoute = require("./routes/customerQuery.route.js")
 const LoginRoute = require("./adminRoutes/userLogin.route.js")
 const RegistrationRoute = require("./adminRoutes/userRegistration.route.js")
 const DashboardRoute = require("./adminRoutes/dashboard.route.js")
-const InsuranceRoute  = require("./adminRoutes/insurance.route.js")
+const InsuranceRoute = require("./adminRoutes/insurance.route.js")
 const MaintainanceRoute = require("./adminRoutes/maintainance.route.js")
 const InstallmentRoute = require("./adminRoutes/installments.route.js")
 const ProfitRoute = require("./adminRoutes/profit.route.js")
@@ -64,15 +64,15 @@ app.use("/login", LoginRoute);
 app.use("/register", RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
 // app.use("/insurance",InsuranceRoute);
-app.use("/maintainance",MaintainanceRoute);
-app.use("/installments",InstallmentRoute);
+app.use("/maintainance", MaintainanceRoute);
+app.use("/installments", InstallmentRoute);
 app.use("/profits", ProfitRoute)
-app.use("/edit-fields",carDetailsEdit)
-app.use("/delete-image",Imageroute)
+app.use("/edit-fields", carDetailsEdit)
+app.use("/delete-image", Imageroute)
 
 // Correct `app.listen` without req and res parameters
-app.listen(PORT, () => {
-    console.log(`Server connected to port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server connected to port ${PORT}`);
+// });
 
-// module.exports = app;
+module.exports = app;
