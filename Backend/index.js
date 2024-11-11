@@ -32,7 +32,7 @@ const carDetailsEdit = require("./routes/carDetailsEdit.route.js")
 
 // Explicitly handle OPTIONS requests
 app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://vehicle-dealership-12sr.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.sendStatus(200); // Important: Ensure this is 200 OK
