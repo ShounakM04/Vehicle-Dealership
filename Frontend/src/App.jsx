@@ -18,6 +18,7 @@ import DriverDashboard from "./pages/DriverDashboard";
 import DriverOnsiteImagesAdd from "./components/DriverOnsiteImagesAdd";
 import ProtectedRoute from "./Auth/ProtectedRoute";
 import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
+import { Maintainance } from "./components/Maintainance";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,21 @@ const router = createBrowserRouter([
 
         <Layout>
           <DriverOnsiteImagesAdd />
+        </Layout>
+        </ProtectedUserRoute >
+
+      </ProtectedRoute>
+    ),
+},
+,
+{
+    path: "/driverdashboard/drivermaintainance",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
+
+        <Layout>
+          <Maintainance isDriver={true}/>
         </Layout>
         </ProtectedUserRoute >
 

@@ -121,9 +121,11 @@ export default function DriverDashboard() {
                         Add Onsite Vehicle Images
                     </div>
                 </NavLink>
+                <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/drivermaintainance">
                     <div className="bg-blue-500 p-5 rounded text-white min-h-4">
-                        Sample Card2
+                        Add Maintainance
                     </div>
+                </NavLink>
                     <div className="bg-orange-500 p-5 rounded text-white min-h-4">
                         Sample Card3
                     </div>

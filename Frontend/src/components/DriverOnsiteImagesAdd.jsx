@@ -27,7 +27,7 @@ export default function DriverOnsiteImagesAdd() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         id = inputValue;
-        setSubmittedID(id);
+        // setSubmittedID(id);
         setInputValue("");
 
 

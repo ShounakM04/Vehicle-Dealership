@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
 import { Maintainance } from "../components/Maintainance";
 import Installment from "../components/Installment";
+import { jwtDecode } from "jwt-decode";
+
 
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
@@ -32,6 +34,12 @@ const CostReport = () => {
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
 
+
+  const [fetchedVehicleData, setFetchedVehicleData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isEmployee, setIsEmployee] = useState(false);
+
+
   const [maintainanceData, setMaintainanceData] = useState({
     carDetails: { carNo: "" },
     maintenanceRecords: [],
@@ -50,6 +58,7 @@ const CostReport = () => {
         const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
         const { car, images, insurance, owner } = response.data;
         setSoldStatus(response.data.car.status);
+        setFetchedVehicleData(response.data);
 
         setvehicleData((prevData) => ({
           ...prevData,
@@ -74,6 +83,32 @@ const CostReport = () => {
     fetchCarDetails();
   }, [id]);
 
+  useEffect(() => {
+    function fetchRole() {
+      const token = localStorage.getItem("authToken");
+      let decodedToken;
+      if (token) {
+        try {
+          decodedToken = jwtDecode(token);
+          console.log(decodedToken);
+
+        } catch (error) {
+          console.error("Invalid token", error);
+
+        }
+      }
+      if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+        setIsAdmin(true);
+      }
+      else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+        setIsEmployee(true)
+      }
+    }
+    fetchRole();
+  }, []);
+
+
+
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
@@ -81,8 +116,7 @@ const CostReport = () => {
         params: { registernumber: id },
       });
 
-
-      console.log("hi");
+      ;
 
       if (response.status === 201) {
         return;
@@ -211,10 +245,11 @@ const CostReport = () => {
 
         {/* Form Section */}
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg">
+
           {soldStatus === false ? (
-            <Maintainance registernumber={id} onMaintenanceAdded={handleMaintenanceAdded} />
+            <Maintainance registernumber={id} isDriver={false} isEmployee={isEmployee} isAdmin={isAdmin} vehicleData={fetchedVehicleData} onMaintenanceAdded={handleMaintenanceAdded} />
           ) : (
-            <Installment carID={id} />
+            <Installment carID={id} isAdmin={isAdmin} />
           )}
 
           {/* <h2 className="text-2xl font-bold mt-6 mb-4">Set Total Amount to be Paid</h2>

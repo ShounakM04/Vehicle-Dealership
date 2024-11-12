@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
 
 
-export default function Installment({ carID }) {
+export default function Installment({ carID, isAdmin }) {
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
   const [carDetails, setCarDetails] = useState([]);
@@ -16,7 +15,7 @@ export default function Installment({ carID }) {
   const [soldCarImages, setSoldCarImages] = useState([]);
   const [profit, setProfit] = useState(0);
   const [uploading, setUploading] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchCarDetails = async () => {
     try {
@@ -112,25 +111,6 @@ export default function Installment({ carID }) {
     }, [carID]);
   }
 
-  useEffect(() => {
-
-    const token = localStorage.getItem("authToken");
-    let decodedToken;
-    if (token) {
-      try {
-        decodedToken = jwtDecode(token);
-        console.log(decodedToken);
-
-      } catch (error) {
-        console.error("Invalid token", error);
-
-      }
-    }
-    if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
-      setIsAdmin(true);
-    }
-
-  }, []);
 
   const fetchProfit = async () => {
     try {
