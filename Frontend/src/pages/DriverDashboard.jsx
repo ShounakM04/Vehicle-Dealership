@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 export default function DriverDashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [userRole,setUserRole] = useState("");
-
+    cons [username, setUsername] = useState("");
 
 
 
@@ -32,15 +32,19 @@ export default function DriverDashboard() {
           if(decodedToken?.isAdmin == true)
           {
             setUserRole("Admin");
-    
+            setUsername(decodedToken?.username)
           }
           else if(decodedToken?.isEmployee == true)
           {
             setUserRole("Employee");
+            setUsername(decodedToken?.username)
+
           }
           else if(decodedToken?.isDriver == true)
             {
               setUserRole("Driver");
+            setUsername(decodedToken?.username)
+
             }
       })
 
@@ -67,7 +71,7 @@ export default function DriverDashboard() {
                     />
                     <div>
                         <h3 className="font-semibold">Nikhil Motors</h3>
-                        <span className="text-gray-500">{userRole}</span>
+                        <span className="text-gray-500">{username}</span>
                     </div>
                 </div>
 
@@ -103,7 +107,7 @@ export default function DriverDashboard() {
             </div>
 
             <div className="flex-1 p-5 lg:p-10">
-                <div className="flex justify-between mb-5">
+                {/* <div className="flex justify-between mb-5">
                     <h2 className="text-2xl font-bold">Driver Dashboard</h2>
                     <div className="flex items-center space-x-2">
                         <img
@@ -113,7 +117,7 @@ export default function DriverDashboard() {
                         />
                         <span>Nikhil Motors</span>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
                 <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/onsiteVehicleImages">
