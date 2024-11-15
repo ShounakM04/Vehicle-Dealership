@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { jwtDecode } from "jwt-decode";
-import { headers } from 'next/headers';
+
 
 // const token = localStorage.getItem('authToken');
 
