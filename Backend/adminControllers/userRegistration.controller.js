@@ -7,6 +7,13 @@ async function handleUserRegistration(req,res) {
     const {userID,userName,userPassword,userDesignation} = req.body;
     const {isAdmin , isEmployee, isDriver} = req.query;
     try{
+        const checkUserQuery = `SELECT * FROM users WHERE userID = $1 OR userName = $2`;
+        const checkValues = [userID, userName];
+        const existingUser = await db.query(checkUserQuery, checkValues);
+
+        if (existingUser.rows.length > 0) {
+            return res.status(400).json({ error: "User with the same userID or userName already exists." });
+        }
         // const hashedPassword = await bcrypt.hash(userPassword,saltRounds);
         const query = `INSERT INTO users (userID, userName, userPassword, userDesignation) VALUES ($1,$2,$3,$4) RETURNING *`;
         // const values = [userID,userName,hashedPassword,userDesignation]
@@ -57,13 +64,13 @@ async function handleUserLogin(req,res) {
 
         let token;
         if(userDetails.userdesignation === 'Admin'){
-            token = generateAdminToken(user);
+            token = generateAdminToken({userID: userDetails.userID, username: userDetails.username,password: userDetails.userPassword});
         }
         if(userDetails.userdesignation === 'Employee'){
-            token = generateEmployeeToken(user);
+            token = generateEmployeeToken({userID: userDetails.userID, username: userDetails.username, password: userDetails.userPassword});
         }
         if(userDetails.userdesignation === 'Driver'){
-            token = generateDriverToken(user);
+            token = generateDriverToken({userID: userDetails.userID, username: userDetails.username, password: userDetails.userPassword});
         }
         console.log(token)
         res.setHeader('Authorization' , `Bearer ${token}`);

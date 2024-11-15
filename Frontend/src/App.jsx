@@ -19,7 +19,8 @@ import DriverOnsiteImagesAdd from "./components/DriverOnsiteImagesAdd";
 import ProtectedRoute from "./Auth/ProtectedRoute";
 import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
 import { Maintainance } from "./components/Maintainance";
-
+import AddDriver from "./pages/AddDriver";
+import AddEmployee from "./pages/AddEmployee";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -60,6 +61,37 @@ const router = createBrowserRouter([
 
     ),
   },
+  {
+    path: "/AddEmployee",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+        <Layout>
+          <AddEmployee/>
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+
+
+    ),
+  },
+  {
+    path: "/AddDriver",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+        <Layout>
+          <AddDriver/>
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+
+
+    ),
+  },
+  
   {
     path: "/driverdashboard",
     element: (
@@ -208,6 +240,7 @@ const router = createBrowserRouter([
       </Layout>
     ),
   },
+  
 ]);
 
 function App() {

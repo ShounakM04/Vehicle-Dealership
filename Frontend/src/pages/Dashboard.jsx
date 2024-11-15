@@ -17,7 +17,7 @@ const Dashboard = () => {
   const { query, setQuery } = useContext(SearchContext);
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
-
+  const [username, setUsername] = useState('');
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,6 +37,14 @@ const Dashboard = () => {
 
   };
 
+  const addEmployee = (e)=>{
+    e.preventDefault()
+    navigate('/AddEmployee')
+  }
+  const addDriver = (e)=>{
+    e.preventDefault()
+    navigate('/AddDriver')
+  }
   // Fetch car details from the API
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -82,10 +90,11 @@ const Dashboard = () => {
     }
     if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
       setUserRole("Admin");
-
+      setUsername(decodedToken?.username);
     }
     else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
       setUserRole("Employee");
+      setUsername(decodedToken?.username);
     }
   })
   const currentDate = new Date();
@@ -93,6 +102,7 @@ const Dashboard = () => {
   const totalCars = carDetails.filter(car => car.status === false).length
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
+      {/* {console.log("HI", username)} */}
       <div
         className={`${isSidebarOpen ? 'block' : 'hidden'
           } lg:block bg-white w-64 p-5 fixed lg:relative z-20`}
@@ -114,7 +124,7 @@ const Dashboard = () => {
           />
           <div>
             <h3 className="font-semibold">Nikhil Motors</h3>
-            <span className="text-gray-500">{userRole}</span>
+            <span className="text-gray-500">{username}</span>
           </div>
         </div>
 
@@ -183,6 +193,15 @@ const Dashboard = () => {
       <div className="flex-1 p-5 lg:p-10">
         <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-bold">Dashboard</h2>
+          <div className="ml-auto flex space-x-4">
+          {userRole === 'Admin' &&
+          <>
+          <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
+          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+           </>
+          }
+      </div>
+
           <div className="flex items-center space-x-2">
             {/* <img
               className="w-8 h-12 rounded-full"
