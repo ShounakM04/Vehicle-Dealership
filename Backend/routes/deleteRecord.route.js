@@ -7,9 +7,9 @@ const { authenticateToken, authorizeEmployeeOrAdmin } = require("../controllers/
 
 DeleteRecordRoute = express.Router();
 
-// DeleteRecordRoute.get("/", authenticateToken, authorizeEmployeeOrAdmin, (req, res) => {
-//     res.send("Delete page")
-// })
+DeleteRecordRoute.get("/", authenticateToken, authorizeEmployeeOrAdmin, (req, res) => {
+    res.send("Delete page")
+})
 
 // DeleteRecordRoute.post("/",authenticateToken, authorizeEmployeeOrAdmin, async (req, res) => {
 //     console.log(req.query);
@@ -39,13 +39,13 @@ DeleteRecordRoute = express.Router();
 //     res.send(`Entered registered number is : ${registernumber}`)
 // });
 
-DeleteRecordRoute.delete("/", authenticateToken, authorizeEmployeeOrAdmin,(req, res) => {
+DeleteRecordRoute.delete("/", authenticateToken, authorizeEmployeeOrAdmin,async (req, res) => {
     try {
         const regisNum = req.query.deletedID;
         console.log(regisNum)
         const query = `delete from cardetails where registernumber =($1)`;
         const values = [regisNum];
-        db.query(query, values);
+        await db.query(query, values);
 
         return res.status(200).send("Record deleted successfully");
     }
