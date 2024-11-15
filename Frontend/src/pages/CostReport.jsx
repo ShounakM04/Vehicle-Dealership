@@ -7,6 +7,8 @@ import { FaTrash } from "react-icons/fa";
 import { Maintainance } from "../components/Maintainance";
 import Installment from "../components/Installment";
 import { jwtDecode } from "jwt-decode";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 
 const CostReport = () => {
@@ -36,6 +38,9 @@ const CostReport = () => {
 
 
   const [fetchedVehicleData, setFetchedVehicleData] = useState(null);
+  const [vehicleImages, setvehicleImages] = useState([]);
+  const [onsiteVehicleImages, setOnsiteVehicleImages] = useState([]);
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEmployee, setIsEmployee] = useState(false);
 
@@ -56,9 +61,13 @@ const CostReport = () => {
     const fetchCarDetails = async () => {
       try {
         const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
-        const { car, images, insurance, owner } = response.data;
+        const { car, images, insurance, owner, onsiteImages } = response.data;
         setSoldStatus(response.data.car.status);
         setFetchedVehicleData(response.data);
+        setvehicleImages(images)
+        setOnsiteVehicleImages(onsiteImages);
+
+        console.log(response.data)
 
         setvehicleData((prevData) => ({
           ...prevData,
@@ -156,13 +165,13 @@ const CostReport = () => {
     <div className="flex flex-col h-[calc(100vh-80px)]">
       <div className="flex flex-col lg:flex-row p-5 bg-gray-100 min-h-[calc(100vh-80px)]">
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-4 lg:mb-0 ">
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-2xl font-bold mb-2">
             Vehicle Pricing & Maintenance Report
           </h2>
 
           {/* Car Details */}
           {/* Car Details and Owner Details */}
-          <div className="mb-4 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
+          <div className="mb-2 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
             {/* <h3 className="text-xl">Vehicle & Owner Details</h3> */}
             <div className="flex justify-between">
               <div className="w-1/2 pr-2">
@@ -183,9 +192,63 @@ const CostReport = () => {
             </div>
           </div>
 
+
+
+          <div className="w-full flex justify-center mx-auto gap-6">
+            {/* First Carousel */}
+            <div className="w-1/2">
+              {vehicleImages.length != 0 ? <p className="mb-2">Inventory Images</p> : <p className="mb-2">Inventory Images Not Available</p>}
+              <Carousel
+                showArrows={true}
+                autoPlay={true}
+                infiniteLoop={true}
+                showThumbs={false}
+                className="rounded-t-lg"
+              >
+                {vehicleImages?.map((image, index) => (
+                  <div key={index}>
+                    <img
+                      src={image}
+                      alt={`Carousel 1 Image ${index + 1}`}
+                      className="w-full h-auto rounded-t-lg max-h-[16vh] object-contain"
+                    />
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+
+            {/* Second Carousel */}
+            <div className="w-1/2">
+              {onsiteVehicleImages.length != 0 ? <p className="mb-2">OnSite Vehicle Images</p> : <p className="mb-2">OnSite Vehicle Images Not Available</p>}
+
+              <Carousel
+                showArrows={true}
+                autoPlay={true}
+                infiniteLoop={true}
+                showThumbs={false}
+                className="rounded-t-lg"
+              >
+                {onsiteVehicleImages.map((image, index) => (
+                  <div key={index}>
+                    <img
+                      src={image}
+                      alt={`No OnSite Vehicle Image Available`}
+                      className="w-full h-auto rounded-t-lg max-h-[16vh] object-contain"
+                    />
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          </div>
+
+
+
+
+
+
           {/* Maintenance Records */}
-          <h3 className="text-lg font-semibold mb-2 ">Maintenance Records:</h3>
-          <div className="overflow-y-auto max-h-60">
+          <h3 className="text-lg font-semibold mt-2 ">Maintenance Records:</h3>
+          <div className="overflow-y-auto max-h-40">
             {maintainanceData.maintenanceRecords.length > 0 ? (
               <ul className="mt-2">
                 {maintainanceData.maintenanceRecords.map((record, index) => {
@@ -203,9 +266,7 @@ const CostReport = () => {
                         <p>Cost: ₹{record.price}</p>
                         <p>
                           Date:{" "}
-                          {new Date(
-                            record.maintainanceDate
-                          ).toLocaleDateString()}
+                          {new Date(record.maintainanceDate).toLocaleDateString("en-GB")}
                         </p>
                         <p>Done By: {record.role}</p>
                         <p>
@@ -229,7 +290,7 @@ const CostReport = () => {
           </div>
 
           {/* Total Maintenance Cost */}
-          <div className="mt-4 p-4 bg-yellow-100 text-yellow-800 font-semibold rounded">
+          <div className="mt-2 p-4 bg-yellow-100 text-yellow-800 font-semibold rounded">
             <h3 className="text-lg">
               Total Maintenance Cost: ₹{maintainanceData.totalMaintenanceCost}
             </h3>

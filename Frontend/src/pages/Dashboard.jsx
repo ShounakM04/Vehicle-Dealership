@@ -37,14 +37,39 @@ const Dashboard = () => {
 
   };
 
-  const addEmployee = (e)=>{
+  const addEmployee = (e) => {
     e.preventDefault()
     navigate('/AddEmployee')
   }
-  const addDriver = (e)=>{
+  const addDriver = (e) => {
     e.preventDefault()
     navigate('/AddDriver')
   }
+
+  const downloadLogFile = async () => {
+    try {
+        const response = await fetch('https://vehicle-dealership.vercel.app/logs/today', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`, // Ensure the user is authenticated
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('File not found or failed to download.');
+        }
+
+        // Create a Blob from the response and trigger a download
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `user_activity_log_${new Date().toISOString().split('T')[0]}.csv`; // File name with today's date
+        link.click();
+    } catch (error) {
+        console.error('Error downloading log file:', error);
+        alert('Failed to download log file.');
+    }
+};
   // Fetch car details from the API
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -124,7 +149,12 @@ const Dashboard = () => {
           />
           <div>
             <h3 className="font-semibold">Nikhil Motors</h3>
-            <span className="text-gray-500">{username}</span>
+            <div className="flex flex-col">
+              <span className="text-gray-500">{userRole}</span>
+              <span className="text-gray-500">{username}</span>
+            </div>
+
+
           </div>
         </div>
 
@@ -194,18 +224,19 @@ const Dashboard = () => {
         <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-bold">Dashboard</h2>
           <div className="ml-auto flex space-x-4">
-          {userRole === 'Admin' &&
-          <>
-          <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
-          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-           </>
-          }
-           {userRole === 'Employee' &&
-          <>
-          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-           </>
-          }
-      </div>
+            {userRole === 'Admin' &&
+              <>
+                <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
+                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+                <button onClick={downloadLogFile} className="bg-green-500 text-white px-4 py-2 rounded">Download Logs</button>
+              </>
+            }
+            {userRole === 'Employee' &&
+              <>
+                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+              </>
+            }
+          </div>
 
           <div className="flex items-center space-x-2">
             {/* <img

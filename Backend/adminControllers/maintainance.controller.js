@@ -71,6 +71,7 @@ async function handleGetMaintainanceDetails(req, res) {
 async function handlePostMaintainanceDetails(req, res) {
     const { registernumber, description, price, role, maintainanceDate } = req.body;
     console.log(req.body);
+    console.log(req.user); // Check if the user is correctly set
 
     // Check for missing fields
     if (!registernumber || !description || !price || !maintainanceDate || !role) {

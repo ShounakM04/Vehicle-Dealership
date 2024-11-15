@@ -1,6 +1,22 @@
 const db = require("../models/database");
 const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config"); // Import S3 functions
 
+
+async function listDocHelper(FolderName) {
+    // Fetch image keys from the S3 folder
+    const DocsKeys = await listImagesInFolder(FolderName);
+
+    // Generate signed URLs for other images, starting from 1
+    const DocsPromises = DocsKeys.map(async (key, index) => {
+        return await getObjectURL(key); // Generate URL for each image key
+    });
+
+    // Wait for all other image promises to resolve
+    const DocsUrls = await Promise.all(DocsPromises);
+    return DocsUrls;
+}
+
+
 async function handleSpecifiPage(req, res) {
     try {
         const regisNum = req.params.registernumber;
@@ -25,22 +41,25 @@ async function handleSpecifiPage(req, res) {
             const owner = ownerResults.rows[0]; // Assuming one owner record per car
 
             // S3 folder structure for images (e.g., regisNum/VehicleImages/)
-            const imageFolder = `${regisNum}/InventoryVehicleImages/`;
+            const inventoryImagesFolder = `${regisNum}/InventoryVehicleImages/`;
+            const onsiteImagesFolder = `${regisNum}/OnsiteVehicleImages/`
 
-            // Fetch image keys from the S3 folder
-            const imageKeys = await listImagesInFolder(imageFolder);
-            console.log(`Image Keys for ${regisNum}: ${imageKeys}`);
 
-            // Generate signed URLs for other images, starting from 1
-            const imagesPromises = imageKeys.map(async (key, index) => {
-                return await getObjectURL(key); // Generate URL for each image key
-            });
+            // // Fetch image keys from the S3 folder
+            // const imageKeys = await listImagesInFolder(imageFolder);
+            // console.log(`Image Keys for ${regisNum}: ${imageKeys}`);
+
+            // // Generate signed URLs for other images, starting from 1
+            // const imagesPromises = imageKeys.map(async (key, index) => {
+            //     return await getObjectURL(key); // Generate URL for each image key
+            // });
 
             // Wait for all other image promises to resolve
-            const images = await Promise.all(imagesPromises);
+            const images = await listDocHelper(inventoryImagesFolder)
+            const onsiteImages = await listDocHelper(onsiteImagesFolder);
 
 
-            res.json({ car, images, insurance, owner });
+            res.json({ car, images, insurance, owner,onsiteImages });
         } else {
             res.status(400).send("Car not found");
         }

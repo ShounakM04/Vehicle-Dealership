@@ -6,7 +6,7 @@ const { authenticateToken, authorizeEmployeeOrAdmin } = require("../controllers/
 
 const router = express.Router();
 
-router.post("/",authenticateToken, authorizeEmployeeOrAdmin, addInstallments);
+router.post("/", addInstallments);
 router.get("/",authenticateToken, authorizeEmployeeOrAdmin, getInstallments);
 
 module.exports = router

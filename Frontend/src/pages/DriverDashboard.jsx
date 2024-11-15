@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export default function DriverDashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [userRole,setUserRole] = useState("");
+    const [userRole, setUserRole] = useState("");
     const [username, setUsername] = useState("");
 
 
@@ -13,40 +13,37 @@ export default function DriverDashboard() {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
-      };
+    };
 
-      
-      useEffect(()=>{
+
+    useEffect(() => {
         const token = localStorage.getItem("authToken");
         let decodedToken;
-            if (token) {
-              try {
-                 decodedToken = jwtDecode(token);
-            console.log(decodedToken);
-          
-              } catch (error) {
+        if (token) {
+            try {
+                decodedToken = jwtDecode(token);
+                console.log(decodedToken);
+
+            } catch (error) {
                 console.error("Invalid token", error);
-               
-              }
+
             }
-          if(decodedToken?.isAdmin == true)
-          {
+        }
+        if (decodedToken?.isAdmin == true) {
             setUserRole("Admin");
             setUsername(decodedToken?.username)
-          }
-          else if(decodedToken?.isEmployee == true)
-          {
+        }
+        else if (decodedToken?.isEmployee == true) {
             setUserRole("Employee");
             setUsername(decodedToken?.username)
 
-          }
-          else if(decodedToken?.isDriver == true)
-            {
-              setUserRole("Driver");
+        }
+        else if (decodedToken?.isDriver == true) {
+            setUserRole("Driver");
             setUsername(decodedToken?.username)
 
-            }
-      })
+        }
+    })
 
     return (
         <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
@@ -71,7 +68,12 @@ export default function DriverDashboard() {
                     />
                     <div>
                         <h3 className="font-semibold">Nikhil Motors</h3>
-                        <span className="text-gray-500">{username}</span>
+                        <div className="flex flex-col">
+                            <span className="text-gray-500">{userRole}</span>
+                            <span className="text-gray-500">{username}</span>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -120,16 +122,16 @@ export default function DriverDashboard() {
                 </div> */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-                <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/onsiteVehicleImages">
-                    <div className="bg-purple-500 p-5 rounded text-white min-h-4">
-                        Add Onsite Vehicle Images
-                    </div>
-                </NavLink>
-                <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/drivermaintainance">
-                    <div className="bg-blue-500 p-5 rounded text-white min-h-4">
-                        Add Maintainance
-                    </div>
-                </NavLink>
+                    <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/onsiteVehicleImages">
+                        <div className="bg-purple-500 p-5 rounded text-white min-h-4">
+                            Add Onsite Vehicle Images
+                        </div>
+                    </NavLink>
+                    <NavLink className="text-gray-600 font-semibold" to="/driverdashboard/drivermaintainance">
+                        <div className="bg-blue-500 p-5 rounded text-white min-h-4">
+                            Add Maintainance
+                        </div>
+                    </NavLink>
                     <div className="bg-orange-500 p-5 rounded text-white min-h-4">
                         Sample Card3
                     </div>
