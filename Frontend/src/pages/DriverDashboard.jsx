@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 export default function DriverDashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [userRole,setUserRole] = useState("");
-    cons [username, setUsername] = useState("");
+    const [username, setUsername] = useState("");
 
 
 
