@@ -12,7 +12,7 @@ async function handleUserRegistration(req,res) {
         const existingUser = await db.query(checkUserQuery, checkValues);
 
         if (existingUser.rows.length > 0) {
-            return res.status(400).json({ error: "User with the same userID or userName already exists." });
+            return res.status(400).json({ error: "User with the same userID already exists." });
         }
         // const hashedPassword = await bcrypt.hash(userPassword,saltRounds);
         const query = `INSERT INTO users (userID, userName, userPassword, userDesignation) VALUES ($1,$2,$3,$4) RETURNING *`;
