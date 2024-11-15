@@ -200,6 +200,11 @@ const Dashboard = () => {
           <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
            </>
           }
+           {userRole === 'Employee' &&
+          <>
+          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+           </>
+          }
       </div>
 
           <div className="flex items-center space-x-2">

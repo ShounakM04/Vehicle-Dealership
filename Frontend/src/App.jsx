@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     path: "/AddDriver",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin"]}>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
         <Layout>
           <AddDriver/>
         </Layout>
