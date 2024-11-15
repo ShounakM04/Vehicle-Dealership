@@ -25,7 +25,7 @@ function Login() {
             return;
         }
 
-        //https://vehicle-dealership.vercel.app/
+        //http://localhost:8000/
         //https://vehicle-dealership.vercel.app/
         const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
@@ -89,7 +89,7 @@ function Login() {
             toast.error("Login failed.", { position: "top-center", autoClose: 2000 });
         }
         setIsLoading(false)
-        
+
         // setUsername('');
         // setPassword('');
     }
@@ -123,7 +123,7 @@ function Login() {
                     />
                 </div>
                 <div className='text-center'>
-                <button
+                    <button
                         type='submit'
                         className='w-full px-3 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors duration-300'
                     >

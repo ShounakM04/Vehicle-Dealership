@@ -37,11 +37,11 @@ const Dashboard = () => {
 
   };
 
-  const addEmployee = (e)=>{
+  const addEmployee = (e) => {
     e.preventDefault()
     navigate('/AddEmployee')
   }
-  const addDriver = (e)=>{
+  const addDriver = (e) => {
     e.preventDefault()
     navigate('/AddDriver')
   }
@@ -124,7 +124,12 @@ const Dashboard = () => {
           />
           <div>
             <h3 className="font-semibold">Nikhil Motors</h3>
-            <span className="text-gray-500">{username}</span>
+            <div className="flex flex-col">
+              <span className="text-gray-500">{userRole}</span>
+              <span className="text-gray-500">{username}</span>
+            </div>
+
+
           </div>
         </div>
 
@@ -194,18 +199,18 @@ const Dashboard = () => {
         <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-bold">Dashboard</h2>
           <div className="ml-auto flex space-x-4">
-          {userRole === 'Admin' &&
-          <>
-          <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
-          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-           </>
-          }
-           {userRole === 'Employee' &&
-          <>
-          <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-           </>
-          }
-      </div>
+            {userRole === 'Admin' &&
+              <>
+                <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
+                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+              </>
+            }
+            {userRole === 'Employee' &&
+              <>
+                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+              </>
+            }
+          </div>
 
           <div className="flex items-center space-x-2">
             {/* <img

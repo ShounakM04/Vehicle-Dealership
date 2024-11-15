@@ -24,9 +24,9 @@ function AddDriver() {
             setPassword('');
             return;
         }
-    
+
         const endpoint = "https://vehicle-dealership.vercel.app/register?isDriver=true"; // Update with your actual endpoint
-    
+
         try {
             setIsLoading(true);
             // Trim and convert username and password to lowercase
@@ -40,18 +40,18 @@ function AddDriver() {
                 userPassword: trimmedPassword,
                 userDesignation: 'Driver'   // Hardcoded as 'Driver'
             };
-    
+
             const response = await axios.post(endpoint, requestBody);
             toast.success("Added Driver successfully", { position: "top-center", autoClose: 3000 });
             setIsLoading(false);
         } catch (error) {
             // Hide loader when there's an error
             setIsLoading(false);
-            
+
             if (error.response) {
                 // Server responded with a status other than 2xx
                 console.error("Registration failed: ", error.response.data);
-        
+
                 // Check for specific error codes and set corresponding error messages
                 if (error.response.status === 400) {
                     setErrorMessage("User with the same userID or userName already exists.");
@@ -69,13 +69,13 @@ function AddDriver() {
                 console.error("Error setting up the request: ", error.message);
                 setErrorMessage("There was an error during the registration process.");
             }
-            
+
             // Show error notification
             toast.error("Registration failed.", { position: "top-center", autoClose: 2000 });
         }
-        
+
     }
-    
+
 
     return (
         <div className='flex items-center justify-center h-[calc(100vh-80px)] bg-gradient-to-r from-green-400 to-blue-500 p-4'>
