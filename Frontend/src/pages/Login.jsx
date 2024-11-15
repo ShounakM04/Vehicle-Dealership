@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
+
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -27,10 +29,17 @@ function Login() {
         const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {
-            const response = await axios.post(endpoint, { userID: username, userPass: password });
+            // Trim and convert username and password to lowercase
+            const trimmedUsername = username.trim().toLowerCase();
+            const trimmedPassword = password.trim().toLowerCase();
+
+            const response = await axios.post(endpoint, {
+                userID: trimmedUsername,
+                userPass: trimmedPassword
+            });
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
-            alert("Login successful");
+            toast.success("Login successful", { position: "top-center", autoClose: 3000 });
 
 
             let decodedToken;
@@ -74,7 +83,7 @@ function Login() {
                 setErrorMessage("There was an error during the login process.");
             }
 
-            alert(errorMessage);
+            toast.error("Login failed.", { position: "top-center", autoClose: 2000 });
         }
 
         // setUsername('');

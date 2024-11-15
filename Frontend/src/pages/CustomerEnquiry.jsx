@@ -44,6 +44,9 @@ function CustomerEnquiry() {
 
 
       await axios.delete('https://vehicle-dealership.vercel.app/customer', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
         data: {
           serialnum: serialnum,
           custcontact: customerPhone
@@ -76,12 +79,22 @@ function CustomerEnquiry() {
     try {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
-      await axios.post('https://vehicle-dealership.vercel.app/customer', {
-        custName: customerName,
-        custContact: customerPhone,
-        custQuery: description,
-        date: submissionDate
-      });
+      await axios.post(
+        'https://vehicle-dealership.vercel.app/customer',
+        {
+          custName: customerName,
+          custContact: customerPhone,
+          custQuery: description,
+          date: submissionDate
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+        }
+      );
+
+
 
       setEnquiries([...enquiries, { custname: customerName, custcontact: customerPhone, custquery: description, date: submissionDate }]);
 
@@ -103,7 +116,11 @@ function CustomerEnquiry() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get('https://vehicle-dealership.vercel.app/customer');
+      const response = await axios.get('https://vehicle-dealership.vercel.app/customer', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
       const formattedEnquiries = response.data.enquiries.map(enquiry => ({
         serialnum: enquiry.serialnum,
         customerName: enquiry.custname,

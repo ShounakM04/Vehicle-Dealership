@@ -114,6 +114,9 @@ const CostReport = () => {
       console.log("hi+" + id);
       const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
         params: { registernumber: id },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
       });
 
       ;

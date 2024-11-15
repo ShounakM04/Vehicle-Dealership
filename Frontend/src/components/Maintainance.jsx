@@ -45,7 +45,12 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             let currRole = isAdmin ? "admin" : isEmployee ? "employee" : isDriver ? "driver" : "";
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
             const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance',
-                { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate });
+                { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                },);
 
 
             const nextIndex = response.data.nextIndex;

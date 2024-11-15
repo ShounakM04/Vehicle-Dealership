@@ -15,7 +15,11 @@ function AddNoticeImage() {
   // Fetch images function to be called on mount and after upload
   const fetchImages = async () => {
     try {
-      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice');
+      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
       setFetchedImages(response.data);
       console.log(response.data);
     } catch (error) {
@@ -104,7 +108,9 @@ function AddNoticeImage() {
       }
 
       await axios.delete(`https://vehicle-dealership.vercel.app/dashboard/delete-notice`, {
-        params: { uniqueID: uniqueID }
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }, params: { uniqueID: uniqueID }
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
 

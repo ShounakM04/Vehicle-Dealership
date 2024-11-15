@@ -103,7 +103,13 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData);
+      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+        }
+      );
 
       toast.success("Car sold successfully!", { position: "top-right" });
       setCarData(null);

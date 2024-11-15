@@ -166,6 +166,10 @@ const EditVehicleImages = ({ id }) => {
             const path = `${id}/InventoryVehicleImages/${uniqueID}`
 
             await axios.delete(`https://vehicle-dealership.vercel.app/delete-image`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }
+                ,
                 params: {
                     path: path
 

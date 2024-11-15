@@ -1,11 +1,13 @@
 const express = require("express")
 const {handleGetMaintainanceDetails,handlePostMaintainanceDetails} = require("../adminControllers/maintainance.controller")
+const { authenticateToken, authorizeEmployeeOrAdmin } = require("../controllers/userRole-auth");
+
 
 const router = express.Router();
 
 
-router.get("/",handleGetMaintainanceDetails);
+router.get("/",authenticateToken, authorizeEmployeeOrAdmin,handleGetMaintainanceDetails);
 
-router.post("/",handlePostMaintainanceDetails);
+router.post("/",authenticateToken, authorizeEmployeeOrAdmin,handlePostMaintainanceDetails);
 
 module.exports = router;

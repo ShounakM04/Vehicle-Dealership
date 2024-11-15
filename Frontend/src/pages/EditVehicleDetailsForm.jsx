@@ -105,6 +105,10 @@ const EditVehicleDetailsForm = () => {
             fieldToEdit: fieldToEdit,
             newValue: newValue,
             registernumber: id
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
         });
 
         // Update the field in vehicleData
@@ -145,7 +149,7 @@ const EditVehicleDetailsForm = () => {
                 </button>
             </div>
             <div>
-                <h1 className="text-xl font-bold mb-2 mt-6 ">Veicle Details</h1>
+                <h1 className="text-xl font-bold mb-2 mt-6 ">Vehicle Details : Reg No : {id}</h1>
                 <div className="flex flex-wrap gap-4">
                     <div className="w-full md:w-[49%]">
 
@@ -272,7 +276,7 @@ const EditVehicleDetailsForm = () => {
 
 
                     <div className="w-full md:w-[49%]">
-                        <label htmlFor="fuel" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Type</label>
+                        <label htmlFor="fuel" className="block text-gray-700 text-sm font-bold mb-2">Fuel Type</label>
                         <div className="relative w-full">
                             {/* Dropdown for Vehicle Names */}
                             {editableFields.fuel ? (
@@ -344,7 +348,7 @@ const EditVehicleDetailsForm = () => {
 
                     <div className="w-full md:w-[50%]">
 
-                        <label htmlFor="vehiclesellprice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Selling Price</label>
+                        <label htmlFor="vehiclesellprice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Selling Price (Display Price)</label>
                         <div className="relative w-full">
                             <input
                                 type="text"

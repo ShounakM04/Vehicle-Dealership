@@ -1,17 +1,17 @@
 const db = require("../models/database")
 
-async function handleRecordDeletion(req, res) {
-    const registernumber = req.body.deletedID;
+async function handleRecordDeletion(req, res){
     try {
-        const query = `delete from cardetails where registernumber = ($1)`;
-        const values = [registernumber];
+        const regisNum = req.query.deletedID;
+        console.log(regisNum)
+        const query = `delete from cardetails where registernumber =($1)`;
+        const values = [regisNum];
         await db.query(query, values);
 
-        return res.status(200).send("Car Records deleted successfully");
+        return res.status(200).send("Record deleted successfully");
     }
     catch (error) {
-        console.log(`The following error has occured : ${error}`);
-        return;
+        console.log(`Error occured while executig the queries : ${error}`);
     }
 
 }

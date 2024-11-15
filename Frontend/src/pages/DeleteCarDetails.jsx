@@ -57,6 +57,10 @@ function DeleteCarDetails() {
     try {
       console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
       const response = await axios.delete(`https://vehicle-dealership.vercel.app/delete`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+        ,
         params: {
           deletedID: submittedID,
         },

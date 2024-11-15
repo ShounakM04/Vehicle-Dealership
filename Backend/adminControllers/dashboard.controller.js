@@ -2,6 +2,7 @@ const db = require("../models/database");
 
 async function handleDashboard(req, res) {
     const { carSearch } = req.query;
+    // console.log(carSearch)
     try {
         let query = `
             SELECT o.ownername, o.owneremail, o.ownerphone, c.carmake, c.carname, c.registernumber, c.status 

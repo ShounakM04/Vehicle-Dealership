@@ -12,6 +12,10 @@ export default function Insurance() {
             const response = await axios.post("https://vehicle-dealership.vercel.app/installments/add", {
                 amount: installmentAmount,
                 date: installmentDate,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }
             });
 
             if (response.status === 200) {

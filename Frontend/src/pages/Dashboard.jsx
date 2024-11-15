@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { jwtDecode } from "jwt-decode";
+import { headers } from 'next/headers';
 
 // const token = localStorage.getItem('authToken');
 
@@ -40,16 +41,26 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const params = {};
+        let params = {};
         if (query) params.carSearch = query;
         // console.log(params)
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`, { params });
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            }
+            , params
+          });
         console.log(response.data);
         setCarDetails(response.data); // Assuming the response contains an array of car details
 
 
       } catch (error) {
-        console.error('Error fetching car details:', error);
+        if (error.response?.status == 400) {
+          navigate('/admin');
+        }
+        else
+          console.error('Error fetching car details:', error);
       }
     };
 
@@ -97,8 +108,8 @@ const Dashboard = () => {
 
         <div className="flex items-center space-x-2 mb-5">
           <img
-            className="w-10 h-10 rounded-full"
-            src="https://via.placeholder.com/40"
+            className="w-8 h-12 rounded-full"
+            src="/Assets/Images/logo.png"
             alt="Profile"
           />
           <div>
@@ -173,12 +184,12 @@ const Dashboard = () => {
         <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-bold">Dashboard</h2>
           <div className="flex items-center space-x-2">
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://via.placeholder.com/40"
+            {/* <img
+              className="w-8 h-12 rounded-full"
+              src="/Assets/Images/logo.png"
               alt="Profile"
             />
-            <span>Nikhil Motors</span>
+            <span>Nikhil Motors</span> */}
           </div>
         </div>
         <h2 className='mb-4'>{currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>

@@ -22,7 +22,11 @@ export default function Installment({ carID, isAdmin }) {
       console.log("Params : " + carID);
       const response = await axios.get(
         `https://vehicle-dealership.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
-        { params: { carID } }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }, params: { carID }
+        }
       );
       setCarDetails(response.data.dbData);
       setInsuranceDoc(response.data.soldCarInsuranceDocs);
@@ -40,6 +44,9 @@ export default function Installment({ carID, isAdmin }) {
     if (!carID) return;
     try {
       const response = await axios.get(`https://vehicle-dealership.vercel.app/installments`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
         params: { registernumber: carID },
       });
       setInstallments(response.data);
@@ -59,6 +66,10 @@ export default function Installment({ carID, isAdmin }) {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
       });
 
       if (response.status === 200) {
@@ -115,6 +126,9 @@ export default function Installment({ carID, isAdmin }) {
   const fetchProfit = async () => {
     try {
       const response = await axios.get("https://vehicle-dealership.vercel.app/profits", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
         params: { registernumber: carID },
       });
       setProfit(response.data.profit);
