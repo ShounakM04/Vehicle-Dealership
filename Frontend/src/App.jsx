@@ -65,7 +65,7 @@ const router = createBrowserRouter([
     path: "/AddEmployee",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
         <Layout>
           <AddEmployee/>
         </Layout>
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     path: "/AddDriver",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
         <Layout>
           <AddDriver/>
         </Layout>
