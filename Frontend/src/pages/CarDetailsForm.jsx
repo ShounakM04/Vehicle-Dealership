@@ -110,15 +110,15 @@ function AdminForm() {
         showInsuranceFields,
         showOwnerFields
       },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`
-        }
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
 
       // Upload images first
       await handleUpload();
-      
+
 
 
       toast.success("Vehicle details added successfully!");

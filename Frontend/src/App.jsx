@@ -21,6 +21,7 @@ import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
 import { Maintainance } from "./components/Maintainance";
 import AddDriver from "./pages/AddDriver";
 import AddEmployee from "./pages/AddEmployee";
+import OfficeDocUpload from "./pages/OfficeDocUpload";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -198,6 +199,20 @@ const router = createBrowserRouter([
 
         <Layout>
           <SellCarDetails />
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/officeDocuments",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+        <Layout>
+          <OfficeDocUpload />
         </Layout>
         </ProtectedUserRoute>
 

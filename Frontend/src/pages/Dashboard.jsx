@@ -248,7 +248,7 @@ const Dashboard = () => {
           }
         </div>
         <h2 className='mb-4'>{currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
           <div className="bg-purple-300  pl-5 p-3 rounded text-white min-h-4">
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
@@ -259,6 +259,13 @@ const Dashboard = () => {
           <div className="bg-orange-300 p-5 rounded text-white min-h-4">
             Sample Card3
           </div>
+          <a href='/dashboard/officeDocuments'><div
+            className="bg-green-300 p-5 rounded text-white min-h-4"
+
+          >
+            Office Documents
+          </div>
+          </a>
         </div>
 
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
