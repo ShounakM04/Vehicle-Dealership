@@ -172,32 +172,36 @@ const CostReport = () => {
           {/* Car Details */}
           {/* Car Details and Owner Details */}
           <div className="mb-2 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
-            {/* <h3 className="text-xl">Vehicle & Owner Details</h3> */}
             <div className="flex justify-between">
               <div className="w-1/2 pr-2">
                 <h2 className="font-bold text-xl">Vehicle Details</h2>
-                <p>Registration Number: {vehicleData.carDetails.carNo}</p>
-                <p>Vehicle Company: {vehicleData.carDetails.carCompany}</p>
-                <p>Model: {vehicleData.carDetails.model}</p>
-                {/* <p>Type: {vehicleData.carDetails.type}</p>
-                <p>Fuel Type: {vehicleData.carDetails.fuelType}</p>
-                <p>Color: {vehicleData.carDetails.color}</p> */}
+                <p className="break-words">Registration Number: {vehicleData.carDetails.carNo}</p>
+                <p className="break-words">Vehicle Company: {vehicleData.carDetails.carCompany}</p>
+                <p className="break-words">Model: {vehicleData.carDetails.model}</p>
+                {/* <p className="break-words">Type: {vehicleData.carDetails.type}</p>
+      <p className="break-words">Fuel Type: {vehicleData.carDetails.fuelType}</p>
+      <p className="break-words">Color: {vehicleData.carDetails.color}</p> */}
               </div>
               <div className="w-1/2 pl-2">
                 <h4 className="font-bold text-xl">Owner Details</h4>
-                <p>Owner: {vehicleData.carDetails.ownerName}</p>
-                <p>Phone: {vehicleData.carDetails.ownerPhone}</p>
-                <p>Email: {vehicleData.carDetails.ownerEmail}</p>
+                <p className="break-words">Owner: {vehicleData.carDetails.ownerName}</p>
+                <p className="break-words">Phone: {vehicleData.carDetails.ownerPhone}</p>
+                <p className="break-words">Email: {vehicleData.carDetails.ownerEmail}</p>
               </div>
             </div>
           </div>
 
 
 
-          <div className="w-full flex justify-center mx-auto gap-6">
-            {/* First Carousel */}
-            <div className="w-1/2">
-              {vehicleImages.length != 0 ? <p className="mb-2">Inventory Images</p> : <p className="mb-2">Inventory Images Not Available</p>}
+
+          <div className="w-full flex flex-col md:flex-row justify-center mx-auto gap-6">
+            {/* First Carousel - Inventory Images */}
+            <div className="w-full md:w-1/2">
+              {vehicleImages.length !== 0 ? (
+                <p className="mb-2">Inventory Images</p>
+              ) : (
+                <p className="mb-2">Inventory Images Not Available</p>
+              )}
               <Carousel
                 showArrows={true}
                 autoPlay={true}
@@ -217,10 +221,13 @@ const CostReport = () => {
               </Carousel>
             </div>
 
-            {/* Second Carousel */}
-            <div className="w-1/2">
-              {onsiteVehicleImages.length != 0 ? <p className="mb-2">OnSite Vehicle Images</p> : <p className="mb-2">OnSite Vehicle Images Not Available</p>}
-
+            {/* Second Carousel - OnSite Vehicle Images */}
+            <div className="w-full md:w-1/2">
+              {onsiteVehicleImages.length !== 0 ? (
+                <p className="mb-2">OnSite Vehicle Images</p>
+              ) : (
+                <p className="mb-2">OnSite Vehicle Images Not Available</p>
+              )}
               <Carousel
                 showArrows={true}
                 autoPlay={true}
@@ -232,7 +239,7 @@ const CostReport = () => {
                   <div key={index}>
                     <img
                       src={image}
-                      alt={`No OnSite Vehicle Image Available`}
+                      alt={`OnSite Vehicle Image ${index + 1}`}
                       className="w-full h-auto rounded-t-lg max-h-[16vh] object-contain"
                     />
                   </div>
@@ -240,6 +247,7 @@ const CostReport = () => {
               </Carousel>
             </div>
           </div>
+
 
 
 

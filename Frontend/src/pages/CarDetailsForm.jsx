@@ -78,7 +78,7 @@ function AdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Clicked")
     if (vehicleBuyPrice < 0) {
       toast.error("Vehicle price cannot be negative");
       return;
@@ -109,11 +109,16 @@ function AdminForm() {
         insuranceEndDate,
         showInsuranceFields,
         showOwnerFields
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
       });
 
       // Upload images first
       await handleUpload();
-
+      
 
 
       toast.success("Vehicle details added successfully!");

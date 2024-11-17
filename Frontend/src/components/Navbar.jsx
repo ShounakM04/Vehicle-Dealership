@@ -150,6 +150,15 @@ function Navbar() {
 
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4">
+              <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm">
+                <img
+                  className="h-6 filter invert rounded-full border-2 border-black"
+                  src="../../public/Assets/Images/loc1.png"
+                  alt="Location Icon"
+                />
+              </a>
+
+
               <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact us</a>
               {loggedIn == true && (<Link to="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</Link>)}
               {loggedIn == true ?

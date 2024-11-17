@@ -45,6 +45,31 @@ const Dashboard = () => {
     e.preventDefault()
     navigate('/AddDriver')
   }
+
+  const downloadLogFile = async () => {
+    try {
+      const response = await fetch('https://vehicle-dealership.vercel.app/logs/today', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`, // Ensure the user is authenticated
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('File not found or failed to download.');
+      }
+
+      // Create a Blob from the response and trigger a download
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `user_activity_log_${new Date().toISOString().split('T')[0]}.csv`; // File name with today's date
+      link.click();
+    } catch (error) {
+      console.error('Error downloading log file:', error);
+      alert('Failed to download log file.');
+    }
+  };
   // Fetch car details from the API
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -198,19 +223,6 @@ const Dashboard = () => {
       <div className="flex-1 p-5 lg:p-10">
         <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-bold">Dashboard</h2>
-          <div className="ml-auto flex space-x-4">
-            {userRole === 'Admin' &&
-              <>
-                <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
-                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-              </>
-            }
-            {userRole === 'Employee' &&
-              <>
-                <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
-              </>
-            }
-          </div>
 
           <div className="flex items-center space-x-2">
             {/* <img
@@ -220,6 +232,20 @@ const Dashboard = () => {
             />
             <span>Nikhil Motors</span> */}
           </div>
+        </div>
+        <div className="ml-auto mb-4 flex space-x-4">
+          {userRole === 'Admin' &&
+            <>
+              <button onClick={addEmployee} className="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
+              <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+              <button onClick={downloadLogFile} className="bg-green-500 text-white px-4 py-2 rounded">Download Logs</button>
+            </>
+          }
+          {userRole === 'Employee' &&
+            <>
+              <button onClick={addDriver} className="bg-green-500 text-white px-4 py-2 rounded">Add Driver</button>
+            </>
+          }
         </div>
         <h2 className='mb-4'>{currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
