@@ -25,7 +25,7 @@ function logResReq(filename) {
         // Capture the user (or anonymous if not available)
         // console.log(req)
         const user = req.user ? req.user.username : 'Anonymous';
-        console.log("Inside log.js", user)
+        // console.log("Inside log.js", user)
         const timestamp = new Date().toISOString();
         // Log for POST requests to `/details` route
         if (req.method === 'POST' && req.path.includes('/details')) {

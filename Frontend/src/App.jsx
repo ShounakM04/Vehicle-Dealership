@@ -21,6 +21,7 @@ import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
 import { Maintainance } from "./components/Maintainance";
 import AddDriver from "./pages/AddDriver";
 import AddEmployee from "./pages/AddEmployee";
+import MiscellaneousCosts from "./pages/MiscellaneousCosts";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -230,6 +231,21 @@ const router = createBrowserRouter([
         </ProtectedUserRoute>
 
       </ProtectedRoute>
+    ),
+  },
+  {
+    path: "dashboard/miscellaneous-costs",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+      
+        <Layout>
+          <MiscellaneousCosts/>
+        </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+      
     ),
   },
   {
