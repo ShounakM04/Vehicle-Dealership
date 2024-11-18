@@ -23,6 +23,7 @@ const carDetailsEdit = require("./routes/carDetailsEdit.route.js")
 // const LogRoute = require('./adminRoutes/logs.route.js');
 const miscellaneousCostRoute = require('./adminRoutes/miscellaneousCosts.route.js')
 const LogDownloadRoute = require('./adminRoutes/logDownload.route.js')
+const handleAddDescriptionRoute =  require("./routes/addImageDescription.route.js") 
 const { authenticateToken, authorizeEmployeeOrAdmin } = require("./controllers/userRole-auth.js");
 
 // const corsOptions = {
@@ -74,6 +75,7 @@ app.use("/edit-fields", carDetailsEdit)
 app.use("/delete-image", Imageroute)
 app.use("/logs/today", LogDownloadRoute)
 app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,miscellaneousCostRoute);
+app.use("/Description",handleAddDescriptionRoute)
 
 // Correct `app.listen` without req and res parameters
 // app.listen(PORT, () => {

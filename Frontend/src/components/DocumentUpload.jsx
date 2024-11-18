@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 import { toast } from "react-toastify";
-
+import axios from "axios";
 
 const DocumentUpload = () => {
 
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [description, setDescription] = useState("");
 
     const navigate = useNavigate();
 
-    const { id } = useParams(); 
-  
-  console.log(id);
+    const { id } = useParams();
+
+    console.log(id);
 
     const handleGoBack = () => {
         if (!id) {
@@ -41,13 +42,12 @@ const DocumentUpload = () => {
             await handleUpload();
 
             toast.success("Vehilce images added successfully!");
-            if(id)
-            {
-
-                navigate(`/dashboard/costReport/${id}`);
-            }
-            else{
-                navigate('/driverdashboard')
+            if (window.location.pathname.includes('/dashboard')) {
+                // If the current URL contains '/dashboard', navigate to '/dashboard'
+                navigate('/dashboard');
+            } else {
+                // Otherwise, navigate to '/driverdashboard'
+                navigate('/driverdashboard');
             }
         } catch (error) {
 
@@ -58,23 +58,45 @@ const DocumentUpload = () => {
         }
     }
 
+    const addDescription = async (uniqueID) => {
+        try {
+            await axios.post('https://vehicle-dealership.vercel.app/Description',
+                {
+                    uniqueID: uniqueID,
+                    description: description
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                }
+            );
+
+        } catch (error) {
+            console.log(`Error occured while saving Description : ${error}`);
+        }
+        return;
+    }
+
     const handleUpload = async () => {
         setUploading(true);
 
         try {
             let folder = 'OfficeDocuments';
-            if(id)
-            {
+            if (id) {
                 folder = `${id}/AdminDocuments`;
             }
 
             // Handle other image uploads if necessary (similar to DisplayImage)
             for (let i = 0; i < images.length; i++) {
-                const uniqueID = Date.now();    
+                const uniqueID = Date.now();
                 const image = images[i];
                 const imageFileName = `${folder}/${uniqueID}`;
                 const imageUploadURL = await getUploadURL(image, imageFileName);
                 await uploadToS3(imageUploadURL, image);
+                console.log("Descp : " + description)
+                await addDescription(uniqueID);
+
             }
 
             setUploading(false);
@@ -99,13 +121,12 @@ const DocumentUpload = () => {
                 </div>
 
                 {id && <h2 className="text-xl font-bold mb-2 mt-2">Register Number : {id}</h2>
-}
+                }
                 <div className='mt-6'>
                     <h2 className="text-xl font-bold mb-2">Upload Documents</h2>
                     <input
                         required
                         type="file"
-                        accept="image/*"
                         multiple
                         onChange={handleImageChange}
                         className="mb-4"
@@ -123,6 +144,16 @@ const DocumentUpload = () => {
                                 />
                             );
                         })}
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="description" className="block text-gray-700 text-sm font-semibold mb-2">Description</label>
+                        <textarea
+                            id="description"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:ring-teal-300"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+
+                        />
                     </div>
                 </div>
                 <button
