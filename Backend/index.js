@@ -65,7 +65,7 @@ app.use(logResReq());
 app.use("/upload",  authenticateToken, authorizeDriverOrEmployeeOrAdmin, Imageroute);
 app.use("/details",authenticateToken, authorizeEmployeeOrAdmin, DetailsRoute);
 app.use("/car", SpecificPageRoute);
-app.use("/delete", DeleteRecordRoute);
+app.use("/delete", authorizeDriverOrEmployeeOrAdmin, DeleteRecordRoute);
 app.use("/customer", customerQueryRoute);
 app.use("/register", authenticateToken, authorizeAdmin, RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
