@@ -21,7 +21,9 @@ import ProtectedUserRoute from "./Auth/ProtectedUserRoute";
 import { Maintainance } from "./components/Maintainance";
 import AddDriver from "./pages/AddDriver";
 import AddEmployee from "./pages/AddEmployee";
-import OfficeDocUpload from "./pages/OfficeDocUpload";
+import DocumentUpload from "./components/DocumentUpload";
+import MiscellaneousCosts from "./pages/MiscellaneousCosts";
+import DocumentView from "./components/DocumentView";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -52,9 +54,9 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
-        <Layout>
-          <Dashboard />
-        </Layout>
+          <Layout>
+            <Dashboard />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -67,9 +69,9 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin"]}>
-        <Layout>
-          <AddEmployee/>
-        </Layout>
+          <Layout>
+            <AddEmployee />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -82,9 +84,9 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
-        <Layout>
-          <AddDriver/>
-        </Layout>
+          <Layout>
+            <AddDriver />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -92,57 +94,57 @@ const router = createBrowserRouter([
 
     ),
   },
-  
+
   {
     path: "/driverdashboard",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
-        <Layout>
-          <DriverDashboard />
-        </Layout>
+        <ProtectedUserRoute requiredRoles={["driver", "admin", "employee"]}>
+          <Layout>
+            <DriverDashboard />
+          </Layout>
         </ProtectedUserRoute>
       </ProtectedRoute>
     ),
-},
-{
+  },
+  {
     path: "/driverdashboard/onsiteVehicleImages",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
+        <ProtectedUserRoute requiredRoles={["driver", "admin", "employee"]}>
 
-        <Layout>
-          <DriverOnsiteImagesAdd />
-        </Layout>
+          <Layout>
+            <DriverOnsiteImagesAdd />
+          </Layout>
         </ProtectedUserRoute >
 
       </ProtectedRoute>
     ),
-},
-,
-{
+  },
+  ,
+  {
     path: "/driverdashboard/drivermaintainance",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["driver", "admin" , "employee"]}>
+        <ProtectedUserRoute requiredRoles={["driver", "admin", "employee"]}>
 
-        <Layout>
-          <Maintainance isDriver={true}/>
-        </Layout>
+          <Layout>
+            <Maintainance isDriver={true} />
+          </Layout>
         </ProtectedUserRoute >
 
       </ProtectedRoute>
     ),
-},
+  },
   {
     path: "/dashboard/carDetailsForm",
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <CarDetailsForm />
-        </Layout>
+          <Layout>
+            <CarDetailsForm />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -153,14 +155,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
-      
-        <Layout>
-          <DeleteCarDetails />
-        </Layout>
+
+          <Layout>
+            <DeleteCarDetails />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
-      
+
     ),
   },
   {
@@ -169,9 +171,9 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <CustomerEnquiry />
-        </Layout>
+          <Layout>
+            <CustomerEnquiry />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -183,9 +185,9 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <AddNoticeImage />
-        </Layout>
+          <Layout>
+            <AddNoticeImage />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -197,23 +199,37 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <SellCarDetails />
-        </Layout>
+          <Layout>
+            <SellCarDetails />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
     ),
   },
   {
-    path: "/dashboard/officeDocuments",
+    path: "/dashboard/addOfficeDocuments",
     element: (
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <OfficeDocUpload />
-        </Layout>
+          <Layout>
+            <DocumentUpload />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/viewOfficeDocuments",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+          <Layout>
+            <DocumentView />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -225,9 +241,37 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-          <CostReport />
-        </Layout>
+          <Layout>
+            <CostReport />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/costReport/:id/addAdminDoc",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
+
+          <Layout>
+            <DocumentUpload />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/costReport/:id/viewAdminDoc",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
+
+          <Layout>
+            <DocumentView />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
@@ -239,12 +283,27 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
-        <Layout>
-           <EditVehicleDetailsForm/>
-        </Layout>
+          <Layout>
+            <EditVehicleDetailsForm />
+          </Layout>
         </ProtectedUserRoute>
 
       </ProtectedRoute>
+    ),
+  },
+  {
+    path: "dashboard/miscellaneous-costs",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+          <Layout>
+            <MiscellaneousCosts />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+
     ),
   },
   {
@@ -255,15 +314,15 @@ const router = createBrowserRouter([
       </Layout>
     ),
   },
-  
+
 ]);
 
 function App() {
   return (
-      <SearchProvider>
-        <ToastContainer />
-        <RouterProvider router={router} />
-      </SearchProvider>
+    <SearchProvider>
+      <ToastContainer />
+      <RouterProvider router={router} />
+    </SearchProvider>
   );
 }
 

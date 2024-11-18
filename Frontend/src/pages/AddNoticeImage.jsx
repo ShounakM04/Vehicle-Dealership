@@ -13,11 +13,17 @@ function AddNoticeImage() {
   const [isLoading, setIsLoading] = useState(false); // State for screen overlay
 
   // Fetch images function to be called on mount and after upload
+
   const fetchImages = async () => {
     try {
-      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice', {
+      let folderPath;
+      folderPath = 'Notices/'
+      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-images', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
+        params: {
+          folderPath: folderPath
         }
       });
       setFetchedImages(response.data);
@@ -107,10 +113,12 @@ function AddNoticeImage() {
         console.log('No unique ID found');
       }
 
+      const path = `Notices/${uniqueID}`
+
       await axios.delete(`https://vehicle-dealership.vercel.app/dashboard/delete-notice`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
-        }, params: { uniqueID: uniqueID }
+        }, params: { path: path }
       });
       toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
 

@@ -21,6 +21,7 @@ const InstallmentRoute = require("./adminRoutes/installments.route.js")
 const ProfitRoute = require("./adminRoutes/profit.route.js")
 const carDetailsEdit = require("./routes/carDetailsEdit.route.js")
 // const LogRoute = require('./adminRoutes/logs.route.js');
+const miscellaneousCostRoute = require('./adminRoutes/miscellaneousCosts.route.js')
 const LogDownloadRoute = require('./adminRoutes/logDownload.route.js')
 const { authenticateToken, authorizeEmployeeOrAdmin } = require("./controllers/userRole-auth.js");
 
@@ -72,11 +73,11 @@ app.use("/profits", ProfitRoute)
 app.use("/edit-fields", carDetailsEdit)
 app.use("/delete-image", Imageroute)
 app.use("/logs/today", LogDownloadRoute)
-
+app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,miscellaneousCostRoute);
 
 // Correct `app.listen` without req and res parameters
-app.listen(PORT, () => {
-    console.log(`Server connected to port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server connected to port ${PORT}`);
+// });
 
-// module.exports = app;
+module.exports = app;

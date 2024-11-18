@@ -109,5 +109,25 @@ async function getSoldCarDetails(req, res) {
     }
 }
 
+async function getTotalSellingPrice(req, res) {
+    try {
+        // Sum up the selling price from soldcarDetails
+        const query = 'SELECT SUM(selling_price) AS total_selling_price FROM soldcardetails';
+        
+        const result = await db.query(query);
 
-module.exports = { handleSellCar, getSoldCarDetails };
+        if (result.rows.length === 0 || result.rows[0].total_selling_price === null) {
+            return res.status(404).json({ message: 'No sold cars found' });
+        }
+
+        const totalSellingPrice = result.rows[0].total_selling_price;
+
+        res.status(200).json({ totalSellingPrice });
+    } catch (error) {
+        console.error("Error calculating total selling price:", error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+
+module.exports = { handleSellCar, getSoldCarDetails , getTotalSellingPrice};

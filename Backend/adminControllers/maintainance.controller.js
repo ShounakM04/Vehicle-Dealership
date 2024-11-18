@@ -3,7 +3,7 @@ const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
 async function handleGetMaintainanceDetails(req, res) {
     const registernumber = req.query.registernumber;
-    console.log("Received register number:", registernumber);
+    // console.log("Received register number:", registernumber);
 
     try {
         if (!registernumber) {
@@ -70,8 +70,8 @@ async function handleGetMaintainanceDetails(req, res) {
 
 async function handlePostMaintainanceDetails(req, res) {
     const { registernumber, description, price, role, maintainanceDate } = req.body;
-    console.log(req.body);
-    console.log(req.user); // Check if the user is correctly set
+    // console.log(req.body);
+    // console.log(req.user); // Check if the user is correctly set
 
     // Check for missing fields
     if (!registernumber || !description || !price || !maintainanceDate || !role) {
