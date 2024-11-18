@@ -24,7 +24,13 @@ const EditVehicleImages = ({ id }) => {
     // Fetch images function to be called on mount and after upload
     const fetchImages = async () => {
         try {
-            const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
+            const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                }
+            );
             const allImageUrls = response.data.images;
             setFetchedImages(allImageUrls);
 

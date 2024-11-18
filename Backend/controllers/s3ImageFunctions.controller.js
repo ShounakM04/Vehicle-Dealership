@@ -1,4 +1,4 @@
-const { uploadToS3 ,deleteObject} = require('../amazonS3/s3config');
+const { uploadToS3 ,deleteObject,listImagesInFolder,getObjectURL} = require('../amazonS3/s3config');
 
 // Controller to directly call uploadToS3Image and return pre-signed URL
 async function generatePresignedUploadUrl(req, res) {
@@ -44,4 +44,34 @@ async function handleDeleteImage(req, res) {
 }
 
 
-module.exports = { generatePresignedUploadUrl ,handleDeleteImage};
+async function handleGetImages(req, res) {
+    try {
+
+        // S3 folder structure for images (e.g., regisNum/VehicleImages/)
+        // const NoticeFolder = `Notices/`;
+        // let ImageFolder = 'Notices/';
+        const ImageFolder = req.query.folderPath;
+        console.log(ImageFolder)
+        
+        // Fetch image keys from the S3 folder
+        const ImagesKeys = await listImagesInFolder(ImageFolder);
+
+        // Generate signed URLs for other images, starting from 1
+        const ImagesPromises = ImagesKeys.map(async (key, index) => {
+            return await getObjectURL(key); // Generate URL for each image key
+        });
+
+       // Wait for all other image promises to resolve
+        const Images = await Promise.all(ImagesPromises);
+
+        res.json(Images);
+
+    } catch (error) {
+        console.log(`${error} : Error occurred while fetching the images`);
+        res.status(500).send("An error occurred while fetching the images");
+    }
+}
+
+
+
+module.exports = { generatePresignedUploadUrl ,handleDeleteImage,handleGetImages};

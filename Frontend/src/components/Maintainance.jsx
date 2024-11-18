@@ -48,7 +48,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
-                      Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
                     }
                 });
 

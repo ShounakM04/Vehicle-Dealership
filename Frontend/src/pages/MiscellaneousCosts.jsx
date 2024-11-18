@@ -61,12 +61,12 @@ const MiscellaneousCosts = () => {
           description,
           cost,
           date: new Date().toISOString(),
-        },{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
-              },
-        }
-        
+        }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
+      }
+
       );
       setDescription("");
       setCost("");
@@ -110,9 +110,8 @@ const MiscellaneousCosts = () => {
           />
           <button
             type="submit"
-            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={loading}
           >
             {loading ? "Adding..." : "Add Cost"}
@@ -126,7 +125,7 @@ const MiscellaneousCosts = () => {
           Miscellaneous Costs
         </h2>
         <hr className="border-t-2 border-gray-300 mb-2" />
-        
+
         <p>Filters:</p>
         <div className="mb-4 flex space-x-4">
           <select

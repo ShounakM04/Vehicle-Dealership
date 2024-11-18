@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // For getting the params from the URL
+import { useParams, useNavigate } from "react-router-dom"; // For getting the params from the URL
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,6 +14,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
   const [soldStatus, setSoldStatus] = useState();
+  const navigate = useNavigate();
   const [vehicleData, setvehicleData] = useState({
     buyingPrice: 12000,
     sellingPrice: 0,
@@ -60,7 +61,13 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
+          {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        }
+        );
         const { car, images, insurance, owner, onsiteImages } = response.data;
         setSoldStatus(response.data.car.status);
         setFetchedVehicleData(response.data);
@@ -168,7 +175,23 @@ const CostReport = () => {
           <h2 className="text-2xl font-bold mb-2">
             Vehicle Pricing & Maintenance Report
           </h2>
+          {isAdmin === true && (
+            <div className="ml-auto mb-4 flex space-x-4">
+              <button
+                onClick={() => navigate(`/dashboard/costReport/${id}/addAdminDoc`)}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Add Admin Doc
+              </button>
+              <button
+                onClick={() => navigate(`/dashboard/costReport/${id}/viewAdminDoc`)}
+                className="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                View Admin Docs
+              </button>
 
+            </div>
+          )}
           {/* Car Details */}
           {/* Car Details and Owner Details */}
           <div className="mb-2 p-4 bg-blue-200 text-blue-800 font-semibold rounded">

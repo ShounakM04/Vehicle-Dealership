@@ -38,7 +38,12 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`
+        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`,
+        {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+      }
       );
       setCarData(response.data);
       console.log(response.data);

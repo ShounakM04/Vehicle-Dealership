@@ -77,7 +77,13 @@ export default function Landing() {
   useEffect(() => {
     const fetchNoticeImages = async () => {
       try {
-        const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-notice');
+        let folderPath;
+        folderPath = 'Notices/'
+        const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-images', {
+          params: {
+            folderPath: folderPath
+          }
+        });
         const imageUrls = response.data;
 
         setNoticeImages(imageUrls);  // Set fetched image URLs
