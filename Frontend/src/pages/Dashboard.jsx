@@ -330,7 +330,7 @@ const Dashboard = () => {
             day: "numeric",
           })}
         </h2>
-        <div className="grid grid-cols-4 gap-5 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
   <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">
     <p>Vehicle Inventory: {totalCars}</p>
     <p>Sold Vehicles: {soldCarsCount}</p>
