@@ -1,9 +1,9 @@
 const express = require('express');
-const downloadLogFile = require('../adminControllers/logdownload.controller.js'); // import the controller
-
+const { GetObjectCommand } = require('@aws-sdk/client-s3');
+const s3Client = require('../amazonS3/s3config');  // Assuming you have a configured S3 client
 const router = express.Router();
+const downloadLogFile = require('../adminControllers/logdownload.controller.js')
 
-// Route to download today's log CSV file
-router.get('/', downloadLogFile);
+router.get('/download', downloadLogFile);
 
 module.exports = router;

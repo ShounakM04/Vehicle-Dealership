@@ -1,5 +1,5 @@
 const express = require("express");
-const logResReq = require("./log"); // Import without destructuring
+const logResReq = require("./log.js"); // Import without destructuring
 const cors = require("cors");
 const PORT = 8000
 
@@ -23,7 +23,7 @@ const carDetailsEdit = require("./routes/carDetailsEdit.route.js")
 // const LogRoute = require('./adminRoutes/logs.route.js');
 const miscellaneousCostRoute = require('./adminRoutes/miscellaneousCosts.route.js')
 const LogDownloadRoute = require('./adminRoutes/logDownload.route.js')
-const { authenticateToken, authorizeEmployeeOrAdmin } = require("./controllers/userRole-auth.js");
+const { authenticateToken, authorizeEmployeeOrAdmin ,authorizeDriverOrEmployeeOrAdmin, authorizeAdmin} = require("./controllers/userRole-auth.js");
 
 // const corsOptions = {
 //     origin: '*', // Allow all origins
@@ -55,29 +55,30 @@ app.use(express.urlencoded({ extended: false }));
 
 // Use your custom logging middleware
 // app.use(logResReq("logs.txt"));
-app.use(logResReq('./user_activity_log.csv'));
-// Using Routes
 app.use("/", HomeRoute);
-app.use("/upload", Imageroute);
+app.use("/login", LoginRoute);
+app.use(authenticateToken);
+app.use(logResReq());
+// Using Routes
+app.use("/upload",  authenticateToken, authorizeDriverOrEmployeeOrAdmin, Imageroute);
 app.use("/details",authenticateToken, authorizeEmployeeOrAdmin, DetailsRoute);
 app.use("/car", SpecificPageRoute);
 app.use("/delete", DeleteRecordRoute);
 app.use("/customer", customerQueryRoute);
-app.use("/login", LoginRoute);
-app.use("/register", RegistrationRoute);
+app.use("/register", authenticateToken, authorizeAdmin, RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
 // app.use("/insurance",InsuranceRoute);
-app.use("/maintainance", authenticateToken, authorizeEmployeeOrAdmin, MaintainanceRoute);
-app.use("/installments",authenticateToken, authorizeEmployeeOrAdmin, InstallmentRoute);
+app.use("/maintainance", MaintainanceRoute);
+app.use("/delete-image", Imageroute)
 app.use("/profits", ProfitRoute)
 app.use("/edit-fields", carDetailsEdit)
-app.use("/delete-image", Imageroute)
-app.use("/logs/today", LogDownloadRoute)
+app.use("/logs", authorizeAdmin, LogDownloadRoute)
 app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,miscellaneousCostRoute);
+app.use("/installments", InstallmentRoute);
 
 // Correct `app.listen` without req and res parameters
-// app.listen(PORT, () => {
-//     console.log(`Server connected to port ${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`Server connected to port ${PORT}`);
+});
 
-module.exports = app;
+// module.exports = app;

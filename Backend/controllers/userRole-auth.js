@@ -4,13 +4,16 @@ require('dotenv').config();
 
 const authenticateToken = (req,res,next) => {
     const token = req.header('Authorization')?.split(' ')[1];
+    // console.log("Token", token)
     if(!token) return res.status(401).send("Access Denied");
     // console.log("I");
-
+    
     try{
             const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
             req.user = decoded;
+            // console.log('Decoded User:', decoded);
             next();
+            
 
     }catch(error){
         console.log(`Error occured : ${error}`)

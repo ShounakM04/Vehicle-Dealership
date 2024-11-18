@@ -14,7 +14,6 @@ router.get("/", authenticateToken, authorizeEmployeeOrAdmin, handleDashboard);
 router.post("/sell-car", authenticateToken, authorizeEmployeeOrAdmin, handleSellCar);
 
 router.get('/total-selling-price', getTotalSellingPrice);
-router.get("/get-notice", handleGetNotice);
 router.delete("/delete-notice", authenticateToken, authorizeEmployeeOrAdmin, handleDeleteNotice)
 router.get("/sold-cars", authenticateToken, authorizeEmployeeOrAdmin, getSoldCarDetails)
 
