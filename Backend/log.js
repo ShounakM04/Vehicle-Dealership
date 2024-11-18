@@ -80,13 +80,17 @@ async function appendLogToS3(bucketName, filename, logEntry) {
 function logResReq() {
     return async (req, res, next) => {
         console.log("logResReq middleware triggered");
-        console.log("REQ.path", req.path)
+        console.log("REQ.path", req.path);
         const user = req?.user ? req?.user?.username : 'Anonymous';
         console.log("User:", user);
 
-        const timestamp = new Date().toISOString();
+        // Convert to IST (UTC+5:30)
+        const currentDate = new Date();
+        const istDate = new Date(currentDate.getTime() + (5.5 * 60 * 60 * 1000)); // Offset by 5 hours and 30 minutes
+        const timestamp = istDate.toISOString().replace('T', ' ').split('.')[0]; // Format timestamp without milliseconds
+        
         const bucketName = "cardealerbucket";
-        const filename = `logs/${new Date().toISOString().split("T")[0]}.csv`;
+        const filename = `logs/${timestamp.split(" ")[0]}.csv`; // Using date portion only
         console.log(`Bucket: ${bucketName}`);
         console.log(`Filepath: ${filename}`);
 
@@ -104,7 +108,6 @@ function logResReq() {
             const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} deleted vehicle with vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/customer')) {
-            // const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} added Customer query`;
         } else if (req.method === 'DELETE' && req.path.includes('customer')) {
             const vehicleNumber = req.body.registernumber || 'Unknown';
@@ -113,20 +116,13 @@ function logResReq() {
             const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} edited fields for vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/miscellaneous-costs/add')) {
-            const vehicleNumber = req.body.registernumber || 'Unknown';
-            logMessage = `${timestamp} : ${user} Added miscellaneous costs`;
+            logMessage = `${timestamp} : ${user} added miscellaneous costs`;
         } else if (req.method === 'POST' && req.path.includes('/dashboard/sell-car')) {
             const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} sold vehicle with vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/dashboard/delete-notice')) {
-            const vehicleNumber = req.body.registernumber || 'Unknown';
-            logMessage = `${timestamp} : ${user} Deleted notice image`;
+            logMessage = `${timestamp} : ${user} deleted notice image`;
         }
-        
-
-        
-
-       
 
         console.log("Log Message:", logMessage);
 

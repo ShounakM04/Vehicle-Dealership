@@ -226,7 +226,7 @@ const Dashboard = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink className="text-gray-600 font-semibold" to="/about">
+              <NavLink className="text-gray-600 font-semibold" to="/contact">
                 Contact Us
               </NavLink>
             </li>

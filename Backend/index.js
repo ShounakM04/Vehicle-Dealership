@@ -80,8 +80,8 @@ app.use("/installments", InstallmentRoute);
 app.use("/Description",handleAddDescriptionRoute)
 
 // Correct `app.listen` without req and res parameters
-// app.listen(PORT, () => {
-//     console.log(`Server connected to port ${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`Server connected to port ${PORT}`);
+});
 
-module.exports = app;
+// module.exports = app;

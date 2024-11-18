@@ -24,12 +24,21 @@ import AddEmployee from "./pages/AddEmployee";
 import MiscellaneousCosts from "./pages/MiscellaneousCosts";
 import DocumentView from "./components/DocumentView";
 import DocumentUpload from "./components/DocumentUpload";
+import ContactUs from "./pages/ContactUs";
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Layout>
         <Landing />
+      </Layout>
+    ),
+  },
+  {
+    path: "/contact",
+    element: (
+      <Layout>
+        <ContactUs />
       </Layout>
     ),
   },

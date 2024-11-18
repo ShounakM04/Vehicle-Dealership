@@ -151,11 +151,11 @@ function Navbar() {
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4">
               <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm">
-              <MdLocationOn className="h-6 w-6 rounded-full border-2 border" />
+              <MdLocationOn className="h-6 w-6 rounded-full border-2" />
               </a>
 
 
-              <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact us</a>
+              <a href="/contact" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact us</a>
               {loggedIn == true && (<Link to="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</Link>)}
               {loggedIn == true ?
                 (<Link to="#" onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log Out</Link>)
@@ -170,7 +170,7 @@ function Navbar() {
         <div className="sm:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
-            <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
+            {/* <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a> */}
             <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
             <a href="/contact" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
             <a href="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
