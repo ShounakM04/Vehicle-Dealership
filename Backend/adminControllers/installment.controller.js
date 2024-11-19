@@ -1,7 +1,7 @@
 const db = require("../models/database");
 
 async function addInstallments(req, res) {
-    const { registernumber, amount, installmentdate, } = req.body;
+    const { registernumber, amount, installmentdate, description, paymentMode, accountPaidTo } = req.body;
     try {
         const sellingPriceResponse = await db.query(
             `SELECT selling_price FROM soldcardetails WHERE registernumber = $1`,
@@ -14,22 +14,42 @@ async function addInstallments(req, res) {
 
         const selling_price = sellingPriceResponse.rows[0].selling_price;
 
-        // Insert the new installment
+        // Check if there is an existing installment for this registernumber
+        const result = await db.query(
+            `SELECT total_amount FROM installments WHERE registernumber = $1 LIMIT 1`,
+            [registernumber]
+        );
+
+        // If no records found, currentTotalAmount should be 0
+        let currentTotalAmount = result.rows.length > 0 ? result.rows[0].total_amount : 0;
+
+        // Calculate the new total_amount
+        let updatedTotalAmount = currentTotalAmount + amount;
+
+        // If there is a previous installment, update the total_amount; otherwise, just insert the new installment
+        if (currentTotalAmount > 0) {
+            // Update the total_amount for the registernumber
+            await db.query(
+                `UPDATE installments
+         SET total_amount = $1
+         WHERE registernumber = $2`,
+                [updatedTotalAmount, registernumber]
+            );
+        } else {
+            // If no previous installments, initialize total_amount with the first installment amount
+            updatedTotalAmount = amount;
+        }
+
+        // Insert the new installment with the updated total_amount
         const insertResponse = await db.query(
-            `INSERT INTO installments (registernumber, amount, installment_date, selling_price)
-             VALUES ($1, $2, $3, $4) RETURNING id`,
-            [registernumber, amount, installmentdate, selling_price]
+            `INSERT INTO installments (registernumber, amount, installment_date, selling_price, total_amount, description, payment_mode, account_paid_to)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+            [registernumber, amount, installmentdate, selling_price, updatedTotalAmount, description, paymentMode, accountPaidTo]
         );
 
         const installmentId = insertResponse.rows[0].id;
 
-        // Update the total_amount for this registernumber
-        await db.query(
-            `UPDATE installments
-             SET total_amount = total_amount + $1
-             WHERE registernumber = $2`,
-            [amount, registernumber]
-        );
+
 
         res.status(200).json({ message: "Installment added successfully", installmentId });
     } catch (error) {

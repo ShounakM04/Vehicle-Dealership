@@ -24,7 +24,6 @@ import AddEmployee from "./pages/AddEmployee";
 import DocumentUpload from "./components/DocumentUpload";
 import MiscellaneousCosts from "./pages/MiscellaneousCosts";
 import DocumentView from "./components/DocumentView";
-import DocumentUpload from "./components/DocumentUpload";
 import ContactUs from "./pages/ContactUs";
 const router = createBrowserRouter([
   {

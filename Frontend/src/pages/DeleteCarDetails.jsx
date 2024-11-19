@@ -28,9 +28,9 @@ function DeleteCarDetails() {
         `https://vehicle-dealership.vercel.app/car/${currDeleteId}`,
         {
           headers: {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
-      }
+        }
       );
       setCarData(response.data); // Store the fetched car data
       console.log(response.data); // Log the fetched car data

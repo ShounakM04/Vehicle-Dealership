@@ -15,6 +15,9 @@ export default function Installment({ carID, isAdmin }) {
   const [soldCarImages, setSoldCarImages] = useState([]);
   const [profit, setProfit] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const [description, setDescription] = useState('');
+  const [paymentMode, setPaymentMode] = useState('');
+  const [accountPaidTo, setAccountPaidTo] = useState('');
   // const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchCarDetails = async () => {
@@ -66,6 +69,9 @@ export default function Installment({ carID, isAdmin }) {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
+        description: description,
+        paymentMode: paymentMode,
+        accountPaidTo: accountPaidTo
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -77,14 +83,17 @@ export default function Installment({ carID, isAdmin }) {
         setInstallmentAmount("");
         setInstallmentDate("");
         setViewOption("view");
+        setDescription("");
+        setPaymentMode("");
+        setAccountPaidTo("");
         // Optionally fetch installments again
         fetchInstallments();
-        setUploading(false);
       }
     } catch (error) {
       toast.error("Failed to add installment. Please try again.");
       console.error(error);
     }
+    setUploading(false);
   };
 
   const formatDate = (dateString) => {
@@ -162,21 +171,28 @@ export default function Installment({ carID, isAdmin }) {
             >
               <div>
                 <p>
-                  <span className="font-medium">Owner: </span> {car.owner_name}
+                  <span className="font-medium">Buyer: </span> {car.owner_name}
                 </p>
                 <p>
-                  <span className="font-medium">Selling Price:</span>{" "}
-                  ₹{car.selling_price}
+                  <span className="font-medium">Selling Price:</span> ₹{car.selling_price}
                 </p>
                 <p>
-                  <span className="font-medium">Contact No:</span>{" "}
-                  {car.contact_no}
+                  <span className="font-medium">Contact No:</span> {car.contact_no}
                 </p>
                 <p>
-                  <span className="font-medium">Commission:</span>{" "}
-                  ₹{car.commission}
+                  <span className="font-medium">Commission:</span> ₹{car.commission}
+                </p>
+                <p>
+                  <span className="font-medium">Description:</span> {car.description}
+                </p>
+                <p>
+                  <span className="font-medium">Payment Mode:</span> {car.payment_mode}
+                </p>
+                <p>
+                  <span className="font-medium">Account Paid To:</span> {car.account_paid_to}
                 </p>
               </div>
+
               <div>
                 <p>
                   <span className="font-medium">Insurance Document:</span>{" "}
@@ -253,27 +269,58 @@ export default function Installment({ carID, isAdmin }) {
             <div className="max-h-60 overflow-y-auto">
               {installments.length > 0 ? (
                 installments.map((inst, index) => (
-                  <div
-                    key={index}
-                    className="p-4 border-b border-gray-200 flex items-center"
-                  >
-                    <span className="font-medium mr-2">{index + 1})</span>
-                    <span className="font-medium mr-2">Amount:</span>
-                    <span className="mr-14">{inst.amount}</span>
-                    <span className="font-medium mr-2">Date:</span>
-                    <span>{formatDate(inst.installment_date)}</span>
+                  <div key={index} className="p-4 border-b border-gray-200 mb-4">
+                    {/* Installment Index */}
+                    <div className="flex mb-2">
+                      <span className="font-medium text-lg mr-2">{index + 1})</span>
+                    </div>
+
+                    {/* Amount and Date side by side */}
+                    <div className="flex flex-wrap mb-2">
+                      <div className="w-full sm:w-1/2 mb-2 sm:mb-0 pr-2">
+                        <span className="font-medium min-w-[120px]">Amount : </span>
+                        <span className="break-words">{inst.amount}</span>
+                      </div>
+                      <div className="w-full sm:w-1/2 mb-2 sm:mb-0 pl-2">
+                        <span className="font-medium min-w-[120px]">Date : </span>
+                        <span className="break-words">{formatDate(inst.installment_date)}</span>
+                      </div>
+                    </div>
+
+                    {/* Payment Mode and Account Paid To side by side */}
+                    <div className="flex flex-wrap mb-2">
+                      <div className="w-full sm:w-1/2 mb-2 sm:mb-0 pr-2">
+                        <span className="font-medium min-w-[120px]">Payment Mode : </span>
+                        <span className="break-words">{inst.payment_mode}</span>
+                      </div>
+                      <div className="w-full sm:w-1/2 mb-2 sm:mb-0 pl-2">
+                        <span className="font-medium min-w-[120px]">Account Paid To : </span>
+                        <span className="break-words">{inst.account_paid_to}</span>
+                      </div>
+                    </div>
+
+                    {/* Description at the bottom */}
+                    <div className="w-full mb-2 sm:mb-0 pr-2">
+                      <span className="font-medium min-w-[120px]">Description : </span>
+                      <span className="break-words">{inst.description}</span>
+                    </div>
                   </div>
                 ))
               ) : (
                 <p className="p-2">No installments available</p>
               )}
             </div>
+
+            {/* Total Installment Amount */}
             <p className="p-2 text-xl">
               Total Installment Amount: {totalInstallmentAmount.toFixed(2)}
             </p>
           </div>
         </>
       )}
+
+
+
 
       {viewOption === "add" && (
         <div className="mt-6">
@@ -292,6 +339,8 @@ export default function Installment({ carID, isAdmin }) {
                 onChange={(e) => setInstallmentAmount(e.target.value)}
                 required
                 className="border border-gray-300 rounded p-2 w-full"
+                step="1"
+                min="0"
               />
             </div>
             <div className="mb-4">
@@ -306,6 +355,46 @@ export default function Installment({ carID, isAdmin }) {
                 className="border border-gray-300 rounded p-2 w-full"
               />
             </div>
+
+            {/* New Fields */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">
+                Description
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                className="border border-gray-300 rounded p-2 w-full"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">
+                Payment Mode
+              </label>
+              <input
+                type="text"
+                value={paymentMode}
+                onChange={(e) => setPaymentMode(e.target.value)}
+                required
+                className="border border-gray-300 rounded p-2 w-full"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">
+                Account Paid To
+              </label>
+              <input
+                type="text"
+                value={accountPaidTo}
+                onChange={(e) => setAccountPaidTo(e.target.value)}
+                required
+                className="border border-gray-300 rounded p-2 w-full"
+              />
+            </div>
+
             <button
               type="submit"
               className="bg-green-500 text-white p-2 rounded w-full"
@@ -316,6 +405,7 @@ export default function Installment({ carID, isAdmin }) {
           </form>
         </div>
       )}
+
     </>
   );
 }

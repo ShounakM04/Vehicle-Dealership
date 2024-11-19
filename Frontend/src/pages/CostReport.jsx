@@ -13,7 +13,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
-  const navigate = useNavigate();
   const [soldStatus, setSoldStatus] = useState();
   const navigate = useNavigate();
   const [vehicleData, setvehicleData] = useState({
@@ -65,9 +64,9 @@ const CostReport = () => {
         const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
           {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
-        }
+          }
         );
         const { car, images, insurance, owner, onsiteImages } = response.data;
         setSoldStatus(response.data.car.status);
@@ -170,8 +169,8 @@ const CostReport = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh)]">
-      <div className="flex flex-col lg:flex-row p-5 bg-gray-100 min-h-[calc(100vh)]">
+    <div className="flex flex-col">
+      <div className="flex flex-col lg:flex-row p-5 bg-gray-100 ">
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-2 lg:mb-0 ">
           <h2 className="text-2xl font-bold mb-2">
             Vehicle Details

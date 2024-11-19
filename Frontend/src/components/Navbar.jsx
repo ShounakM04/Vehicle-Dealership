@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchContext } from '../context/SearchContext.jsx';
 import { jwtDecode } from "jwt-decode";
 import { toast } from 'react-toastify';
-import { MdLocationOn } from 'react-icons/md';  
-
+import { MdLocationOn } from 'react-icons/md';
+import axios from 'axios';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,13 +12,44 @@ function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation(); // Get current location
   const navigate = useNavigate();
-
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setLoggedIn(true);
-    }
-  })
+    const validateToken = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setLoggedIn(false); // No token found, user is not logged in
+        return;
+      }
+
+      try {
+        // Make the request with the correct Authorization header
+        const response = await axios.post(
+          "https://vehicle-dealership.vercel.app/validate-token",
+          {}, // No body needed for this request
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Check if the response status is 200 (successful)
+        if (response.status === 200) {
+          setLoggedIn(true); // Token is valid
+        } else {
+          // Token is invalid or expired
+          localStorage.removeItem("authToken"); // Remove invalid token
+          setLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error validating token:", error);
+        localStorage.removeItem("authToken"); // Remove token if any error occurs
+        setLoggedIn(false); // Handle errors gracefully
+      }
+    };
+
+    validateToken();
+  }, []);
+
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -150,8 +181,11 @@ function Navbar() {
 
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4">
-              <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm">
-              <MdLocationOn className="h-6 w-6 rounded-full border-2" />
+              <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MdLocationOn className="h-6 w-6 rounded-full border-2" />
               </a>
 
 

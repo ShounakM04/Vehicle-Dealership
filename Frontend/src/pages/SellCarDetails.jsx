@@ -25,7 +25,11 @@ function SellCarDetails() {
     insuranceDocument: [],
     carPhotos: [], // Change to array for multiple photos
     carID: "",
+    description: "", // New field for description
+    paymentMode: "", // New field for payment mode
+    accountPaidTo: "", // New field for account paid to
   });
+
   const [submittedID, setSubmittedID] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -41,9 +45,9 @@ function SellCarDetails() {
         `https://vehicle-dealership.vercel.app/car/${currDeleteId}`,
         {
           headers: {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
-      }
+        }
       );
       setCarData(response.data);
       console.log(response.data);
@@ -271,6 +275,8 @@ function SellCarDetails() {
                 value={formData.sellingPrice}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                step="1"
+                min="0"
               />
             </div>
 
@@ -325,6 +331,8 @@ function SellCarDetails() {
                 value={formData.downPayment}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                step="1"
+                min="0"
               />
             </div>
 
@@ -343,6 +351,8 @@ function SellCarDetails() {
                 value={formData.totalInstallments}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                step="1"
+                min="0"
               />
             </div>
 
@@ -361,6 +371,8 @@ function SellCarDetails() {
                 value={formData.installmentAmount}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                step="1"
+                min="0"
               />
             </div>
 
@@ -379,6 +391,63 @@ function SellCarDetails() {
                 value={formData.commission}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                step="1"
+                min="0"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="description"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                required
+                value={formData.description}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                rows="4"  // Set the number of rows for the textarea (optional)
+              ></textarea>
+
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="paymentMode"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Payment Mode
+              </label>
+              <input
+                type="text"
+                id="paymentMode"
+                name="paymentMode"
+                required
+                value={formData.paymentMode}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="accountPaidTo"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Account Paid To
+              </label>
+              <input
+                type="text"
+                id="accountPaidTo"
+                name="accountPaidTo"
+                required
+                value={formData.accountPaidTo}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
 
@@ -394,7 +463,6 @@ function SellCarDetails() {
                 id="insuranceDocument"
                 name="insuranceDocument"
                 multiple
-                // accept=".pdf, .doc, .docx"
                 onChange={handleFileChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
@@ -426,6 +494,7 @@ function SellCarDetails() {
               Sell Car
             </button>
           </form>
+
         </div>
       )}
 

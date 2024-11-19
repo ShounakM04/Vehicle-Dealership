@@ -17,9 +17,9 @@ function CarDetails() {
         const response = await axios.get(`https://vehicle-dealership.vercel.app/landingcar/${params.id}`,
           {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
-        }
+          }
         );
         if (response.status === 200) {
           setCarData(response.data);

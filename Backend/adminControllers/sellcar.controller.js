@@ -17,7 +17,10 @@ async function handleSellCar(req, res) {
             downPayment,
             totalInstallments,
             installmentAmount,
-            commission
+            commission,
+            description, 
+            paymentMode,
+            accountPaidTo,
         } = req.body;
 
         console.log("In controller: CarID - " + carID);
@@ -32,9 +35,9 @@ async function handleSellCar(req, res) {
         await db.query(
             `INSERT INTO soldcardetails (
                 registernumber, selling_price, owner_name, contact_no, 
-                down_payment, total_installments, installment_amount, commission
+                down_payment, total_installments, installment_amount, commission,description,payment_mode,account_paid_to
             ) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10,$11) 
             RETURNING *`,
             [
                 carID,
@@ -45,6 +48,9 @@ async function handleSellCar(req, res) {
                 totalInstallments,
                 installmentAmount,
                 commission,
+                description, 
+                paymentMode,
+                accountPaidTo,
             ]
         );
 
@@ -113,7 +119,7 @@ async function getTotalSellingPrice(req, res) {
     try {
         // Sum up the selling price from soldcarDetails
         const query = 'SELECT SUM(selling_price) AS total_selling_price FROM soldcardetails';
-        
+
         const result = await db.query(query);
 
         if (result.rows.length === 0 || result.rows[0].total_selling_price === null) {
@@ -130,4 +136,4 @@ async function getTotalSellingPrice(req, res) {
 }
 
 
-module.exports = { handleSellCar, getSoldCarDetails , getTotalSellingPrice};
+module.exports = { handleSellCar, getSoldCarDetails, getTotalSellingPrice };

@@ -26,6 +26,8 @@ const LogDownloadRoute = require('./adminRoutes/logDownload.route.js')
 const handleAddDescriptionRoute =  require("./routes/addImageDescription.route.js") 
 const unauthorizedSpecificCar = require("./routes/unauthorizedSpecificCar.route.js")
 const { authenticateToken, authorizeEmployeeOrAdmin ,authorizeDriverOrEmployeeOrAdmin, authorizeAdmin} = require("./controllers/userRole-auth.js");
+const ValidateTokenRoute = require("./routes/ValidateToken.route.js")
+
 
 // const corsOptions = {
 //     origin: '*', // Allow all origins
@@ -59,6 +61,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(logResReq("logs.txt"));
 app.use("/", HomeRoute);
 app.use("/login", LoginRoute);
+app.use('/validate-token',ValidateTokenRoute)
 app.use("/landingcar",unauthorizedSpecificCar )
 app.use(authenticateToken);
 app.use(logResReq());
