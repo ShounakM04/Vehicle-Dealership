@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "https://vehicle-dealership.vercel.app/validate-token",
+          "http://localhost:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {
@@ -102,7 +102,7 @@ function Navbar() {
       // Redirect to the login page
       // window.location.href = '/admin';
       // navigate("/admin");
-      toast.success('Logged out successfully!');
+      // toast.success('Logged out successfully!');
       setLoggedIn(false);
 
     } catch (error) {

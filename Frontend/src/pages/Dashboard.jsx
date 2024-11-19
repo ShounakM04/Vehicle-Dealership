@@ -180,8 +180,11 @@ const Dashboard = () => {
   const currentDate = new Date();
   const soldCarsCount = carDetails.filter((car) => car.status === true).length;
   const totalCars = carDetails.filter((car) => car.status === false).length;
+
+
+
   return (
-    <div className="min-h-screen bg-blue-100 flex flex-col lg:flex-row">
+    <div className="bg-blue-100 flex flex-col lg:flex-row">
       {/* {console.log("HI", username)} */}
       <div
         className={`${isSidebarOpen ? "block" : "hidden"
@@ -273,8 +276,8 @@ const Dashboard = () => {
         </button>
       </div>
 
-      <div className="flex-1 p-5 lg:p-10">
-        <div className="flex justify-between mb-5">
+      <div className="flex-1 p-5 lg:p-5">
+        <div className="flex justify-between mb-3 ">
           <h2 className="text-2xl font-bold">Dashboard</h2>
 
           <div className="flex items-center space-x-2">
@@ -286,7 +289,7 @@ const Dashboard = () => {
             <span>Nikhil Motors</span> */}
           </div>
         </div>
-        <div className="ml-auto mb-4 flex space-x-4">
+        <div className="ml-auto mb-3 flex space-x-4">
           {userRole === "Admin" && (
             <>
               <button
@@ -319,16 +322,16 @@ const Dashboard = () => {
               </button>
             </>
           )}
+          <h2 className="">
+            {currentDate.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </h2>
         </div>
-        <h2 className="mb-4">
-          {currentDate.toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
@@ -367,9 +370,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
-          <h3 className="text-lg font-semibold mb-3">Car Details</h3>
+          <h3 className="text-lg font-semibold mb-2">Car Details</h3>
 
           {/* search section */}
           <div className="relative mx-auto w-full max-w-md ml-0 mb-4">
@@ -398,54 +400,58 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="text-left bg-gray-200">
-                <th className="p-2">Owner Name</th>
-                <th className="p-2">Email</th>
-                <th className="p-2">Phone No.</th>
-                <th className="p-2">Vehicle Type</th>
-                <th className="p-2">Vehicle Name</th>
-                <th className="p-2">Registration No.</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">View</th>
-                <th className="p-2">Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {carDetails.map((car, index) => (
-                <tr key={index} className="border-b">
-                  <td className="p-2">{car.ownername}</td>
-                  <td className="p-2">{car.owneremail}</td>
-                  <td className="p-2">{car.ownerphone}</td>
-                  <td className="p-2">{car.carmake}</td>
-                  <td className="p-2">{car.carname}</td>
-                  <td className="p-2">{car.registernumber}</td>
-                  <td className="p-2">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${car.status === true
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                        }`}
-                    >
-                      {car.status === true ? "sold" : "Available"}
-                    </span>
-                  </td>
-                  <td className="p-2">
-                    <button onClick={() => handleView(car.registernumber)}>
-                      <i className={"fas fa-eye"}></i>
-                    </button>
-                  </td>
-                  <td className="p-2">
-                    <button onClick={() => handleEdit(car.registernumber)}>
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
+          {/* Table Section with Scroll */}
+          <div className="overflow-y-auto max-h-[calc(5*3.5rem)]"> {/* Limit the table height to 5 rows */}
+            <table className="w-full table-auto">
+              <thead className="sticky top-0 bg-gray-200 z-10">
+                <tr className="text-left">
+                  <th className="p-2">Owner Name</th>
+                  <th className="p-2">Email</th>
+                  <th className="p-2">Phone No.</th>
+                  <th className="p-2">Vehicle Type</th>
+                  <th className="p-2">Vehicle Name</th>
+                  <th className="p-2">Registration No.</th>
+                  <th className="p-2">Status</th>
+                  <th className="p-2">View</th>
+                  <th className="p-2">Edit</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {carDetails.map((car, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="p-2">{car.ownername}</td>
+                    <td className="p-2">{car.owneremail}</td>
+                    <td className="p-2">{car.ownerphone}</td>
+                    <td className="p-2">{car.carmake}</td>
+                    <td className="p-2">{car.carname}</td>
+                    <td className="p-2">{car.registernumber}</td>
+                    <td className="p-2">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${car.status === true
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                          }`}
+                      >
+                        {car.status === true ? "sold" : "Available"}
+                      </span>
+                    </td>
+                    <td className="p-2">
+                      <button onClick={() => handleView(car.registernumber)}>
+                        <i className={"fas fa-eye"}></i>
+                      </button>
+                    </td>
+                    <td className="p-2">
+                      <button onClick={() => handleEdit(car.registernumber)}>
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+
       </div>
     </div>
   );

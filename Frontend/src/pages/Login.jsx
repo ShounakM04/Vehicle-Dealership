@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import { toast } from "react-toastify";
+
 
 
 function Login() {
@@ -25,9 +25,9 @@ function Login() {
             return;
         }
 
-        //https://vehicle-dealership.vercel.app/
-        //https://vehicle-dealership.vercel.app/
-        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
+        //http://localhost:8000/
+        //http://localhost:8000/
+        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)
@@ -41,7 +41,7 @@ function Login() {
             });
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
-            toast.success("Login successful", { position: "top-center", autoClose: 3000 });
+            alert("Login Successful");
 
 
             let decodedToken;
@@ -86,7 +86,7 @@ function Login() {
                 setErrorMessage("There was an error during the login process.");
             }
 
-            toast.error("Login failed.", { position: "top-center", autoClose: 2000 });
+            // toast.error("Login failed.", { position: "top-center", autoClose: 2000 });
         }
         setIsLoading(false)
 

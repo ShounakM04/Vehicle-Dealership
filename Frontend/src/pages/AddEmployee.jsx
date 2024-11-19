@@ -25,7 +25,7 @@ function AddEmployee() {
             return;
         }
 
-        const endpoint = "https://vehicle-dealership.vercel.app/register?isEmployee=true"; // Update with your actual endpoint
+        const endpoint = "http://localhost:8000/register?isEmployee=true"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);
@@ -43,10 +43,10 @@ function AddEmployee() {
 
             const response = await axios.post(endpoint, requestBody, {
                 headers: {
-                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
             });
-            
+
             toast.success("Added Driver successfully", { position: "top-center", autoClose: 3000 });
             setIsLoading(false);
         } catch (error) {
