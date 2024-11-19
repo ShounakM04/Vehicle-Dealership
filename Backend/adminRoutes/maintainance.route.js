@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.get("/",authenticateToken, authorizeEmployeeOrAdmin,handleGetMaintainanceDetails);
 
-router.post("/",authenticateToken, authorizeDriverOrEmployeeOrAdmin, logResReq("./user_activity_log.csv"), handlePostMaintainanceDetails);
+router.post("/",authenticateToken, authorizeDriverOrEmployeeOrAdmin, handlePostMaintainanceDetails);
 
 module.exports = router;

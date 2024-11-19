@@ -92,7 +92,11 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://vehicle-dealership.vercel.app/car/${currId}`
+                `https://vehicle-dealership.vercel.app/car/${currId}`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                }
             );
             setCarData(response.data); // Store the fetched car data
             console.log(response.data); // Log the fetched car data

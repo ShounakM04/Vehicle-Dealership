@@ -1,7 +1,7 @@
 const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 require("dotenv").config();
-
+const { format } = require('date-fns');
 
 
 // Initialize S3 client with specific configurations
@@ -56,7 +56,7 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
 
             // Check if data.Contents exists and has items
             if (!data.Contents || data.Contents.length === 0) {
-                console.log(`No images found for path ${path}`);
+                // console.log(`No images found for path ${path}`);
                 return []; // Return an empty array if no images found
             }
 
@@ -84,4 +84,66 @@ async function  deleteObject(filename) {
     
 }
 
-module.exports = { uploadToS3,getObjectURL ,listImagesInFolder,deleteObject};
+
+
+async function uploadLogsToS3() {
+    const todayDate = format(new Date(), 'yyyy-MM-dd');
+    const logFilePath = path.join(__dirname, `../logs/${todayDate}.csv`);
+
+    // Deleting the log file from two days ago
+    const twoDaysAgoDate = format(subDays(new Date(), 1), 'yyyy-MM-dd'); // Date two days ago
+    const twoDaysAgoLogFile = `logs/${twoDaysAgoDate}.csv`;
+    await deleteObject(twoDaysAgoLogFile);
+
+    // Check if today's log file exists
+    if (fs.existsSync(logFilePath)) {
+        const logData = fs.readFileSync(logFilePath);
+
+        const s3Params = {
+            Bucket: "cardealerbucket",
+            Key: `logs/${todayDate}.csv`,
+            Body: logData,
+            ContentType: "text/csv",
+        };
+
+        const command = new PutObjectCommand(s3Params);
+
+        try {
+            await s3Client.send(command);
+            console.log(`Log file for ${todayDate} uploaded successfully.`);
+        } catch (error) {
+            console.error("Error uploading logs:", error);
+            throw error;
+        }
+    } else {
+        console.log(`No log file found for ${todayDate}.`);
+    }
+}
+
+async function downloadTodaysLogsFromS3() {
+    const todayDate = format(new Date(), 'yyyy-MM-dd');
+    const command = new GetObjectCommand({
+        Bucket: "cardealerbucket",
+        Key: `logs/${todayDate}.csv`,
+    });
+
+    try {
+        const { Body } = await s3Client.send(command);
+        const logs = await streamToString(Body);
+        return logs;
+    } catch (error) {
+        console.error("Error downloading logs:", error);
+        throw error;
+    }
+}
+
+function streamToString(stream) {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        stream.on("data", chunk => chunks.push(chunk));
+        stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+        stream.on("error", reject);
+    });
+}
+
+module.exports = { s3Client, uploadToS3,getObjectURL ,listImagesInFolder,deleteObject, uploadLogsToS3, downloadTodaysLogsFromS3};

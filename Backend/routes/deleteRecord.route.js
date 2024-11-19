@@ -39,7 +39,7 @@ DeleteRecordRoute.get("/",  (req, res) => {
 //     res.send(`Entered registered number is : ${registernumber}`)
 // });
 
-DeleteRecordRoute.delete("/",async (req, res) => {
+DeleteRecordRoute.delete("/car",async (req, res) => {
     try {
         const regisNum = req.query.deletedID;
         console.log(regisNum)

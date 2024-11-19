@@ -54,7 +54,13 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`);
+                const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                        }
+                    }
+                );
                 const { car, images, insurance, owner } = response.data;
                 setVehicleData((prevData) => ({
                     ...prevData,

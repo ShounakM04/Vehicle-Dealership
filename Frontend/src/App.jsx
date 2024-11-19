@@ -24,12 +24,22 @@ import AddEmployee from "./pages/AddEmployee";
 import DocumentUpload from "./components/DocumentUpload";
 import MiscellaneousCosts from "./pages/MiscellaneousCosts";
 import DocumentView from "./components/DocumentView";
+import DocumentUpload from "./components/DocumentUpload";
+import ContactUs from "./pages/ContactUs";
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Layout>
         <Landing />
+      </Layout>
+    ),
+  },
+  {
+    path: "/contact",
+    element: (
+      <Layout>
+        <ContactUs />
       </Layout>
     ),
   },
@@ -236,6 +246,34 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/dashboard/addOfficeDocuments",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+          <Layout>
+            <DocumentUpload />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/viewOfficeDocuments",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+          <Layout>
+            <DocumentView />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/dashboard/costReport/:id",
     element: (
       <ProtectedRoute>
@@ -243,6 +281,34 @@ const router = createBrowserRouter([
 
           <Layout>
             <CostReport />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/costReport/:id/addAdminDoc",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
+
+          <Layout>
+            <DocumentUpload />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/costReport/:id/viewAdminDoc",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
+
+          <Layout>
+            <DocumentView />
           </Layout>
         </ProtectedUserRoute>
 

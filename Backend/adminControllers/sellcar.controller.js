@@ -84,7 +84,7 @@ async function getSoldCarDetails(req, res) {
 
         const result = await db.query(query, params);
 
-        console.log("sellcar.cotroller : " + carID)
+        // console.log("sellcar.cotroller : " + carID)
 
         // S3 folder structure for images (e.g., regisNum/VehicleImages/)
         const soldCarImagesFolder = `${carID}/SoldCarImages/`;

@@ -41,7 +41,12 @@ function AddDriver() {
                 userDesignation: 'Driver'   // Hardcoded as 'Driver'
             };
 
-            const response = await axios.post(endpoint, requestBody);
+            const response = await axios.post(endpoint, requestBody,
+                {
+                    headers: {
+                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+        });
             toast.success("Added Driver successfully", { position: "top-center", autoClose: 3000 });
             setIsLoading(false);
         } catch (error) {

@@ -7,7 +7,7 @@ const logResReq = require('../log.js')
 
 const router = express.Router();
 
-router.post("/", addInstallments);
-router.get("/",authenticateToken, authorizeEmployeeOrAdmin, logResReq("./user_activity_log.csv"), getInstallments);
+router.post("/", logResReq(), addInstallments);
+router.get("/",logResReq(), getInstallments);
 
 module.exports = router

@@ -31,7 +31,7 @@ export default function DocumentView() {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-images', {
+            const response1 = await axios.get('https://vehicle-dealership.vercel.app/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },

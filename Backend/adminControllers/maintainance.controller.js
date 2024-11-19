@@ -35,7 +35,7 @@ async function handleGetMaintainanceDetails(req, res) {
 
         // Fetch image keys from the S3 folder
         const maintainanceDocsKeys = await listImagesInFolder(maintainanceFolder);
-        console.log(`Image Keys for ${registernumber}: ${maintainanceDocsKeys}`);
+        // console.log(`Image Keys for ${registernumber}: ${maintainanceDocsKeys}`);
 
         // Generate signed URLs for other images, starting from 1
         const maintainanceDocsPromises = maintainanceDocsKeys.map(async (key, index) => {

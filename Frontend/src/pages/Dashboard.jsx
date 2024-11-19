@@ -68,7 +68,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("https://vehicle-dealership.vercel.app/logs/today", {
+      const response = await fetch("https://vehicle-dealership.vercel.app/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -142,7 +142,7 @@ const Dashboard = () => {
         "https://vehicle-dealership.vercel.app/miscellaneous-costs/current-month",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         }
       ); // Endpoint for miscellaneous costs
@@ -224,7 +224,7 @@ const Dashboard = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink className="text-gray-600 font-semibold" to="/about">
+              <NavLink className="text-gray-600 font-semibold" to="/contact">
                 Contact Us
               </NavLink>
             </li>
@@ -320,43 +320,53 @@ const Dashboard = () => {
             </>
           )}
         </div>
-        <h2 className='mb-4'>{currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>
+        <h2 className="mb-4">
+          {currentDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          <div className="bg-purple-300  pl-5 p-3 rounded text-white min-h-4">
-            <p>Vehicle Inventory: {totalCars}</p>
-            <p>Sold Vehicles: {soldCarsCount}</p>
-          </div>
-          <div
-            onClick={() => navigate("/dashboard/miscellaneous-costs")}
-            className="bg-blue-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-blue-400 transition-all transform hover:scale-105 active:scale-95"
-          >
-            <p>Miscellaneous Expenses This Month</p>
-            <p className="text-lg font-bold">₹{monthlyCost}</p>
-          </div>
+  <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">
+    <p>Vehicle Inventory: {totalCars}</p>
+    <p>Sold Vehicles: {soldCarsCount}</p>
+  </div>
 
-          <div className="bg-orange-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-orange-400 transition-all transform hover:scale-105 active:scale-95">
-            <p>Total Sold Vehicles Cost</p>
-            <p className="text-lg font-bold">₹{totalSellingPrice}</p> {/* Display total selling price */}
-          </div>
-          <div
-            className="bg-green-400 p-3 rounded text-white min-h-4 "
+  <div
+    onClick={() => navigate("/dashboard/miscellaneous-costs")}
+    className="bg-blue-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-blue-400 transition-all transform hover:scale-105 active:scale-95"
+  >
+    <p>Miscellaneous Expenses This Month</p>
+    <p className="text-lg font-bold">₹{monthlyCost}</p>
+  </div>
 
-          >
-            <p> Office Documents</p>
-            <div className="py-1 flex space-x-4">
-              <button
-                onClick={() => navigate('/dashboard/addOfficeDocuments')}
-                className="text-white px-2 py-2 rounded border cursor-pointer hover:bg-green-500 transition-all transform hover:scale-105 active:scale-95"
-              >Add Docs</button>
+  <div className="bg-orange-300 p-3 rounded text-white min-h-4">
+    <p>Total Sold Vehicles Cost</p>
+    <p className="text-lg font-bold">₹{totalSellingPrice}</p>
+    {/* Display total selling price */}
+  </div>
 
-              <button
-                onClick={() => navigate('/dashboard/viewOfficeDocuments')}
-                className="text-white px-2 py-2 rounded border cursor-pointer hover:bg-green-500 transition-all transform hover:scale-105 active:scale-95"
-              >View Docs</button>
-            </div>
-          </div>
+  <div className="bg-green-400 p-3 rounded text-white min-h-4">
+    <p>Office Documents</p>
+    <div className="py-1 flex space-x-4 flex-nowrap">
+      <button
+        onClick={() => navigate("/dashboard/addOfficeDocuments")}
+        className="text-white px-2 py-2 rounded border cursor-pointer hover:bg-green-500 transition-all transform hover:scale-105 active:scale-95"
+      >
+        Add Docs
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/viewOfficeDocuments")}
+        className="text-white px-2 py-2 rounded border cursor-pointer hover:bg-green-500 transition-all transform hover:scale-105 active:scale-95"
+      >
+        View Docs
+      </button>
+    </div>
+  </div>
+</div>
 
-        </div>
 
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-3">Car Details</h3>

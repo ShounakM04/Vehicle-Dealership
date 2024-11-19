@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", authenticateToken, authorizeEmployeeOrAdmin, handleDashboard);
 router.post("/sell-car", authenticateToken, authorizeEmployeeOrAdmin, handleSellCar);
 router.get('/total-selling-price', getTotalSellingPrice);
-router.get("/get-images", handleGetImages);
+// router.get("/get-images", handleGetImages);
 router.delete("/delete-notice", authenticateToken, authorizeEmployeeOrAdmin, handleDeleteImage)
 router.get("/sold-cars", authenticateToken, authorizeEmployeeOrAdmin, getSoldCarDetails)
 

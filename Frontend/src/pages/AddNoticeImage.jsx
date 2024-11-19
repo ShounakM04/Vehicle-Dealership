@@ -18,7 +18,7 @@ function AddNoticeImage() {
     try {
       let folderPath;
       folderPath = 'Notices/'
-      const response = await axios.get('https://vehicle-dealership.vercel.app/dashboard/get-images', {
+      const response = await axios.get('https://vehicle-dealership.vercel.app/get-images', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
