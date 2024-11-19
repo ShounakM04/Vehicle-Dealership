@@ -25,9 +25,9 @@ function Login() {
             return;
         }
 
-        //http://localhost:8000/
-        //http://localhost:8000/
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        //https://vehicle-dealership.vercel.app/
+        //https://vehicle-dealership.vercel.app/
+        const endpoint = "https://vehicle-dealership.vercel.app/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)

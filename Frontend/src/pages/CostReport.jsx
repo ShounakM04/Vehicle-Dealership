@@ -61,7 +61,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`,
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -128,7 +128,7 @@ const CostReport = () => {
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
-      const response = await axios.get("http://localhost:8000/maintainance", {
+      const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`

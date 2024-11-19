@@ -24,7 +24,7 @@ export default function Installment({ carID, isAdmin }) {
     try {
       console.log("Params : " + carID);
       const response = await axios.get(
-        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
+        `https://vehicle-dealership.vercel.app/dashboard/sold-cars`, // Update to your actual endpoint
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -46,7 +46,7 @@ export default function Installment({ carID, isAdmin }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`http://localhost:8000/installments`, {
+      const response = await axios.get(`https://vehicle-dealership.vercel.app/installments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -65,7 +65,7 @@ export default function Installment({ carID, isAdmin }) {
     e.preventDefault();
     setUploading(true);
     try {
-      const response = await axios.post("http://localhost:8000/installments", {
+      const response = await axios.post("https://vehicle-dealership.vercel.app/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -134,7 +134,7 @@ export default function Installment({ carID, isAdmin }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/profits", {
+      const response = await axios.get("https://vehicle-dealership.vercel.app/profits", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },

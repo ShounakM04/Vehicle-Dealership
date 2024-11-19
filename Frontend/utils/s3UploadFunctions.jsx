@@ -7,7 +7,7 @@ export async function getUploadURL(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
+    const response = await axios.get('https://vehicle-dealership.vercel.app/upload/generate-upload-url', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -53,7 +53,7 @@ export async function deleteFromS3(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.delete('http://localhost:8000/delete-image', {
+    const response = await axios.delete('https://vehicle-dealership.vercel.app/delete-image', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }
