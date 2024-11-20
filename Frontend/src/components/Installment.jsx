@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 
-export default function Installment({ carID, isAdmin }) {
+export default function Installment({ carID, isAdmin, soldStatus }) {
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
   const [carDetails, setCarDetails] = useState([]);
@@ -106,31 +106,51 @@ export default function Installment({ carID, isAdmin }) {
     0
   );
 
-  if (carID) {
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true); // Start loading
-        try {
-          await fetchInstallments(); // Fetch installments
-          await fetchCarDetails(); // Fetch car details
-        } catch (err) {
-          console.error(
-            "Error fetching data:",
-            err.response ? err.response.data : err.message
-          );
-          setError("Error fetching data");
-        } finally {
-          setLoading(false); // End loading
+  // if (carID) {
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       setLoading(true); // Start loading
+  //       try {
+  //         await fetchInstallments(); // Fetch installments
+  //         // await fetchCarDetails(); // Fetch car details
+  //       } catch (err) {
+  //         console.error(
+  //           "Error fetching data:",
+  //           err.response ? err.response.data : err.message
+  //         );
+  //         setError("Error fetching data");
+  //       } finally {
+  //         setLoading(false); // End loading
+  //       }
+  //     };
+
+  //     fetchData();
+
+
+  //     console.log(insuranceDoc);
+  //   }, [carID]);
+  // }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // await fetchInstallments();
+        if (soldStatus) {
+          await fetchCarDetails(); // Fetch car details when soldStatus is true
+          await fetchInstallments();
+          await fetchProfit();
         }
-      };
+      } catch (err) {
+        console.error("Error fetching data:", err.response ? err.response.data : err.message);
+        setError("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchData();
-
-
-      console.log(insuranceDoc);
-    }, [carID]);
-  }
-
+    fetchData();
+  }, [carID, soldStatus]);
 
   const fetchProfit = async () => {
     try {
@@ -147,11 +167,11 @@ export default function Installment({ carID, isAdmin }) {
     }
   };
 
-  useEffect(() => {
-    if (carID) {
-      fetchProfit();
-    }
-  }, [carID]);
+  // useEffect(() => {
+  //   if (carID) {
+  //     fetchProfit();
+  //   }
+  // }, [carID]);
 
   function abs(num) {
     return num > 0 ? num : -num;

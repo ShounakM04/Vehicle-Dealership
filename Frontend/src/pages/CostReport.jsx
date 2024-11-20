@@ -344,7 +344,7 @@ const CostReport = () => {
           {soldStatus === false ? (
             <Maintainance registernumber={id} isDriver={false} isEmployee={isEmployee} isAdmin={isAdmin} vehicleData={fetchedVehicleData} onMaintenanceAdded={handleMaintenanceAdded} />
           ) : (
-            <Installment carID={id} isAdmin={isAdmin} />
+            <Installment carID={id} isAdmin={isAdmin} soldStatus={soldStatus} />
           )}
 
           {/* <h2 className="text-2xl font-bold mt-6 mb-4">Set Total Amount to be Paid</h2>

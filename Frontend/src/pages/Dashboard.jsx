@@ -431,7 +431,7 @@ const Dashboard = () => {
           </div>
 
           {/* Table Section with Scroll */}
-          <div className="overflow-y-auto max-h-[calc(5*3.5rem)]"> {/* Limit the table height to 5 rows */}
+          <div className="overflow-y-auto max-h-[calc(5*3.4rem)]"> {/* Limit the table height to 5 rows */}
             <table className="w-full table-auto">
               <thead className="sticky top-0 bg-gray-200 z-10">
                 <tr className="text-left">
