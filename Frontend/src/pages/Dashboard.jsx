@@ -8,8 +8,6 @@ import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { jwtDecode } from "jwt-decode";
 
-// const token = localStorage.getItem('authToken');
-
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [carDetails, setCarDetails] = useState([]);
@@ -19,6 +17,18 @@ const Dashboard = () => {
   const [username, setUsername] = useState("");
   const [monthlyCost, setMonthlyCost] = useState(0);
   const [totalSellingPrice, setTotalSellingPrice] = useState(0);
+  const [accountDetails, setAccountDetails] = useState({
+    totalBuy: 0,
+    totalMaintainance: 0,
+    totalMiscellaneous: 0,
+    totalInstallments: 0,
+    totalSellings: 0,
+    totalDownPayments: 0,
+    totalCommision: 0,
+    totalInvestment: 0,
+    Remaining_Balance: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -33,7 +43,6 @@ const Dashboard = () => {
   };
 
   const handleSearchInputChange = (e) => {
-    // console.log(e.target.value)
     setQuery(e.target.value);
   };
 
@@ -41,30 +50,27 @@ const Dashboard = () => {
     e.preventDefault();
     navigate("/AddEmployee");
   };
+
   const addDriver = (e) => {
     e.preventDefault();
     navigate("/AddDriver");
   };
 
-  useEffect(() => {
-    const fetchTotalSellingPrice = async () => {
-      try {
-        const response = await axios.get(
-          "https://vehicle-dealership.vercel.app/dashboard/total-selling-price",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            },
-          }
-        );
-        setTotalSellingPrice(response.data.totalSellingPrice); // Assuming response contains 'totalSellingPrice'
-      } catch (error) {
-        console.error("Error fetching total selling price:", error);
-      }
-    };
-
-    fetchTotalSellingPrice();
-  }, []);
+  const fetchTotalSellingPrice = async () => {
+    try {
+      const response = await axios.get(
+        "https://vehicle-dealership.vercel.app/dashboard/total-selling-price",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setTotalSellingPrice(response.data.totalSellingPrice);
+    } catch (error) {
+      console.error("Error fetching total selling price:", error);
+    }
+  };
 
   const downloadLogFile = async () => {
     try {
@@ -91,50 +97,46 @@ const Dashboard = () => {
       alert("Failed to download log file.");
     }
   };
-  // Fetch car details from the API
-  useEffect(() => {
-    const fetchCarDetails = async () => {
-      try {
-        let params = {};
-        if (query) params.carSearch = query;
-        // console.log(params)
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-          params,
-        });
-        console.log(response.data);
-        setCarDetails(response.data); // Assuming the response contains an array of car details
-      } catch (error) {
-        if (error.response?.status == 400) {
-          navigate("/admin");
-        } else console.error("Error fetching car details:", error);
+
+
+  const fetchCarDetails = async () => {
+    try {
+      let params = {};
+      if (query) params.carSearch = query;
+      const response = await axios.get("https://vehicle-dealership.vercel.app/dashboard", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+        params,
+      });
+      setCarDetails(response.data);
+    } catch (error) {
+      if (error.response?.status === 400) {
+        navigate("/admin");
+      } else {
+        console.error("Error fetching car details:", error);
       }
-    };
+    }
+  };
 
-    fetchCarDetails();
-  }, [query]);
-
-  useEffect(() => {
+  const fetchUserRoleAndUsername = () => {
     const token = localStorage.getItem("authToken");
     let decodedToken;
     if (token) {
       try {
         decodedToken = jwtDecode(token);
-        console.log(decodedToken);
       } catch (error) {
         console.error("Invalid token", error);
       }
     }
-    if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+    if (decodedToken?.isAdmin && decodedToken.isAdmin === true) {
       setUserRole("Admin");
       setUsername(decodedToken?.username);
-    } else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+    } else if (decodedToken?.isEmployee && decodedToken.isEmployee === true) {
       setUserRole("Employee");
       setUsername(decodedToken?.username);
     }
-  });
+  };
 
   const fetchMonthlyCosts = async () => {
     try {
@@ -145,14 +147,12 @@ const Dashboard = () => {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         }
-      ); // Endpoint for miscellaneous costs
+      );
       const allCosts = response.data;
-
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const currentYear = currentDate.getFullYear();
 
-      // Filter costs for current month and year
       const thisMonthCosts = allCosts.filter((cost) => {
         const costDate = new Date(cost.date);
         return (
@@ -161,20 +161,39 @@ const Dashboard = () => {
         );
       });
 
-      // Calculate the total for the current month
       const totalMonthlyCost = thisMonthCosts.reduce(
         (accumulator, cost) => accumulator + parseFloat(cost.cost),
         0
       );
 
-      setMonthlyCost(totalMonthlyCost.toFixed(2)); // Format to 2 decimal places
+      setMonthlyCost(totalMonthlyCost.toFixed(2));
     } catch (error) {
       console.error("Error fetching monthly costs:", error);
     }
   };
 
+
+  const fetchAccountDetails = async () => {
+    try {
+      const response = await axios.get("https://vehicle-dealership.vercel.app/accountDetails", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+      setAccountDetails(response.data);
+    } catch (error) {
+      console.error("Error fetching account details:", error);
+    }
+  };
+
   useEffect(() => {
+    setLoading(true);
+    fetchTotalSellingPrice();
+    fetchCarDetails();
+    fetchUserRoleAndUsername();
     fetchMonthlyCosts();
+    fetchAccountDetails();
+    setLoading(false);
   }, []);
 
   const currentDate = new Date();
@@ -182,6 +201,14 @@ const Dashboard = () => {
   const totalCars = carDetails.filter((car) => car.status === false).length;
 
 
+  // Loading spinner or shadow box when loading
+  if (loading) {
+    return (
+      <div className="loading-overlay">
+        <div className="spinner"></div> {/* Example of loading spinner */}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-blue-100 flex flex-col lg:flex-row">
@@ -345,11 +372,14 @@ const Dashboard = () => {
             <p className="text-lg font-bold">₹{monthlyCost}</p>
           </div>
 
-          <div className="bg-orange-300 p-3 rounded text-white min-h-4">
-            <p>Total Sold Vehicles Cost</p>
-            <p className="text-lg font-bold">₹{totalSellingPrice}</p>
-            {/* Display total selling price */}
+          <div
+            onClick={() => navigate("/dashboard/accountDetails")}
+            className={`bg-orange-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-orange-400 transition-all transform hover:scale-105 active:scale-95`}
+          >
+            <p>Total Account Balance</p>
+            <p className="text-lg font-bold">₹{accountDetails.Remaining_Balance}</p>
           </div>
+
 
           <div className="bg-green-400 p-3 rounded text-white min-h-4">
             <p>Office Documents</p>

@@ -4,6 +4,12 @@ const { downloadTodaysLogsFromS3 } = require('../amazonS3/s3config.js');
 const downloadLogFile = async (req, res) => {
     try {
         const logs = await downloadTodaysLogsFromS3();
+
+        if (!logs) {
+            console.log("No logs found.");
+            return res.status(404).send('Log file not found.');
+        }
+        
         
         // Set the response headers
         res.setHeader('Content-Type', 'text/csv');

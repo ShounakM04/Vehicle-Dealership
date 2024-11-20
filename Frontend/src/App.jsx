@@ -23,6 +23,7 @@ import AddDriver from "./pages/AddDriver";
 import AddEmployee from "./pages/AddEmployee";
 import DocumentUpload from "./components/DocumentUpload";
 import MiscellaneousCosts from "./pages/MiscellaneousCosts";
+import AccountDetails from "./pages/AccountDetails";
 import DocumentView from "./components/DocumentView";
 import ContactUs from "./pages/ContactUs";
 const router = createBrowserRouter([
@@ -364,6 +365,21 @@ const router = createBrowserRouter([
 
           <Layout>
             <MiscellaneousCosts />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+
+    ),
+  },
+  {
+    path: "dashboard/accountDetails",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+
+          <Layout>
+            <AccountDetails />
           </Layout>
         </ProtectedUserRoute>
 

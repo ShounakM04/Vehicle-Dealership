@@ -24,6 +24,7 @@ const carDetailsEdit = require("./routes/carDetailsEdit.route.js")
 const miscellaneousCostRoute = require('./adminRoutes/miscellaneousCosts.route.js')
 const LogDownloadRoute = require('./adminRoutes/logDownload.route.js')
 const handleAddDescriptionRoute =  require("./routes/addImageDescription.route.js") 
+const handleAddAccountDetailsRoute =  require("./adminRoutes/accountDetails.route.js") 
 const unauthorizedSpecificCar = require("./routes/unauthorizedSpecificCar.route.js")
 const { authenticateToken, authorizeEmployeeOrAdmin ,authorizeDriverOrEmployeeOrAdmin, authorizeAdmin} = require("./controllers/userRole-auth.js");
 const ValidateTokenRoute = require("./routes/ValidateToken.route.js")
@@ -81,7 +82,9 @@ app.use("/edit-fields", carDetailsEdit)
 app.use("/logs", authorizeAdmin, LogDownloadRoute)
 app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,miscellaneousCostRoute);
 app.use("/installments", InstallmentRoute);
-app.use("/Description",handleAddDescriptionRoute)
+app.use("/Description",handleAddDescriptionRoute);
+app.use("/accountDetails",handleAddAccountDetailsRoute);
+
 
 // Correct `app.listen` without req and res parameters
 // app.listen(PORT, () => {

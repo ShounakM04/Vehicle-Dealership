@@ -42,9 +42,9 @@ async function addInstallments(req, res) {
 
         // Insert the new installment with the updated total_amount
         const insertResponse = await db.query(
-            `INSERT INTO installments (registernumber, amount, installment_date, selling_price, total_amount, description, payment_mode, account_paid_to)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-            [registernumber, amount, installmentdate, selling_price, updatedTotalAmount, description, paymentMode, accountPaidTo]
+            `INSERT INTO installments (registernumber, amount, installment_date, total_amount, description, payment_mode, account_paid_to)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+            [registernumber, amount, installmentdate, updatedTotalAmount, description, paymentMode, accountPaidTo]
         );
 
         const installmentId = insertResponse.rows[0].id;
