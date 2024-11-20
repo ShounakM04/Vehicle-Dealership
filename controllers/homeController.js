@@ -4,7 +4,7 @@ async function handleHomePage(req,res) {
     const {fuelType,carMake} = req.query;
     try{
         let query1 = `
-        SELECT c.carname,c.registernumber,c.carcolor,c.carprice,ci.image_urls
+        SELECT c.carname,c.registernumber,c.carcolor,c.carprice,ci.car_images
         FROM cardetails c 
         JOIN images ci ON c.registernumber = ci.carNumber
         WHERE 1=1

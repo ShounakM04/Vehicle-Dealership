@@ -15,7 +15,7 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
     const command = new GetObjectCommand({
         Bucket: "cardealerbucket",
         Key: key,
-    });
+    });     
     
     // Generate a signed URL with an expiration time
     const url = await getSignedUrl(s3Client, command, { expiresIn });

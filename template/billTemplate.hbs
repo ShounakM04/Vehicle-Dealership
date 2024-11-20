@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bill</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .section { margin-bottom: 15px; }
+        .title { font-weight: bold; }
+        .item { margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Customer Bill</h1>
+            <p>Vehicle Dealership</p>
+        </div>
+        <div class="section">
+            <div class="title">Car Details:</div>
+            <div class="item">Name: {{carDetails.carname}}</div>
+            <div class="item">Make: {{carDetails.carmake}}</div>
+            <div class="item">Company: {{carDetails.carcompany}}</div>
+            <div class="item">Color: {{carDetails.carcolor}}</div>
+            <div class="item">Fuel: {{carDetails.fuel}}</div>
+        </div>
+        <div class="section">
+            <div class="title">Insurance Details:</div>
+            <div class="item">Insurance Company: {{carinsurance.insurancecompany}}</div>
+            <div class="item">Insurance Number: {{carinsurance.insurancenumber}}</div>
+            <div class="item">Start Date: {{carinsurance.insurancestartdate}}</div>
+            <div class="item">Expiry Date: {{carinsurance.insuranceenddate}}</div>
+        </div>
+        <div class="section">
+            <div class="title">Customer Details:</div>
+            <div class="item">Name: {{customerDetails.owner_name}}</div>
+            <div class="item">Contact: {{customerDetails.contact_no}}</div>
+            <div class="item">Down Payment: {{customerDetails.down_payment}}</div>
+            <div class="item">Total Installments: {{customerDetails.total_installments}}</div>
+            <div class="item">Installments Amount: {{customerDetails.installment_amount}}</div>
+            <div class="item">Address: {{customerDetails.address}}</div>
+
+        </div>
+        <div class="section">
+            <div class="title">Total Price: {{customerDetails.selling_price}}</div>
+        </div>
+    </div>
+</body>
+</html>

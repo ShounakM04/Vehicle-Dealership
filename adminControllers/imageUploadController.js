@@ -11,11 +11,8 @@ async function handleImageUpload(req,res){
     }
 
     try{
-        const imageUrls = imageUpload(req.files);
-        const query = `INSERT INTO  images (carNumber,image_urls) VALUES ($1,$2)`
-            const values = [carNumber,imageUrls];
-            await db.query(query,values);  
-        res.send("Images uploaded successfully")
+       const imageUrls = req.files;
+       
 
     }
     catch(error){

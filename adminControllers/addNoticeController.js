@@ -12,7 +12,7 @@ async function handleAddNotice(req, res) {
     
     try {
         // Upload images and get an array of URLs
-        
+            
 
         // Loop through each URL and insert it individually
     
