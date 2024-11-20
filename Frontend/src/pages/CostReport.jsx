@@ -221,12 +221,12 @@ const CostReport = () => {
               >
                 View Admin Docs
               </button>
-              <button
+              {soldStatus && <button
                 onClick={handleGenerateBill}
                 className="bg-green-500 text-white px-4 py-2 rounded"
               >
                 {loading ? "Downloading...." : "Download Bill"}
-              </button>
+              </button>}
 
             </div>
           )}
