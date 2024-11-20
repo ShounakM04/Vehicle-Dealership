@@ -27,7 +27,8 @@ const handleAddDescriptionRoute =  require("./routes/addImageDescription.route.j
 const handleAddAccountDetailsRoute =  require("./adminRoutes/accountDetails.route.js") 
 const unauthorizedSpecificCar = require("./routes/unauthorizedSpecificCar.route.js")
 const { authenticateToken, authorizeEmployeeOrAdmin ,authorizeDriverOrEmployeeOrAdmin, authorizeAdmin} = require("./controllers/userRole-auth.js");
-const ValidateTokenRoute = require("./routes/ValidateToken.route.js")
+const BillGenerate = require('./adminRoutes/billgenerate.route.js')
+const ValidateTokenRoute = require("./routes/ValidateToken.route.js");
 
 
 // const corsOptions = {
@@ -84,7 +85,7 @@ app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,misce
 app.use("/installments", InstallmentRoute);
 app.use("/Description",handleAddDescriptionRoute);
 app.use("/accountDetails",handleAddAccountDetailsRoute);
-
+app.use("/bill", BillGenerate)
 
 // Correct `app.listen` without req and res parameters
 // app.listen(PORT, () => {

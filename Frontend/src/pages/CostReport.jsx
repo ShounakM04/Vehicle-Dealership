@@ -36,7 +36,7 @@ const CostReport = () => {
   // Form state for installments
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
-
+  const [loading, setLoading] = useState(false);
 
   const [fetchedVehicleData, setFetchedVehicleData] = useState(null);
   const [vehicleImages, setvehicleImages] = useState([]);
@@ -123,8 +123,40 @@ const CostReport = () => {
     fetchRole();
   }, []);
 
-
-
+  const handleGenerateBill = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        `https://vehicle-dealership.vercel.app/bill/generate-bill`,
+        { registerNumber: id },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+          responseType: 'blob',  // Important: this makes sure the response is treated as a binary file
+        }
+      );
+  
+      if (response.data) {
+        toast.success("Bill generated successfully!");
+  
+        // Create a URL for the PDF file
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+  
+        // Create an anchor element and trigger a click to download the file
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${id}_bill.pdf`); // Use the register number for the file name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);  // Clean up after download
+        setLoading(false)
+      }
+    } catch (error) {
+      toast.error("Failed to generate bill.");
+      console.error(error);
+      setLoading(false)
+    }
+  };
+  
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
@@ -189,6 +221,12 @@ const CostReport = () => {
               >
                 View Admin Docs
               </button>
+              <button
+                onClick={handleGenerateBill}
+                className="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                {loading ? "Downloading...." : "Download Bill"}
+              </button>
 
             </div>
           )}
@@ -213,9 +251,6 @@ const CostReport = () => {
               </div>
             </div>
           </div>
-
-
-
 
           <div className="w-full flex flex-col md:flex-row justify-center mx-auto gap-6">
             {/* First Carousel - Inventory Images */}
