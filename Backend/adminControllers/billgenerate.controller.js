@@ -1,54 +1,31 @@
-const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
-const { format } = require('date-fns');
-const pdf = require('html-pdf');
-const handlebars = require('handlebars');
-const db = require("../models/database.js");  // Assuming you have a file to handle DB connections
+const htmlPdfChrome = require("html-pdf-chrome");
+const handlebars = require("handlebars");
+const db = require("../models/database.js");
 
 async function generateBill(req, res) {
     const { registerNumber } = req.body;
-    console.log("Request body:", req.body);
 
     try {
-        // Query car details
-        const carDetailsQuery = `SELECT * FROM cardetails WHERE registernumber = ($1)`;
-        const result = await db.query(carDetailsQuery, [registerNumber]);
+        const carDetailsQuery = `SELECT * FROM cardetails WHERE registernumber = $1`;
+        const carDetailsResult = await db.query(carDetailsQuery, [registerNumber]);
+        if (carDetailsResult.rowCount === 0) return res.status(404).send({ message: "Car details not found" });
 
-        if (result.rowCount === 0) {
-            return res.status(404).send({ message: "Car details not found for the given registration number" });
-        }
+        const carDetails = carDetailsResult.rows[0];
 
-        // Query car insurance details
+        // Query car insurance details from the database
         const carInsuranceQuery = `SELECT * FROM carinsurance WHERE registernumber = $1`;
-        const result1 = await db.query(carInsuranceQuery, [registerNumber]);
-
-        if (result1.rowCount === 0) {
-            return res.status(404).send({ message: "Car insurance details not found for the given registration number" });
-        }
+        const insuranceResult = await db.query(carInsuranceQuery, [registerNumber]);
+        const carinsurance = insuranceResult.rowCount ? insuranceResult.rows[0] : {};
 
         // Query customer details (who bought the car)
         const customerDetailsQuery = `SELECT * FROM soldcardetails WHERE registernumber = $1`;
-        const result2 = await db.query(customerDetailsQuery, [registerNumber]);
+        const customerResult = await db.query(customerDetailsQuery, [registerNumber]);
+        const customerDetails = customerResult.rowCount ? customerResult.rows[0] : {};
 
-        if (result2.rowCount === 0) {
-            return res.status(404).send({ message: "Customer details not found for the given registration number" });
-        }
-
+        // Query owner details from the database
         const ownerDetailsQuery = `SELECT * FROM ownerdetails WHERE registernumber = $1`;
-        const result3 = await db.query(ownerDetailsQuery, [registerNumber]);
-
-        if (result3.rowCount === 0) {
-            return res.status(404).send({ message: "Owner details not found for the given registration number" });
-        }
-
-        // Extract data from queries
-        const carDetails = result.rows[0];
-        const carinsurance = result1.rows[0];
-        const customerDetails = result2.rows[0];
-        const ownerDetails = result3.rows[0];
-        console.log("carDetails: ", carDetails);
-        console.log("carinsurance: ", carinsurance);
-        console.log("customerDetails: ", customerDetails);
-        console.log("OwnerDetails: ", ownerDetails);
+        const ownerResult = await db.query(ownerDetailsQuery, [registerNumber]);
+        const ownerDetails = ownerResult.rowCount ? ownerResult.rows[0] : {};
 
         // Inline Handlebars template as a string
         const templateContent = `
@@ -121,32 +98,23 @@ async function generateBill(req, res) {
         </body>
         </html>`;
 
-        // Compile the template using Handlebars
         const compiledTemplate = handlebars.compile(templateContent);
-
-        // Generate HTML with data
         const html = compiledTemplate({ carDetails, carinsurance, customerDetails, ownerDetails });
 
-        // PDF options
-        const options = { format: 'A4', orientation: 'portrait' };
+        // Use html-pdf-chrome to generate the PDF
+        const options = { format: 'A4', printBackground: true };
 
-        // Generate PDF buffer (in memory)
-        pdf.create(html, options).toBuffer((err, buffer) => {
-            if (err) {
-                console.error('Error generating PDF:', err);
-                return res.status(500).send({ message: "Error generating PDF" });
-            }
+        const pdfBuffer = await htmlPdfChrome.create(html, options).then(result => result.toBuffer());
 
-            // Set headers to force download
-            res.setHeader('Content-Disposition', `attachment; filename=${registerNumber}_bill.pdf`);
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Length', buffer.length);
+        // Set headers to force download in Vercel
+        res.setHeader('Content-Disposition', `attachment; filename=${registerNumber}_bill.pdf`);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Length', pdfBuffer.length);
 
-            // Send the buffer as the response (this will trigger a download)
-            res.send(buffer);
-        });
+        // Send the buffer as the response (this will trigger a download)
+        res.send(pdfBuffer);
     } catch (error) {
-        console.error(error);
+        console.error("Error generating PDF:", error);
         res.status(500).send({ message: "Internal Server Error" });
     }
 }
