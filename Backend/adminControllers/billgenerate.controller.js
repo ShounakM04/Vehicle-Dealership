@@ -57,7 +57,7 @@ async function generateBill(req, res) {
 
         // Load and compile the Handlebars template
         // const templatePath = path.join(__dirname, '../template/billTemplate.hbs');
-        const templatePath = path.join(process.cwd(), 'public/template/billTemplate.hbs');
+        const templatePath = path.join(process.cwd(), './template/billTemplate.hbs');
 
         const template = fs.readFileSync(templatePath, 'utf8');
         const compiledTemplate = handlebars.compile(template);
