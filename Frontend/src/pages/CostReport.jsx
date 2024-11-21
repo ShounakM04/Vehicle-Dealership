@@ -7,9 +7,8 @@ import { FaTrash } from "react-icons/fa";
 import { Maintainance } from "../components/Maintainance";
 import Installment from "../components/Installment";
 import { jwtDecode } from "jwt-decode";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
@@ -45,7 +44,6 @@ const CostReport = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEmployee, setIsEmployee] = useState(false);
 
-
   const [maintainanceData, setMaintainanceData] = useState({
     carDetails: { carNo: "" },
     maintenanceRecords: [],
@@ -61,20 +59,18 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            }
-          }
-        );
+        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
         const { car, images, insurance, owner, onsiteImages } = response.data;
         setSoldStatus(response.data.car.status);
         setFetchedVehicleData(response.data);
-        setvehicleImages(images)
+        setvehicleImages(images);
         setOnsiteVehicleImages(onsiteImages);
 
-        console.log(response.data)
+        console.log(response.data);
 
         setvehicleData((prevData) => ({
           ...prevData,
@@ -107,17 +103,14 @@ const CostReport = () => {
         try {
           decodedToken = jwtDecode(token);
           console.log(decodedToken);
-
         } catch (error) {
           console.error("Invalid token", error);
-
         }
       }
       if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
         setIsAdmin(true);
-      }
-      else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
-        setIsEmployee(true)
+      } else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+        setIsEmployee(true);
       }
     }
     fetchRole();
@@ -125,35 +118,38 @@ const CostReport = () => {
 
   const handleGenerateBill = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(
         `https://vehicle-dealership.vercel.app/bill/generate-bill`,
         { registerNumber: id },
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
-          responseType: 'blob',  // Important: this makes sure the response is treated as a binary file
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
       );
   
-      if (response.data) {
+      if (response.data && response.data.fileUrl) {
         toast.success("Bill generated successfully!");
   
-        // Create a URL for the PDF file
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-  
-        // Create an anchor element and trigger a click to download the file
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `${id}_bill.pdf`); // Use the register number for the file name
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);  // Clean up after download
-        setLoading(false)
+        // Open the URL in a new tab
+        const newTab = window.open(response.data.fileUrl, '_blank');
+        if (newTab) {
+          newTab.focus(); // Focus on the new tab
+        } else {
+          toast.error("Failed to open the bill in a new tab.");
+        }
       }
+      setLoading(false);
     } catch (error) {
-      toast.error("Failed to generate bill.");
+      // Handle the case when the bill already exists (or any error occurs)
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // Error message from the backend
+      } else {
+        toast.error("Failed to generate bill.");
+      }
       console.error(error);
-      setLoading(false)
+      setLoading(false);
     }
   };
   
@@ -163,16 +159,13 @@ const CostReport = () => {
       const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
         params: { registernumber: id },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       });
-
-      ;
 
       if (response.status === 201) {
         return;
       }
-
 
       const { maintenanceRecords, totalmaintainance } = response.data;
 
@@ -204,30 +197,33 @@ const CostReport = () => {
     <div className="flex flex-col">
       <div className="flex flex-col lg:flex-row p-5 bg-gray-100 ">
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-2 lg:mb-0 ">
-          <h2 className="text-2xl font-bold mb-2">
-            Vehicle Details
-          </h2>
+          <h2 className="text-2xl font-bold mb-2">Vehicle Details</h2>
           {isAdmin === true && (
             <div className="ml-auto mb-4 flex space-x-4">
               <button
-                onClick={() => navigate(`/dashboard/costReport/${id}/addAdminDoc`)}
+                onClick={() =>
+                  navigate(`/dashboard/costReport/${id}/addAdminDoc`)
+                }
                 className="bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Add Admin Doc
               </button>
               <button
-                onClick={() => navigate(`/dashboard/costReport/${id}/viewAdminDoc`)}
+                onClick={() =>
+                  navigate(`/dashboard/costReport/${id}/viewAdminDoc`)
+                }
                 className="bg-green-500 text-white px-4 py-2 rounded"
               >
                 View Admin Docs
               </button>
-              {soldStatus && <button
-                onClick={handleGenerateBill}
-                className="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                {loading ? "Downloading...." : "Download Bill"}
-              </button>}
-
+              {soldStatus && (
+                <button
+                  onClick={handleGenerateBill}
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  {loading ? "Downloading...." : "Download Bill"}
+                </button>
+              )}
             </div>
           )}
           {/* Car Details */}
@@ -236,18 +232,30 @@ const CostReport = () => {
             <div className="flex justify-between">
               <div className="w-1/2 pr-2">
                 <h2 className="font-bold text-xl">Vehicle Details</h2>
-                <p className="break-words">Registration Number: {vehicleData.carDetails.carNo}</p>
-                <p className="break-words">Vehicle Company: {vehicleData.carDetails.carCompany}</p>
-                <p className="break-words">Model: {vehicleData.carDetails.model}</p>
+                <p className="break-words">
+                  Registration Number: {vehicleData.carDetails.carNo}
+                </p>
+                <p className="break-words">
+                  Vehicle Company: {vehicleData.carDetails.carCompany}
+                </p>
+                <p className="break-words">
+                  Model: {vehicleData.carDetails.model}
+                </p>
                 {/* <p className="break-words">Type: {vehicleData.carDetails.type}</p>
       <p className="break-words">Fuel Type: {vehicleData.carDetails.fuelType}</p>
       <p className="break-words">Color: {vehicleData.carDetails.color}</p> */}
               </div>
               <div className="w-1/2 pl-2">
                 <h4 className="font-bold text-xl">Owner Details</h4>
-                <p className="break-words">Owner: {vehicleData.carDetails.ownerName}</p>
-                <p className="break-words">Phone: {vehicleData.carDetails.ownerPhone}</p>
-                <p className="break-words">Email: {vehicleData.carDetails.ownerEmail}</p>
+                <p className="break-words">
+                  Owner: {vehicleData.carDetails.ownerName}
+                </p>
+                <p className="break-words">
+                  Phone: {vehicleData.carDetails.ownerPhone}
+                </p>
+                <p className="break-words">
+                  Email: {vehicleData.carDetails.ownerEmail}
+                </p>
               </div>
             </div>
           </div>
@@ -306,20 +314,12 @@ const CostReport = () => {
             </div>
           </div>
 
-
-
-
-
-
-
           {/* Maintenance Records */}
           <h3 className="text-lg font-semibold mt-2 ">Maintenance Records:</h3>
           <div className="overflow-y-auto max-h-40">
             {maintainanceData.maintenanceRecords.length > 0 ? (
               <ul className="mt-2">
                 {maintainanceData.maintenanceRecords.map((record, index) => {
-
-
                   return (
                     <li
                       key={index}
@@ -332,7 +332,9 @@ const CostReport = () => {
                         <p>Cost: ₹{record.price}</p>
                         <p>
                           Date:{" "}
-                          {new Date(record.maintainanceDate).toLocaleDateString("en-GB")}
+                          {new Date(record.maintainanceDate).toLocaleDateString(
+                            "en-GB"
+                          )}
                         </p>
                         <p>Done By: {record.role}</p>
                         <p>
@@ -375,9 +377,15 @@ const CostReport = () => {
 
         {/* Form Section */}
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg">
-
           {soldStatus === false ? (
-            <Maintainance registernumber={id} isDriver={false} isEmployee={isEmployee} isAdmin={isAdmin} vehicleData={fetchedVehicleData} onMaintenanceAdded={handleMaintenanceAdded} />
+            <Maintainance
+              registernumber={id}
+              isDriver={false}
+              isEmployee={isEmployee}
+              isAdmin={isAdmin}
+              vehicleData={fetchedVehicleData}
+              onMaintenanceAdded={handleMaintenanceAdded}
+            />
           ) : (
             <Installment carID={id} isAdmin={isAdmin} soldStatus={soldStatus} />
           )}
