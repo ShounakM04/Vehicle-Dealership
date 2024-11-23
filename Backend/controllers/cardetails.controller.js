@@ -74,33 +74,43 @@ async function handleCarDetails(req, res) {
     const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice];
     await db.query(query2, values2);
 
+    let values3= [
+      registernumber,
+      insuranceCompany || "Not Provided",
+      insuranceNumber || "Not Provided",
+      insuranceTenure || 0,
+      insuranceStartDate || null,
+      insuranceEndDate || null,
+      soldStatus || false, // set default soldStatus to false if not provided
+    ];
     if (showInsuranceFields == true) {
-      // Insert insurance details
-      const query3 = `
-      INSERT INTO carinsurance (
-        registernumber, 
-        insurancecompany, 
-        insurancenumber, 
-        insurancetenure, 
-        insurancestartdate, 
-        insuranceenddate, 
-        soldstatus
-      ) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-      const values3 = [
+      values3 = [
         registernumber,
         insuranceCompany,
         insuranceNumber,
         insuranceTenure,
-        insuranceStartDate,
-        insuranceEndDate,
+        insuranceStartDate || null,
+        insuranceEndDate || null,
         soldStatus || false, // set default soldStatus to false if not provided
       ];
-
-
-
-      await db.query(query3, values3);
+      
+      
+      
     }
+    // Insert insurance details
+    const query3 = `
+    INSERT INTO carinsurance (
+      registernumber, 
+      insurancecompany, 
+      insurancenumber, 
+      insurancetenure, 
+      insurancestartdate, 
+      insuranceenddate, 
+      soldstatus
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+    
+    await db.query(query3, values3);
 
     // Insert owner details
     const query4 = `INSERT INTO ownerdetails (ownername, ownerphone, owneremail, owneraddress, registernumber) VALUES ($1, $2, $3, $4, $5)`;

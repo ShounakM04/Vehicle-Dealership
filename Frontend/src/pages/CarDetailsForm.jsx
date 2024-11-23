@@ -85,7 +85,7 @@ function AdminForm() {
     }
 
     try {
-
+      setUploading(true);
 
       // Submit form data after images are uploaded
       await axios.post("https://vehicle-dealership.vercel.app/details", {
@@ -130,6 +130,8 @@ function AdminForm() {
         toast.error(error.response.data.error);
       }
     }
+    setUploading(false);
+
   };
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">

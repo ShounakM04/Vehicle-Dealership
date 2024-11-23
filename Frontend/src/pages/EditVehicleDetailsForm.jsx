@@ -7,6 +7,7 @@ import EditVehicleImages from "./EditVehicleImages";
 const EditVehicleDetailsForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [wait, setWait] = useState(false);
     const [vehicleData, setVehicleData] = useState({
         vehicleDetails: {
             carname: "",
@@ -105,30 +106,37 @@ const EditVehicleDetailsForm = () => {
         if (fieldToEdit == "ownername" || fieldToEdit == "ownerphone" || fieldToEdit == "owneremail" || fieldToEdit == "owneraddress") {
             tablename = "ownerdetails"
         }
+        try {
+            setWait(true);
+            const response = await axios.post("https://vehicle-dealership.vercel.app/edit-fields", {
+                tablename: tablename,
+                fieldToEdit: fieldToEdit,
+                newValue: newValue,
+                registernumber: id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
 
-        const response = await axios.post("https://vehicle-dealership.vercel.app/edit-fields", {
-            tablename: tablename,
-            fieldToEdit: fieldToEdit,
-            newValue: newValue,
-            registernumber: id
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            }
-        });
+            // Update the field in vehicleData
+            setVehicleData((prevData) => ({
+                ...prevData,
+                vehicleDetails: {
+                    ...prevData.vehicleDetails,
+                    [fieldToEdit]: newValue,
+                },
+            }));
 
-        // Update the field in vehicleData
-        setVehicleData((prevData) => ({
-            ...prevData,
-            vehicleDetails: {
-                ...prevData.vehicleDetails,
-                [fieldToEdit]: newValue,
-            },
-        }));
 
-        // After editing, set the field back to readOnly (not editable)
-        setEditableFields((prev) => ({ ...prev, [fieldToEdit]: false }));
+            // After editing, set the field back to readOnly (not editable)
+            setEditableFields((prev) => ({ ...prev, [fieldToEdit]: false }));
+
+        } catch (error) {
+            console.log(error);
+        }
         setInputValue("");
+        setWait(false);
     };
 
     const handleCancelEdit = (field) => {
@@ -175,8 +183,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.carname && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carname")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("carname")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carname")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("carname")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -201,8 +209,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.carcompany && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carcompany")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("carcompany")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carcompany")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("carcompany")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -244,11 +252,11 @@ const EditVehicleDetailsForm = () => {
                                 <i className="fas fa-pencil-alt"></i>
                             </button>
 
-                            {/* OK and Cancel Buttons */}
+                            {/* {wait ? "wait..." : "OK"} and Cancel Buttons */}
                             {editableFields.carmake && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carmake")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("carmake")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carmake")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("carmake")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -273,8 +281,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.carcolor && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carcolor")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("carcolor")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "carcolor")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("carcolor")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -315,11 +323,11 @@ const EditVehicleDetailsForm = () => {
                                 <i className="fas fa-pencil-alt"></i>
                             </button>
 
-                            {/* OK and Cancel Buttons */}
+                            {/* {wait ? "wait..." : "OK"} and Cancel Buttons */}
                             {editableFields.fuel && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "fuel")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("fuel")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "fuel")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("fuel")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -344,8 +352,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.vehiclebuyprice && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "vehiclebuyprice")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("vehiclebuyprice")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "vehiclebuyprice")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("vehiclebuyprice")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -370,8 +378,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.vehiclesellprice && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "vehiclesellprice")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("vehiclesellprice")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "vehiclesellprice")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("vehiclesellprice")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -403,8 +411,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.insurancecompany && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancecompany")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("insurancecompany")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancecompany")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("insurancecompany")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -429,8 +437,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.insurancenumber && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancenumber")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("insurancenumber")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancenumber")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("insurancenumber")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -455,8 +463,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.insurancestartdate && (
                                 <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancestartdate")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("insurancestartdate")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancestartdate")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("insurancestartdate")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -480,8 +488,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.insuranceenddate && (
                                 <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insuranceenddate")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("insuranceenddate")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insuranceenddate")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("insuranceenddate")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -506,8 +514,8 @@ const EditVehicleDetailsForm = () => {
 
                             {editableFields.insurancetenure && (
                                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancetenure")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                    <button onClick={() => handleCancelEdit("insurancetenure")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "insurancetenure")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("insurancetenure")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                 </div>
                             )}
                         </div>
@@ -537,8 +545,8 @@ const EditVehicleDetailsForm = () => {
 
                                 {editableFields.ownername && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "ownername")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                        <button onClick={() => handleCancelEdit("ownername")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "ownername")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                        <button onClick={() => handleCancelEdit("ownername")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                     </div>
                                 )}
                             </div>
@@ -563,8 +571,8 @@ const EditVehicleDetailsForm = () => {
 
                                 {editableFields.ownerphone && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "ownerphone")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                        <button onClick={() => handleCancelEdit("ownerphone")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "ownerphone")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                        <button onClick={() => handleCancelEdit("ownerphone")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                     </div>
                                 )}
                             </div>
@@ -589,8 +597,8 @@ const EditVehicleDetailsForm = () => {
 
                                 {editableFields.owneremail && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "owneremail")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                        <button onClick={() => handleCancelEdit("owneremail")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "owneremail")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                        <button onClick={() => handleCancelEdit("owneremail")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                     </div>
                                 )}
                             </div>
@@ -615,8 +623,8 @@ const EditVehicleDetailsForm = () => {
 
                                 {editableFields.owneraddress && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "owneraddress")} className="bg-green-500 text-white py-1 px-3 rounded">OK</button>
-                                        <button onClick={() => handleCancelEdit("owneraddress")} className="bg-red-500 text-white py-1 px-3 rounded">CANCEL</button>
+                                        <button onClick={() => handleVehicleDetailsEdit(inputValue, "owneraddress")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                        <button onClick={() => handleCancelEdit("owneraddress")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
                                     </div>
                                 )}
                             </div>

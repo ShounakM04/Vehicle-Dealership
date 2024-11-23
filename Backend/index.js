@@ -73,7 +73,7 @@ app.use("/details",authenticateToken, authorizeEmployeeOrAdmin, DetailsRoute);
 app.use("/car", SpecificPageRoute);
 app.use("/delete", authorizeDriverOrEmployeeOrAdmin, DeleteRecordRoute);
 app.use("/customer", customerQueryRoute);
-app.use("/register", authenticateToken, authorizeAdmin, RegistrationRoute);
+app.use("/register", authenticateToken, authorizeEmployeeOrAdmin, RegistrationRoute);
 app.use("/dashboard", DashboardRoute)
 // app.use("/insurance",InsuranceRoute);
 app.use("/maintainance", MaintainanceRoute);

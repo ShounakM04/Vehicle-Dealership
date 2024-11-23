@@ -103,6 +103,8 @@ const Dashboard = () => {
     try {
       let params = {};
       if (query) params.carSearch = query;
+
+      console.log("Query : " + query);
       const response = await axios.get("https://vehicle-dealership.vercel.app/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -110,6 +112,7 @@ const Dashboard = () => {
         params,
       });
       setCarDetails(response.data);
+      console.log(response.data);
     } catch (error) {
       if (error.response?.status === 400) {
         navigate("/admin");
@@ -187,9 +190,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+
+    fetchCarDetails();
+  }, [query]);
+  useEffect(() => {
     setLoading(true);
     fetchTotalSellingPrice();
-    fetchCarDetails();
     fetchUserRoleAndUsername();
     fetchMonthlyCosts();
     fetchAccountDetails();

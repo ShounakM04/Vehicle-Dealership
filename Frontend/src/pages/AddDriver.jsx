@@ -49,6 +49,7 @@ function AddDriver() {
                 });
             toast.success("Added Driver successfully", { position: "top-center", autoClose: 3000 });
             setIsLoading(false);
+            navigate("/dashboard");
         } catch (error) {
             // Hide loader when there's an error
             setIsLoading(false);

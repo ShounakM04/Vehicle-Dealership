@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/`, { params });
+        const response = await axios.get(`https://vehicle-dealership.vercel.app//`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {

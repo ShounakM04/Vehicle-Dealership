@@ -128,10 +128,10 @@ const CostReport = () => {
           },
         }
       );
-  
+
       if (response.data && response.data.fileUrl) {
         toast.success("Bill generated successfully!");
-  
+
         // Open the URL in a new tab
         const newTab = window.open(response.data.fileUrl, '_blank');
         if (newTab) {
@@ -152,7 +152,7 @@ const CostReport = () => {
       setLoading(false);
     }
   };
-  
+
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
