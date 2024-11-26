@@ -88,7 +88,7 @@ function AdminForm() {
       setUploading(true);
 
       // Submit form data after images are uploaded
-      await axios.post("https://vehicle-dealership.vercel.app/details", {
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,

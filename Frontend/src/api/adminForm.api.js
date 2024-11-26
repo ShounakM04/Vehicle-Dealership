@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "https://vehicle-dealership.vercel.app//";
+const API_URL = "http://localhost:8000//";
 
 
 export const submitAdminForm = async (formData) => {

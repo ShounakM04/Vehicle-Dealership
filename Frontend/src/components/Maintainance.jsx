@@ -46,7 +46,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             if (!currRole) currRole = role;
 
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance',
+            const response = await axios.post('http://localhost:8000/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
@@ -94,7 +94,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://vehicle-dealership.vercel.app/car/${currId}`, {
+                `http://localhost:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

@@ -55,7 +55,7 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`,
+                const response = await axios.get(`http://localhost:8000/car/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -108,7 +108,7 @@ const EditVehicleDetailsForm = () => {
         }
         try {
             setWait(true);
-            const response = await axios.post("https://vehicle-dealership.vercel.app/edit-fields", {
+            const response = await axios.post("http://localhost:8000/edit-fields", {
                 tablename: tablename,
                 fieldToEdit: fieldToEdit,
                 newValue: newValue,

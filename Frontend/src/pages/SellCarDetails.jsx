@@ -43,7 +43,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`,
+        `http://localhost:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -119,7 +119,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("https://vehicle-dealership.vercel.app/dashboard/sell-car", formData,
+      await axios.post("http://localhost:8000/dashboard/sell-car", formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
