@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000//`, { params });
+        const response = await axios.get(`http://localhost:8000/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
