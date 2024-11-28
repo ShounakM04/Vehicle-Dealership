@@ -25,9 +25,10 @@ function Login() {
             return;
         }
 
-        //http://localhost:8000//
-        //http://localhost:8000//
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        //http://65.2.78.63:8000/
+        //http://65.2.78.63:8000/
+        //http://65.2.78.63/
+        const endpoint = "http://65.2.78.63:8000/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)

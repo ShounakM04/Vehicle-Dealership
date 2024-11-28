@@ -88,7 +88,7 @@ function AdminForm() {
       setUploading(true);
 
       // Submit form data after images are uploaded
-      await axios.post("http://localhost:8000/details", {
+      await axios.post("http://65.2.78.63:8000/details", {
         vehicleName,
         brandName,
         registernumber,

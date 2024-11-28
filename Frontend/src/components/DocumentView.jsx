@@ -31,7 +31,7 @@ export default function DocumentView() {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('http://localhost:8000/get-images', {
+            const response1 = await axios.get('http://65.2.78.63:8000/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -41,7 +41,7 @@ export default function DocumentView() {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('http://localhost:8000/Description', {
+            const response2 = await axios.get('http://65.2.78.63:8000/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

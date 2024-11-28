@@ -88,7 +88,7 @@ app.use("/accountDetails",handleAddAccountDetailsRoute);
 app.use("/bill", BillGenerate)
 
 // Correct `app.listen` without req and res parameters
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0", () => {
     console.log(`Server connected to port ${PORT}`);
 });
 

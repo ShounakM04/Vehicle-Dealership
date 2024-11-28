@@ -14,7 +14,7 @@ function CarDetails() {
     const fetchCarDetails = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get(`http://localhost:8000/landingcar/${params.id}`,
+        const response = await axios.get(`http://65.2.78.63:8000/landingcar/${params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
