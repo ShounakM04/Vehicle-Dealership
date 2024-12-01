@@ -60,7 +60,7 @@ const DocumentUpload = () => {
 
     const addDescription = async (uniqueID) => {
         try {
-            await axios.post('http://65.2.78.63:8000/Description',
+            await axios.post('http://65.2.150.123:8000/Description',
                 {
                     uniqueID: uniqueID,
                     description: description

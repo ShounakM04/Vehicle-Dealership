@@ -1,7 +1,8 @@
 const express = require("express");
 const logResReq = require("./log.js"); // Import without destructuring
 const cors = require("cors");
-const PORT = 8000
+
+const PORT = 8000 
 
 const app = express();
 
@@ -88,7 +89,7 @@ app.use("/accountDetails",handleAddAccountDetailsRoute);
 app.use("/bill", BillGenerate)
 
 // Correct `app.listen` without req and res parameters
-app.listen(PORT,"0.0.0.0", () => {
+app.listen(PORT, () => {
     console.log(`Server connected to port ${PORT}`);
 });
 

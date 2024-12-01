@@ -43,7 +43,7 @@ function CustomerEnquiry() {
       const { serialnum, customerPhone } = selectedEnquiry;
 
 
-      await axios.delete('http://65.2.78.63:8000/customer', {
+      await axios.delete('http://65.2.150.123:8000/customer', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -80,7 +80,7 @@ function CustomerEnquiry() {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
       await axios.post(
-        'http://65.2.78.63:8000/customer',
+        'http://65.2.150.123:8000/customer',
         {
           custName: customerName,
           custContact: customerPhone,
@@ -116,7 +116,7 @@ function CustomerEnquiry() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get('http://65.2.78.63:8000/customer', {
+      const response = await axios.get('http://65.2.150.123:8000/customer', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }

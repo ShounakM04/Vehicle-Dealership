@@ -25,7 +25,7 @@ function AddEmployee() {
             return;
         }
 
-        const endpoint = "http://65.2.78.63:8000/register?isEmployee=true"; // Update with your actual endpoint
+        const endpoint = "http://65.2.150.123:8000/register?isEmployee=true"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);

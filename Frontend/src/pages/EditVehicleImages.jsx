@@ -24,7 +24,7 @@ const EditVehicleImages = ({ id }) => {
     // Fetch images function to be called on mount and after upload
     const fetchImages = async () => {
         try {
-            const response = await axios.get(`http://65.2.78.63:8000/car/${id}`,
+            const response = await axios.get(`http://65.2.150.123:8000/car/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -171,7 +171,7 @@ const EditVehicleImages = ({ id }) => {
 
             const path = `${id}/InventoryVehicleImages/${uniqueID}`
 
-            await axios.delete(`http://65.2.78.63:8000/delete-image`, {
+            await axios.delete(`http://65.2.150.123:8000/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

@@ -9,7 +9,7 @@ export default function Insurance() {
     const handleInstallmentSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://65.2.78.63:8000/installments/add", {
+            const response = await axios.post("http://65.2.150.123:8000/installments/add", {
                 amount: installmentAmount,
                 date: installmentDate,
             }, {

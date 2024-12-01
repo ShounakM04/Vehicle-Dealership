@@ -59,7 +59,7 @@ const Dashboard = () => {
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
-        "http://65.2.78.63:8000/dashboard/total-selling-price",
+        "http://65.2.150.123:8000/dashboard/total-selling-price",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -74,7 +74,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("http://65.2.78.63:8000/logs/download", {
+      const response = await fetch("http://65.2.150.123:8000/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -105,7 +105,7 @@ const Dashboard = () => {
       if (query) params.carSearch = query;
 
       console.log("Query : " + query);
-      const response = await axios.get("http://65.2.78.63:8000/dashboard", {
+      const response = await axios.get("http://65.2.150.123:8000/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -144,7 +144,7 @@ const Dashboard = () => {
   const fetchMonthlyCosts = async () => {
     try {
       const response = await axios.get(
-        "http://65.2.78.63:8000/miscellaneous-costs/current-month",
+        "http://65.2.150.123:8000/miscellaneous-costs/current-month",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -178,7 +178,7 @@ const Dashboard = () => {
 
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("http://65.2.78.63:8000/accountDetails", {
+      const response = await axios.get("http://65.2.150.123:8000/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
