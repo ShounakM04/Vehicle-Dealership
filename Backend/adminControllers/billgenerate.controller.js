@@ -1,56 +1,49 @@
+
 // const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 // const { format } = require('date-fns');
 // const pdf = require('html-pdf');
 // const handlebars = require('handlebars');
-// const db = require("../models/database.js");  // Assuming you have a file to handle DB connections
+// const db = require("../models/database.js");
+// const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
+// const s3Client = new S3Client({
+//     region: "ap-south-1",
+//     credentials: {
+//         accessKeyId: process.env.AMAZON_ACCESS_KEY,
+//         secretAccessKey: process.env.AMAZON_SECRET_KEY,
+//     }
+// });
+
+// const BUCKET_NAME = 'cardealerbucket';
 
 // async function generateBill(req, res) {
 //     const { registerNumber } = req.body;
-//     console.log("Request body:", req.body);
 
 //     try {
 //         // Query car details
 //         const carDetailsQuery = `SELECT * FROM cardetails WHERE registernumber = ($1)`;
 //         const result = await db.query(carDetailsQuery, [registerNumber]);
+//         if (result.rowCount === 0) return res.status(404).send({ message: "Car details not found" });
 
-//         if (result.rowCount === 0) {
-//             return res.status(404).send({ message: "Car details not found for the given registration number" });
-//         }
-
-//         // Query car insurance details
+//         // Query insurance, customer, and owner details
 //         const carInsuranceQuery = `SELECT * FROM carinsurance WHERE registernumber = $1`;
 //         const result1 = await db.query(carInsuranceQuery, [registerNumber]);
+//         if (result1.rowCount === 0) return res.status(404).send({ message: "Car insurance details not found" });
 
-//         if (result1.rowCount === 0) {
-//             return res.status(404).send({ message: "Car insurance details not found for the given registration number" });
-//         }
-
-//         // Query customer details (who bought the car)
 //         const customerDetailsQuery = `SELECT * FROM soldcardetails WHERE registernumber = $1`;
 //         const result2 = await db.query(customerDetailsQuery, [registerNumber]);
-
-//         if (result2.rowCount === 0) {
-//             return res.status(404).send({ message: "Customer details not found for the given registration number" });
-//         }
+//         if (result2.rowCount === 0) return res.status(404).send({ message: "Customer details not found" });
 
 //         const ownerDetailsQuery = `SELECT * FROM ownerdetails WHERE registernumber = $1`;
 //         const result3 = await db.query(ownerDetailsQuery, [registerNumber]);
-
-//         if (result3.rowCount === 0) {
-//             return res.status(404).send({ message: "Owner details not found for the given registration number" });
-//         }
+//         if (result3.rowCount === 0) return res.status(404).send({ message: "Owner details not found" });
 
 //         // Extract data from queries
 //         const carDetails = result.rows[0];
 //         const carinsurance = result1.rows[0];
 //         const customerDetails = result2.rows[0];
 //         const ownerDetails = result3.rows[0];
-//         console.log("carDetails: ", carDetails);
-//         console.log("carinsurance: ", carinsurance);
-//         console.log("customerDetails: ", customerDetails);
-//         console.log("OwnerDetails: ", ownerDetails);
 
-//         // Inline Handlebars template as a string
 //         const templateContent = `
 //         <!DOCTYPE html>
 //         <html lang="en">
@@ -123,27 +116,61 @@
 
 //         // Compile the template using Handlebars
 //         const compiledTemplate = handlebars.compile(templateContent);
-
-//         // Generate HTML with data
 //         const html = compiledTemplate({ carDetails, carinsurance, customerDetails, ownerDetails });
 
 //         // PDF options
 //         const options = { format: 'A4', orientation: 'portrait' };
 
-//         // Generate PDF buffer (in memory)
-//         pdf.create(html, options).toBuffer((err, buffer) => {
+//         // Generate PDF buffer
+//         pdf.create(html, options).toBuffer(async (err, buffer) => {
 //             if (err) {
 //                 console.error('Error generating PDF:', err);
 //                 return res.status(500).send({ message: "Error generating PDF" });
 //             }
 
-//             // Set headers to force download
-//             res.setHeader('Content-Disposition', `attachment; filename=${registerNumber}_bill.pdf`);
-//             res.setHeader('Content-Type', 'application/pdf');
-//             res.setHeader('Content-Length', buffer.length);
+//             // Generate S3 object key (use the registration number and folder path)
+//             const s3Key = `bill/${registerNumber}_bill.pdf`;
 
-//             // Send the buffer as the response (this will trigger a download)
-//             res.send(buffer);
+//             try {
+//                 // Check if the bill already exists in S3
+//                 const headParams = {
+//                     Bucket: BUCKET_NAME,
+//                     Key: s3Key,
+//                 };
+
+//                 try {
+//                     // If the file exists, we will not upload it again, just generate a signed URL
+//                     await s3Client.send(new GetObjectCommand(headParams));
+
+//                     // Generate a signed URL for the existing file (valid for 15 minutes)
+//                     const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(headParams), { expiresIn: 900 });
+//                     return res.status(200).send({ message: 'PDF already exists. You can download it using the link.', fileUrl: signedUrl });
+
+//                 } catch (headError) {
+//                     if (headError.name === 'NoSuchKey') {
+//                         // If the file does not exist, upload the new PDF
+//                         const uploadParams = {
+//                             Bucket: BUCKET_NAME,
+//                             Key: s3Key,
+//                             Body: buffer,
+//                             ContentType: 'application/pdf',
+//                             ACL: 'public-read' // You can modify this based on your permissions
+//                         };
+
+//                         await s3Client.send(new PutObjectCommand(uploadParams));
+
+//                         // Generate a signed URL for the uploaded file (valid for 15 minutes by default)
+//                         const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(headParams), { expiresIn: 900 });
+
+//                         return res.status(200).send({ message: 'PDF generated and uploaded successfully', fileUrl: signedUrl });
+//                     } else {
+//                         throw headError; // Re-throw any other errors
+//                     }
+//                 }
+//             } catch (s3Error) {
+//                 console.error('Error with S3:', s3Error);
+//                 res.status(500).send({ message: 'Error checking/uploading PDF to S3' });
+//             }
 //         });
 //     } catch (error) {
 //         console.error(error);
@@ -151,12 +178,12 @@
 //     }
 // }
 
-// module.exports = { generateBill };
+// module.exports = generateBill;
 
 
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { format } = require('date-fns');
-const pdf = require('html-pdf');
+const puppeteer = require('puppeteer'); // Import Puppeteer
 const handlebars = require('handlebars');
 const db = require("../models/database.js");
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -273,63 +300,60 @@ async function generateBill(req, res) {
         const compiledTemplate = handlebars.compile(templateContent);
         const html = compiledTemplate({ carDetails, carinsurance, customerDetails, ownerDetails });
 
-        // PDF options
-        const options = { format: 'A4', orientation: 'portrait' };
+        // Use Puppeteer to generate PDF
+        const browser = await puppeteer.launch(); // Launch Puppeteer browser
+        const page = await browser.newPage();
+        await page.setContent(html); // Set HTML content to the page
+        const buffer = await page.pdf({ format: 'A4', landscape: false }); // Generate PDF buffer
 
-        // Generate PDF buffer
-        pdf.create(html, options).toBuffer(async (err, buffer) => {
-            if (err) {
-                console.error('Error generating PDF:', err);
-                return res.status(500).send({ message: "Error generating PDF" });
-            }
+        await browser.close(); // Close the Puppeteer browser
 
-            // Generate S3 object key (use the registration number and folder path)
-            const s3Key = `bill/${registerNumber}_bill.pdf`;
+        // Generate S3 object key (use the registration number and folder path)
+        const s3Key = `bill/${registerNumber}_bill.pdf`;
+
+        try {
+            // Check if the bill already exists in S3
+            const headParams = {
+                Bucket: BUCKET_NAME,
+                Key: s3Key,
+            };
 
             try {
-                // Check if the bill already exists in S3
-                const headParams = {
-                    Bucket: BUCKET_NAME,
-                    Key: s3Key,
-                };
+                // If the file exists, we will not upload it again, just generate a signed URL
+                await s3Client.send(new GetObjectCommand(headParams));
 
-                try {
-                    // If the file exists, we will not upload it again, just generate a signed URL
-                    await s3Client.send(new GetObjectCommand(headParams));
+                // Generate a signed URL for the existing file (valid for 15 minutes)
+                const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(headParams), { expiresIn: 900 });
+                return res.status(200).send({ message: 'PDF already exists. You can download it using the link.', fileUrl: signedUrl });
 
-                    // Generate a signed URL for the existing file (valid for 15 minutes)
-                    const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(headParams), { expiresIn: 900 });
-                    return res.status(200).send({ message: 'PDF already exists. You can download it using the link.', fileUrl: signedUrl });
+            } catch (headError) {
+                if (headError.name === 'NoSuchKey') {
+                    // If the file doesn't exist, proceed to upload it
+                    const uploadParams = {
+                        Bucket: BUCKET_NAME,
+                        Key: s3Key,
+                        Body: buffer,
+                        ContentType: 'application/pdf',
+                    };
 
-                } catch (headError) {
-                    if (headError.name === 'NoSuchKey') {
-                        // If the file does not exist, upload the new PDF
-                        const uploadParams = {
-                            Bucket: BUCKET_NAME,
-                            Key: s3Key,
-                            Body: buffer,
-                            ContentType: 'application/pdf',
-                            ACL: 'public-read' // You can modify this based on your permissions
-                        };
+                    // Upload the PDF to S3
+                    await s3Client.send(new PutObjectCommand(uploadParams));
 
-                        await s3Client.send(new PutObjectCommand(uploadParams));
+                    // Generate a signed URL for the uploaded PDF (valid for 15 minutes)
+                    const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand({ Bucket: BUCKET_NAME, Key: s3Key }), { expiresIn: 900 });
 
-                        // Generate a signed URL for the uploaded file (valid for 15 minutes by default)
-                        const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(headParams), { expiresIn: 900 });
-
-                        return res.status(200).send({ message: 'PDF generated and uploaded successfully', fileUrl: signedUrl });
-                    } else {
-                        throw headError; // Re-throw any other errors
-                    }
+                    return res.status(200).send({ message: 'Bill generated successfully', fileUrl: signedUrl });
+                } else {
+                    throw headError; // Other errors
                 }
-            } catch (s3Error) {
-                console.error('Error with S3:', s3Error);
-                res.status(500).send({ message: 'Error checking/uploading PDF to S3' });
             }
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: "Internal Server Error" });
+        } catch (err) {
+            return res.status(500).send({ message: 'Failed to upload or retrieve PDF', error: err.message });
+        }
+
+    } catch (err) {
+        console.error('Error generating bill:', err);
+        return res.status(500).send({ message: 'Error generating the bill', error: err.message });
     }
 }
 
