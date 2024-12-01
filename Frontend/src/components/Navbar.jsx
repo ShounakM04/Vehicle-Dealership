@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "http://65.2.150.123:8000/validate-token",
+          "http://43.204.107.186:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {

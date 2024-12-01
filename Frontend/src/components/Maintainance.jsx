@@ -46,7 +46,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             if (!currRole) currRole = role;
 
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('http://65.2.150.123:8000/maintainance',
+            const response = await axios.post('http://43.204.107.186:8000/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
@@ -94,7 +94,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `http://65.2.150.123:8000/car/${currId}`, {
+                `http://43.204.107.186:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

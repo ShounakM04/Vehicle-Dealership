@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://65.2.150.123:8000/";
+const API_URL = "http://43.204.107.186:8000/";
 
 
 export const submitAdminForm = async (formData) => {
