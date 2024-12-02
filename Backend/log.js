@@ -128,8 +128,9 @@ function logResReq() {
         } else if (req.method === 'POST' && req.path.includes('/installments')) {
             const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} added an installment for vehicle number: ${vehicleNumber}`;
-        } else if (req.method === 'POST' && req.path.includes('/delete/car')) {
-            const vehicleNumber = req.body.registernumber || 'Unknown';
+        } else if (req.method === 'DELETE' && req.path.includes('/delete/car')) {
+            console.log(req.path)
+            const vehicleNumber = req.query.deletedID || 'Unknown';
             logMessage = `${timestamp} : ${user} deleted vehicle with vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/customer')) {
             logMessage = `${timestamp} : ${user} added Customer query`;
@@ -142,10 +143,16 @@ function logResReq() {
         } else if (req.method === 'POST' && req.path.includes('/miscellaneous-costs/add')) {
             logMessage = `${timestamp} : ${user} added miscellaneous costs`;
         } else if (req.method === 'POST' && req.path.includes('/dashboard/sell-car')) {
-            const vehicleNumber = req.body.registernumber || 'Unknown';
+            const vehicleNumber = req.body.carID || 'Unknown';
             logMessage = `${timestamp} : ${user} sold vehicle with vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/dashboard/delete-notice')) {
             logMessage = `${timestamp} : ${user} deleted notice image`;
+        } else if (req.method === 'POST' && req.path.includes('/accountDetails')){
+            logMessage = `${timestamp} : ${user} added an investment`;
+        } else if (req.method === 'POST' && req.path.includes('/edit-fields')){
+            logMessage = `${timestamp} : ${user} edited fields of vehicle details`;
+        } else if (req.method === 'POST' && req.path.includes('/miscellaneous-costs/add')){
+            logMessage = `${timestamp} : ${user} Added miscellaneous costs`;
         }
 
         // console.log("Log Message:", logMessage);

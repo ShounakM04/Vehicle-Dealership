@@ -38,7 +38,8 @@
     "nopt": "^8.0.0",
     "pdf-lib": "^1.17.1",
     "pg": "^8.13.0",
-    "puppeteer": "^23.8.0",
+    "playwright": "^1.49.0",
+    "puppeteer": "^23.9.0",
     "puppeteer-core": "^23.8.0",
     "streamifier": "^0.1.1"
   }
