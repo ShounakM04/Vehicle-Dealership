@@ -310,17 +310,25 @@ const Dashboard = () => {
       </div>
 
       <div className="flex-1 p-5 lg:p-5">
+
         <div className="flex justify-between mb-3 ">
           <h2 className="text-2xl font-bold">Dashboard</h2>
-
-          <div className="flex items-center space-x-2">
-            {/* <img
+          <h2 className="mt-1.5">
+            {currentDate.toLocaleDateString("en-US", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </h2>
+          {/* <div className="flex items-center space-x-2">
+            <img
               className="w-8 h-12 rounded-full"
               src="/Assets/Images/logo.png"
               alt="Profile"
             />
-            <span>Nikhil Motors</span> */}
-          </div>
+            <span>Nikhil Motors</span>
+          </div> */}
         </div>
         <div className="ml-auto mb-3 flex space-x-4">
           {userRole === "Admin" && (
@@ -355,14 +363,7 @@ const Dashboard = () => {
               </button>
             </>
           )}
-          <h2 className="">
-            {currentDate.toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </h2>
+
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">

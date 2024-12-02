@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
+import { jwtDecode } from "jwt-decode";
 
 export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, vehicleData, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');
@@ -22,6 +23,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
     const [carData, setCarData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [decodedToken, setDecodedToken] = useState(null);
 
 
 
@@ -36,14 +38,38 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         })
     }
 
+    function fetchToken() {
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+        if (token) {
+            try {
+                decodedToken = jwtDecode(token);
+                console.log(decodedToken);
+            } catch (error) {
+                console.error("Invalid token", error);
+            }
+        }
+        console.log(decodedToken);
+        setDecodedToken(decodedToken);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             setAdding(true);
+
+            fetchToken();
+
+
             let currRole = isDriver ? "driver" : isAdmin ? "admin" : isEmployee ? "employee" : "";
             if (!currRole) currRole = role;
+
+            // if(decodedToken)
+            // {
+            //     currRole += ` ${decodedToken.username}`;
+            // }
+            // console.log("CurrRole : "+currRole);
 
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
             const response = await axios.post('http://43.204.107.186:8000/maintainance',
@@ -288,11 +314,11 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                                 className="border border-gray-300 rounded p-2 w-full"
                             />
                         </div>
-                        <div className="mb-4">
+                        {/* <div className="mb-4">
                             <label className="block text-sm font-medium mb-2">Role</label>
                             <select
-                                disabled={isDriver} // Disable if any of these roles are true
-                                value={isDriver ? "driver" : role}
+                                disabled={isDriver || isAdmin || isEmployee} // Disable if any of these roles are true
+                                value={isDriver ? "driver" : isEmployee==true ? "Employee" :  isAdmin==true ? "temp" : role}
                                 onChange={(e) => setRole(e.target.value)}
                                 required
                                 className="border border-gray-300 rounded p-2 w-full text-sm md:text-base"
@@ -306,7 +332,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                             </select>
 
 
-                        </div>
+                        </div> */}
                         <div className="mb-4">
                             <label className="block text-sm font-medium mb-2">Maintenance Date</label>
                             <input
