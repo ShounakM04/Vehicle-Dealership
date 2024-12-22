@@ -43,7 +43,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `http://43.204.107.186:8000/car/${currDeleteId}`,
+        `http://13.203.151.53:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -119,7 +119,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("http://43.204.107.186:8000/dashboard/sell-car", formData,
+      await axios.post("http://13.203.151.53:8000/dashboard/sell-car", formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`

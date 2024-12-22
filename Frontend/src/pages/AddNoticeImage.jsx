@@ -18,7 +18,7 @@ function AddNoticeImage() {
     try {
       let folderPath;
       folderPath = 'Notices/'
-      const response = await axios.get('http://43.204.107.186:8000/get-images', {
+      const response = await axios.get('http://13.203.151.53:8000/get-images', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -115,7 +115,7 @@ function AddNoticeImage() {
 
       const path = `Notices/${uniqueID}`
 
-      await axios.delete(`http://43.204.107.186:8000/dashboard/delete-notice`, {
+      await axios.delete(`http://13.203.151.53:8000/dashboard/delete-notice`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }, params: { path: path }

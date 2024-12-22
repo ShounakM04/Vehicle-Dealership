@@ -25,10 +25,10 @@ function Login() {
             return;
         }
 
-        //http://43.204.107.186:8000/
-        //http://43.204.107.186:8000/
+        //http://13.203.151.53:8000/
+        //http://13.203.151.53:8000/
         //http://65.2.78.63/
-        const endpoint = "http://43.204.107.186:8000/login"; // Update with your actual endpoint
+        const endpoint = "http://13.203.151.53:8000/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)

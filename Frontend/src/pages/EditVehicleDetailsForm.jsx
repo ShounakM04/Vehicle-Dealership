@@ -55,7 +55,7 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`http://43.204.107.186:8000/car/${id}`,
+                const response = await axios.get(`http://13.203.151.53:8000/car/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -108,7 +108,7 @@ const EditVehicleDetailsForm = () => {
         }
         try {
             setWait(true);
-            const response = await axios.post("http://43.204.107.186:8000/edit-fields", {
+            const response = await axios.post("http://13.203.151.53:8000/edit-fields", {
                 tablename: tablename,
                 fieldToEdit: fieldToEdit,
                 newValue: newValue,

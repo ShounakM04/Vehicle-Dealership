@@ -33,7 +33,7 @@ const AccountDetails = () => {
 
     const fetchAccountDetails = async () => {
         try {
-            const response = await axios.get("http://43.204.107.186:8000/accountDetails", {
+            const response = await axios.get("http://13.203.151.53:8000/accountDetails", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                 },
@@ -58,7 +58,7 @@ const AccountDetails = () => {
         setIsFetching(true); // Start loading
         try {
             const response = await axios.get(
-                "http://43.204.107.186:8000/accountDetails/filter",
+                "http://13.203.151.53:8000/accountDetails/filter",
                 {
                     params: {
                         month: filterMonth + 1, // Adjust for 0-based month
@@ -91,7 +91,7 @@ const AccountDetails = () => {
         setLoading(true); // Show loading while adding amount
         try {
             const response = await axios.post(
-                "http://43.204.107.186:8000/accountDetails/addInvestment",
+                "http://13.203.151.53:8000/accountDetails/addInvestment",
                 {
                     description,
                     amount,
