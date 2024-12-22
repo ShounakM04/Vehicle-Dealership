@@ -4,7 +4,7 @@ import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const DocumentUpload = () => {
+const DocumentUpload = ({ isOffice }) => {
 
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
@@ -17,7 +17,11 @@ const DocumentUpload = () => {
     console.log(id);
 
     const handleGoBack = () => {
-        if (!id) {
+        if (isOffice == true) {
+            navigate('/dashboard');
+        }
+
+        else if (!id) {
 
             navigate('/driverdashboard');
         }

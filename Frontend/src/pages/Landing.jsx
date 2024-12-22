@@ -128,7 +128,7 @@ export default function Landing() {
           </div>
 
           <div className="mb-4">
-            <h2 className="text-xl py-6 font-bold">CAR TYPE</h2>
+            <h2 className="text-xl py-6 font-bold">VEHICLE TYPE</h2>
             {["car", "truck", "bike", "tempo"].map((type) => (
               <div className="flex items-center" key={type}>
                 <input
