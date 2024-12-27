@@ -58,8 +58,8 @@ async function handleSpecifiPage(req, res) {
             const images = await listDocHelper(inventoryImagesFolder)
             const onsiteImages = await listDocHelper(onsiteImagesFolder);
 
-
-            res.json({ car, images, insurance, owner,onsiteImages });
+            // console.log(insurance);
+            res.json({ car, images, insurance, owner, onsiteImages });
         } else {
             res.status(400).send("Car not found");
         }

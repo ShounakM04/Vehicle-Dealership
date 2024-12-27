@@ -25,7 +25,7 @@ function AddDriver() {
             return;
         }
 
-        const endpoint = "http://13.203.151.53:8000/register?isDriver=true"; // Update with your actual endpoint
+        const endpoint = "http://localhost:8000/register?isDriver=true"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);

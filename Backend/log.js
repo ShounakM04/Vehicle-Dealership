@@ -36,7 +36,7 @@ async function deleteOldLogs(bucketName) {
 // Function to create an empty log file every day at midnight
 async function createDefaultLogFile() {
     const todayDate = format(new Date(), 'yyyy-MM-dd'); // Today's date
-    const bucketName = "cardealerbucket";
+    const bucketName = "vehicledealership";
     const filename = `logs/${todayDate}.csv`; // Daily log file
     const emptyContent = "Timestamp,Message"; // Header for the CSV file
 
@@ -115,7 +115,7 @@ function logResReq() {
         const istDate = new Date(currentDate.getTime() + (5.5 * 60 * 60 * 1000)); // Offset by 5 hours and 30 minutes
         const timestamp = istDate.toISOString().replace('T', ' ').split('.')[0]; // Format timestamp without milliseconds
         
-        const bucketName = "cardealerbucket";
+        const bucketName = "vehicledealership";
         const filename = `logs/${timestamp.split(" ")[0]}.csv`; // Using date portion only
 
         let logMessage = '';

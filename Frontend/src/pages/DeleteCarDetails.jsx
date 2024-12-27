@@ -27,7 +27,7 @@ function DeleteCarDetails() {
     setError(null); // Reset error before fetch
     try {
       const response = await axios.get(
-        `http://13.203.151.53:8000/car/${currDeleteId}`,
+        `http://localhost:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -72,7 +72,7 @@ function DeleteCarDetails() {
     try {
       setDeleting(true);
       console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-      const response = await axios.delete(`http://13.203.151.53:8000/delete/car`, {
+      const response = await axios.delete(`http://localhost:8000/delete/car`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }

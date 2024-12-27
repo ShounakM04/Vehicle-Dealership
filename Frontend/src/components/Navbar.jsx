@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "http://13.203.151.53:8000/validate-token",
+          "http://localhost:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {
@@ -143,17 +143,17 @@ function Navbar() {
               <img
                 src="/Assets/Images/logo.png"
                 alt="Brand Logo"
-                className="sm:w-20 h-30 w-12 ml-20 sm:ml-0"
+                className="sm:w-20 h-30 w-12 ml-[20%] sm:ml-0"
               />
 
 
 
               {/* Show 'Nikhil Motors' on larger screens */}
-              <div className="hidden sm:block text-white text-xl font-bold ml-2">
+              <div className="hidden lg:block text-white text-xl font-bold ml-2">
                 Nikhil Motors
               </div>
               {/* Show search bar on mobile screens */}
-              <div className="block sm:hidden ml-2 w-1/2">
+              {isHomeRoute ? (<div className="block sm:hidden ml-2 w-1/2">
                 <input
                   type="text"
                   className="w-full h-7 pl-10 pr-4 py-2 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -161,7 +161,9 @@ function Navbar() {
                   value={query}
                   onChange={handleSearchInputChange}
                 />
-              </div>
+              </div>):(<div className="block sm:hidden text-white text-xl font-bold ml-2">
+                Nikhil Motors
+              </div>)}
 
             </div>
 
@@ -225,7 +227,7 @@ function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
             {/* <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a> */}
-            <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
+            {/* <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a> */}
             <a href="/contact" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
             <a href="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
             {loggedIn == true ?
