@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000/`, { params });
+        const response = await axios.get(`http://3.109.83.51:8000/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
@@ -79,7 +79,7 @@ export default function Landing() {
       try {
         let folderPath;
         folderPath = 'Notices/'
-        const response = await axios.get('http://localhost:8000/get-images', {
+        const response = await axios.get('http://3.109.83.51:8000/get-images', {
           params: {
             folderPath: folderPath
           }

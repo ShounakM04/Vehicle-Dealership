@@ -23,7 +23,7 @@ const MiscellaneousCosts = () => {
     setIsFetching(true); // Start loading
     try {
       const response = await axios.get(
-        "http://localhost:8000/miscellaneous-costs/filter",
+        "http://3.109.83.51:8000/miscellaneous-costs/filter",
         {
           params: {
             month: filterMonth + 1, // Adjust for 0-based month
@@ -56,7 +56,7 @@ const MiscellaneousCosts = () => {
     setLoading(true); // Show loading while adding cost
     try {
       const response = await axios.post(
-        "http://localhost:8000/miscellaneous-costs/add",
+        "http://3.109.83.51:8000/miscellaneous-costs/add",
         {
           description,
           cost,
