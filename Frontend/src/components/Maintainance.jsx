@@ -72,7 +72,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             // console.log("CurrRole : "+currRole);
 
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('http://3.109.83.51:8000/maintainance',
+            const response = await axios.post('http://3.109.83.51/api/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
@@ -120,7 +120,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `http://3.109.83.51:8000/car/${currId}`, {
+                `http://3.109.83.51/api/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

@@ -24,7 +24,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     try {
       console.log("Params : " + carID);
       const response = await axios.get(
-        `http://3.109.83.51:8000/dashboard/sold-cars`, // Update to your actual endpoint
+        `http://3.109.83.51/api/dashboard/sold-cars`, // Update to your actual endpoint
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -46,7 +46,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`http://3.109.83.51:8000/installments`, {
+      const response = await axios.get(`http://3.109.83.51/api/installments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -65,7 +65,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     e.preventDefault();
     setUploading(true);
     try {
-      const response = await axios.post("http://3.109.83.51:8000/installments", {
+      const response = await axios.post("http://3.109.83.51/api/installments", {
         registernumber: carID,
         amount: installmentAmount,
         installmentdate: installmentDate,
@@ -154,7 +154,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("http://3.109.83.51:8000/profits", {
+      const response = await axios.get("http://3.109.83.51/api/profits", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },

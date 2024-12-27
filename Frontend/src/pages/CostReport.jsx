@@ -59,7 +59,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://3.109.83.51:8000/car/${id}`, {
+        const response = await axios.get(`http://3.109.83.51/api/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -120,7 +120,7 @@ const CostReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://3.109.83.51:8000/bill/generate-bill`,
+        `http://3.109.83.51/api/bill/generate-bill`,
         { registerNumber: id },
         {
           headers: {
@@ -156,7 +156,7 @@ const CostReport = () => {
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
-      const response = await axios.get("http://3.109.83.51:8000/maintainance", {
+      const response = await axios.get("http://3.109.83.51/api/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
