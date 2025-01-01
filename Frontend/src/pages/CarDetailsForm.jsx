@@ -85,10 +85,13 @@ function AdminForm() {
     }
 
     try {
+      setUploading(true);
 
+      // Upload images first
+      await handleUpload();
 
       // Submit form data after images are uploaded
-      await axios.post("https://vehicle-dealership.vercel.app/details", {
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -116,8 +119,7 @@ function AdminForm() {
           }
         });
 
-      // Upload images first
-      await handleUpload();
+
 
 
 
@@ -130,6 +132,8 @@ function AdminForm() {
         toast.error(error.response.data.error);
       }
     }
+    setUploading(false);
+
   };
   return (
     <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">

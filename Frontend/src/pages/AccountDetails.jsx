@@ -33,7 +33,7 @@ const AccountDetails = () => {
 
     const fetchAccountDetails = async () => {
         try {
-            const response = await axios.get("https://vehicle-dealership.vercel.app/accountDetails", {
+            const response = await axios.get("http://localhost:8000/accountDetails", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                 },
@@ -58,7 +58,7 @@ const AccountDetails = () => {
         setIsFetching(true); // Start loading
         try {
             const response = await axios.get(
-                "https://vehicle-dealership.vercel.app/accountDetails/filter",
+                "http://localhost:8000/accountDetails/filter",
                 {
                     params: {
                         month: filterMonth + 1, // Adjust for 0-based month
@@ -91,7 +91,7 @@ const AccountDetails = () => {
         setLoading(true); // Show loading while adding amount
         try {
             const response = await axios.post(
-                "https://vehicle-dealership.vercel.app/accountDetails/addInvestment",
+                "http://localhost:8000/accountDetails/addInvestment",
                 {
                     description,
                     amount,
@@ -178,6 +178,10 @@ const AccountDetails = () => {
                         <tr className="border-b">
                             <td className="py-2 px-4">Total Miscellaneous Spends</td>
                             <td className="py-2 px-4 text-right">{accountDetails?.totalMiscellaneous}</td>
+                        </tr>
+                        <tr className="border-b">
+                            <td className="py-2 px-4">Total DownPayment Received</td>
+                            <td className="py-2 px-4 text-right">{accountDetails?.totalDownPayments}</td>
                         </tr>
                         <tr className="border-b">
                             <td className="py-2 px-4">Total Commission</td>

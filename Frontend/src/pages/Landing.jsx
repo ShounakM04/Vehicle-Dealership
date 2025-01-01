@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/`, { params });
+        const response = await axios.get(`http://localhost:8000/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data.map((car) => {
@@ -79,7 +79,7 @@ export default function Landing() {
       try {
         let folderPath;
         folderPath = 'Notices/'
-        const response = await axios.get('https://vehicle-dealership.vercel.app/get-images', {
+        const response = await axios.get('http://localhost:8000/get-images', {
           params: {
             folderPath: folderPath
           }
@@ -128,7 +128,7 @@ export default function Landing() {
           </div>
 
           <div className="mb-4">
-            <h2 className="text-xl py-6 font-bold">CAR TYPE</h2>
+            <h2 className="text-xl py-6 font-bold">VEHICLE TYPE</h2>
             {["car", "truck", "bike", "tempo"].map((type) => (
               <div className="flex items-center" key={type}>
                 <input
@@ -198,7 +198,7 @@ export default function Landing() {
           car.status === false && (
             <div
               key={car.id}
-              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%]"
+              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%] md:w-[48%]"
             >
               <img
                 src={car.imgSrc}

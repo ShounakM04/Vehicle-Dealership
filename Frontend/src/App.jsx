@@ -224,7 +224,7 @@ const router = createBrowserRouter([
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
           <Layout>
-            <DocumentUpload />
+            <DocumentUpload isOffice={true} />
           </Layout>
         </ProtectedUserRoute>
 
@@ -238,7 +238,7 @@ const router = createBrowserRouter([
         <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
 
           <Layout>
-            <DocumentView />
+            <DocumentView isOffice={true} />
           </Layout>
         </ProtectedUserRoute>
 

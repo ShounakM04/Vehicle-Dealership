@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
+import { jwtDecode } from "jwt-decode";
 
 export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, vehicleData, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');
@@ -22,6 +23,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
     const [carData, setCarData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [decodedToken, setDecodedToken] = useState(null);
 
 
 
@@ -36,15 +38,41 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         })
     }
 
+    function fetchToken() {
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+        if (token) {
+            try {
+                decodedToken = jwtDecode(token);
+                console.log(decodedToken);
+            } catch (error) {
+                console.error("Invalid token", error);
+            }
+        }
+        console.log(decodedToken);
+        setDecodedToken(decodedToken);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             setAdding(true);
-            let currRole = isAdmin ? "admin" : isEmployee ? "employee" : isDriver ? "driver" : "";
+
+            fetchToken();
+
+
+            let currRole = isDriver ? "driver" : isAdmin ? "admin" : isEmployee ? "employee" : "";
+            if (!currRole) currRole = role;
+
+            // if(decodedToken)
+            // {
+            //     currRole += ` ${decodedToken.username}`;
+            // }
+            // console.log("CurrRole : "+currRole);
+
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('https://vehicle-dealership.vercel.app/maintainance',
+            const response = await axios.post('http://localhost:8000/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
@@ -52,17 +80,16 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                     }
                 });
 
+            if (files.length != 0) {
+                const nextIndex = response.data.nextIndex;
+                console.log("nextIndex : " + nextIndex);;
+                // Handle other image uploads if necessary (similar to DisplayImage)
 
-            const nextIndex = response.data.nextIndex;
-            console.log("nextIndex : " + nextIndex);;
-            // Handle other image uploads if necessary (similar to DisplayImage)
-
-            const file = files[0];
-            const maintainanceDocPath = `${globalRegisterNumber}/MaintenanceDoc/${nextIndex}`;
-            const maintainanceDocUrl = await getUploadURL(file, maintainanceDocPath);
-            await uploadToS3(maintainanceDocUrl, file);
-
-
+                const file = files[0];
+                const maintainanceDocPath = `${globalRegisterNumber}/MaintenanceDoc/${nextIndex}`;
+                const maintainanceDocUrl = await getUploadURL(file, maintainanceDocPath);
+                await uploadToS3(maintainanceDocUrl, file);
+            }
             // Call the parent callback to refresh maintenance records
             if (onMaintenanceAdded) { onMaintenanceAdded(); }
 
@@ -88,11 +115,12 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
     // Fetch car details using the submitted ID
     const fetchCarDetails = async (currId) => {
+        setUploading(true);
         setLoading(true); // Set loading to true before the fetch call
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://vehicle-dealership.vercel.app/car/${currId}`, {
+                `http://localhost:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -106,6 +134,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             setError("Error fetching car details"); // Set error message if fetch fails
         } finally {
             setLoading(false); // Set loading to false after fetch completes
+            setUploading(false);
         }
     };
 
@@ -176,7 +205,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                             className={`bg-blue-500 mt-6 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             disabled={uploading}
                         >
-                            {uploading ? 'Uploading...' : 'Submit'}
+                            {uploading ? 'Fetching...' : 'Submit'}
                         </button>
                     </form>
                 </div>
@@ -285,11 +314,11 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                                 className="border border-gray-300 rounded p-2 w-full"
                             />
                         </div>
-                        <div className="mb-4">
+                        {/* <div className="mb-4">
                             <label className="block text-sm font-medium mb-2">Role</label>
                             <select
-                                disabled={isDriver || isEmployee || isAdmin} // Disable if any of these roles are true
-                                value={isDriver ? "driver" : isEmployee ? "employee" : isAdmin ? "admin" : ""}
+                                disabled={isDriver || isAdmin || isEmployee} // Disable if any of these roles are true
+                                value={isDriver ? "driver" : isEmployee==true ? "Employee" :  isAdmin==true ? "temp" : role}
                                 onChange={(e) => setRole(e.target.value)}
                                 required
                                 className="border border-gray-300 rounded p-2 w-full text-sm md:text-base"
@@ -303,7 +332,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                             </select>
 
 
-                        </div>
+                        </div> */}
                         <div className="mb-4">
                             <label className="block text-sm font-medium mb-2">Maintenance Date</label>
                             <input
@@ -318,6 +347,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                             <label className="block text-sm font-medium mb-2">Upload Documents</label>
                             <input
                                 type="file"
+                                required
                                 onChange={(e) => setFiles([...e.target.files])}
                                 className="border border-gray-300 rounded p-2 w-full"
                             />

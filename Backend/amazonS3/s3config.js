@@ -16,7 +16,7 @@ const s3Client = new S3Client({
 async function uploadToS3(filename, contentType) {
     // Set up the parameters for the S3 upload
     const s3Params = {
-        Bucket: "cardealerbucket",
+        Bucket: "vehicledealership",
         Key: filename,
         ContentType: contentType
     };
@@ -33,7 +33,7 @@ async function uploadToS3(filename, contentType) {
 // Generate a signed URL to retrieve an object
 async function getObjectURL(key, expiresIn = 3600) { // default expiration set to 1 hour
     const command = new GetObjectCommand({
-        Bucket: "cardealerbucket",
+        Bucket: "vehicledealership",
         Key: key,
     });
     
@@ -46,7 +46,7 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
     // List images in a specified folder path
     async function listImagesInFolder(path) {
         const params = { 
-            Bucket: 'cardealerbucket', // Replace with your bucket name
+            Bucket: 'vehicledealership', // Replace with your bucket name
             Prefix: path, // Use the folder structure based on the provided path
         };
 
@@ -71,7 +71,7 @@ async function getObjectURL(key, expiresIn = 3600) { // default expiration set t
 
 async function  deleteObject(filename) {
     const command = new DeleteObjectCommand({
-        Bucket : "cardealerbucket",
+        Bucket : "vehicledealership",
         Key : filename
     });
 
@@ -100,7 +100,7 @@ async function uploadLogsToS3() {
         const logData = fs.readFileSync(logFilePath);
 
         const s3Params = {
-            Bucket: "cardealerbucket",
+            Bucket: "vehicledealership",
             Key: `logs/${todayDate}.csv`,
             Body: logData,
             ContentType: "text/csv",
@@ -123,7 +123,7 @@ async function uploadLogsToS3() {
 async function downloadTodaysLogsFromS3() {
     const todayDate = format(new Date(), 'yyyy-MM-dd');
     const command = new GetObjectCommand({
-        Bucket: "cardealerbucket",
+        Bucket: "vehicledealership",
         Key: `logs/${todayDate}.csv`,
     });
 

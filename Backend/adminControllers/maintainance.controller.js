@@ -44,6 +44,7 @@ async function handleGetMaintainanceDetails(req, res) {
 
         // Wait for all other image promises to resolve
         const maintainanceDocs = await Promise.all(maintainanceDocsPromises);
+        // console.log(maintainanceDocs);
 
         // Create maintenanceRecords array
         const maintenanceRecords = maintainanceDetails.map((detail, index) => ({

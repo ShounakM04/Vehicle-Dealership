@@ -59,7 +59,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/car/${id}`, {
+        const response = await axios.get(`http://localhost:8000/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -120,7 +120,7 @@ const CostReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `https://vehicle-dealership.vercel.app/bill/generate-bill`,
+        `http://localhost:8000/bill/generate-bill`,
         { registerNumber: id },
         {
           headers: {
@@ -128,10 +128,10 @@ const CostReport = () => {
           },
         }
       );
-  
+
       if (response.data && response.data.fileUrl) {
         toast.success("Bill generated successfully!");
-  
+
         // Open the URL in a new tab
         const newTab = window.open(response.data.fileUrl, '_blank');
         if (newTab) {
@@ -152,11 +152,11 @@ const CostReport = () => {
       setLoading(false);
     }
   };
-  
+
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
-      const response = await axios.get("https://vehicle-dealership.vercel.app/maintainance", {
+      const response = await axios.get("http://localhost:8000/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,

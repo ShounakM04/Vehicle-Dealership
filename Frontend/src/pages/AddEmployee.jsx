@@ -25,7 +25,7 @@ function AddEmployee() {
             return;
         }
 
-        const endpoint = "https://vehicle-dealership.vercel.app/register?isEmployee=true"; // Update with your actual endpoint
+        const endpoint = "http://localhost:8000/register?isEmployee=true"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);
@@ -49,6 +49,7 @@ function AddEmployee() {
 
             toast.success("Added Driver successfully", { position: "top-center", autoClose: 3000 });
             setIsLoading(false);
+            navigate("/dashboard");
         } catch (error) {
             // Hide loader when there's an error
             setIsLoading(false);

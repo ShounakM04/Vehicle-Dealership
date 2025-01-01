@@ -62,8 +62,8 @@ export default function DriverDashboard() {
 
                 <div className="flex items-center space-x-2 mb-5">
                     <img
-                        className="w-10 h-10 rounded-full"
-                        src="https://via.placeholder.com/40"
+                        className="w-8 h-12 rounded-full"
+                        src="/Assets/Images/logo.png"
                         alt="Profile"
                     />
                     <div>
@@ -132,9 +132,9 @@ export default function DriverDashboard() {
                             Add Maintainance
                         </div>
                     </NavLink>
-                    <div className="bg-orange-500 p-5 rounded text-white min-h-4">
+                    {/* <div className="bg-orange-500 p-5 rounded text-white min-h-4">
                         Sample Card3
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

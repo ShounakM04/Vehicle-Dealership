@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "https://vehicle-dealership.vercel.app/validate-token",
+          "http://localhost:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {
@@ -140,11 +140,33 @@ function Navbar() {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0 flex items-center">
-              <img src="/Assets/Images/logo.png" alt="Brand Logo" className="h-30 w-20" />
-              <div className="text-white text-xl font-bold ml-2">
+              <img
+                src="/Assets/Images/logo.png"
+                alt="Brand Logo"
+                className="sm:w-20 h-30 w-12 ml-[20%] sm:ml-0"
+              />
+
+
+
+              {/* Show 'Nikhil Motors' on larger screens */}
+              <div className="hidden lg:block text-white text-xl font-bold ml-2">
                 Nikhil Motors
               </div>
+              {/* Show search bar on mobile screens */}
+              {isHomeRoute ? (<div className="block sm:hidden ml-2 w-1/2">
+                <input
+                  type="text"
+                  className="w-full h-7 pl-10 pr-4 py-2 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Search..."
+                  value={query}
+                  onChange={handleSearchInputChange}
+                />
+              </div>) : (<div className="block sm:hidden text-white text-xl font-bold ml-2">
+                Nikhil Motors
+              </div>)}
+
             </div>
+
           </div>
 
           <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
@@ -205,7 +227,7 @@ function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
             {/* <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a> */}
-            <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
+            {/* <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a> */}
             <a href="/contact" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
             <a href="#" onClick={handleAdmin} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
             {loggedIn == true ?
@@ -215,7 +237,7 @@ function Navbar() {
           </div>
 
           {/* Search bar in the hamburger menu */}
-          {isHomeRoute && ( // Render search input only on the home route
+          {/* {isHomeRoute && ( // Render search input only on the home route
             <div className="px-2 pt-2 pb-3">
               <div className="relative">
                 <input
@@ -249,7 +271,7 @@ function Navbar() {
                 Search
               </button>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </nav>

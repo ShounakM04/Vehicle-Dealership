@@ -17,6 +17,8 @@ function DeleteCarDetails() {
   const [carData, setCarData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const navigate = useNavigate();
   // Fetch car details using the submitted ID
@@ -25,7 +27,7 @@ function DeleteCarDetails() {
     setError(null); // Reset error before fetch
     try {
       const response = await axios.get(
-        `https://vehicle-dealership.vercel.app/car/${currDeleteId}`,
+        `http://localhost:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -45,6 +47,7 @@ function DeleteCarDetails() {
 
   // Handle form submission
   const handleSubmit = async (e) => {
+
     e.preventDefault(); // Prevent default form submission
 
     const currDeleteId = registernumber;
@@ -52,16 +55,24 @@ function DeleteCarDetails() {
     setSubmittedID(registernumber); // Store the registernumber for deletion
     setregisternumber(""); // Clear the input field after submission
     setSubmitted(true); // Set the form as submitted
+    try {
+      setUploading(true);
 
-    await fetchCarDetails(currDeleteId); // Call the fetch function
+      await fetchCarDetails(currDeleteId); // Call the fetch function
+
+    } catch (error) {
+      console.log(error);
+    }
+    setUploading(false);
   };
 
   // Simulate deletion from DB and handle success/error with toast notifications
   const deleteEntry = async () => {
     // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
     try {
+      setDeleting(true);
       console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-      const response = await axios.delete(`https://vehicle-dealership.vercel.app/delete/car`, {
+      const response = await axios.delete(`http://localhost:8000/delete/car`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -97,6 +108,7 @@ function DeleteCarDetails() {
       });
       setModalOpen(false); // Close the modal even if an error occurs
     }
+    setDeleting(false);
   };
 
   // Open modal for final confirmation
@@ -147,11 +159,13 @@ function DeleteCarDetails() {
             }
           />
         </div>
+
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6"
+          className={`bg-blue-500 mt-6 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={uploading}
         >
-          Submit
+          {uploading ? 'Fetching...' : 'Submit'}
         </button>
       </form>
 
@@ -297,9 +311,13 @@ function DeleteCarDetails() {
         <div className="mt-6">
           <button
             onClick={() => deleteEntry()}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+            className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2 ${deleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={deleting}
+
           >
-            Confirm Delete
+
+            {deleting ? 'Deleting...' : 'Confirm Delete'}
+
           </button>
           <button
             onClick={closeModal}

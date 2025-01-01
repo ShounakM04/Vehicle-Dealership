@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useParams, useNavigate } from 'react-router-dom'
 import { FaFileAlt } from "react-icons/fa";
-export default function DocumentView() {
+export default function DocumentView({ isOffice }) {
     const [fetchedImages, setFetchedImages] = useState([]);
     const [fetchedDescription, setFetchedDescription] = useState([]);
     const [fetchedUniqueIds, setFetchedUniqueIds] = useState([]);
@@ -31,7 +31,7 @@ export default function DocumentView() {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('https://vehicle-dealership.vercel.app/get-images', {
+            const response1 = await axios.get('http://localhost:8000/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -41,7 +41,7 @@ export default function DocumentView() {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('https://vehicle-dealership.vercel.app/Description', {
+            const response2 = await axios.get('http://localhost:8000/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -67,7 +67,10 @@ export default function DocumentView() {
 
     const handleGoBack = () => {
 
-        navigate(`/dashboard/costReport/${id}`);
+        if (isOffice == true) {
+            navigate("/dashboard");
+        }
+        else { navigate(`/dashboard/costReport/${id}`); }
 
 
     };

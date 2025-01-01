@@ -14,7 +14,7 @@ function CarDetails() {
     const fetchCarDetails = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get(`https://vehicle-dealership.vercel.app/landingcar/${params.id}`,
+        const response = await axios.get(`http://localhost:8000/landingcar/${params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -96,7 +96,7 @@ function CarDetails() {
             </ul>
 
             {/* Insurance Section */}
-            {carData.insurance && <><h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
+            {carData.insurance && (carData.insurance.insurancetenure) != 0 && <><h3 className="text-lg font-semibold mb-2 mt-4">Insurance Information</h3>
               <ul className="space-y-2">
                 <li className="flex justify-between items-center border-b pb-2">
                   <span className="font-semibold">Insurance Company:</span>
@@ -108,7 +108,7 @@ function CarDetails() {
                 </li>
                 <li className="flex justify-between items-center border-b pb-2">
                   <span className="font-semibold">Policy Tenure:</span>
-                  <span>{carData.insurance.policytenure} years</span>
+                  <span>{carData.insurance.insurancetenure} years</span>
                 </li>
               </ul>
             </>

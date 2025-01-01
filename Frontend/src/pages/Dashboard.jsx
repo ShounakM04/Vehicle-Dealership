@@ -59,7 +59,7 @@ const Dashboard = () => {
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
-        "https://vehicle-dealership.vercel.app/dashboard/total-selling-price",
+        "http://localhost:8000/dashboard/total-selling-price",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -74,7 +74,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("https://vehicle-dealership.vercel.app/logs/download", {
+      const response = await fetch("http://localhost:8000/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -103,13 +103,16 @@ const Dashboard = () => {
     try {
       let params = {};
       if (query) params.carSearch = query;
-      const response = await axios.get("https://vehicle-dealership.vercel.app/dashboard", {
+
+      console.log("Query : " + query);
+      const response = await axios.get("http://localhost:8000/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         params,
       });
       setCarDetails(response.data);
+      console.log(response.data);
     } catch (error) {
       if (error.response?.status === 400) {
         navigate("/admin");
@@ -141,7 +144,7 @@ const Dashboard = () => {
   const fetchMonthlyCosts = async () => {
     try {
       const response = await axios.get(
-        "https://vehicle-dealership.vercel.app/miscellaneous-costs/current-month",
+        "http://localhost:8000/miscellaneous-costs/current-month",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -175,7 +178,7 @@ const Dashboard = () => {
 
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("https://vehicle-dealership.vercel.app/accountDetails", {
+      const response = await axios.get("http://localhost:8000/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -187,9 +190,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+
+    fetchCarDetails();
+  }, [query]);
+  useEffect(() => {
     setLoading(true);
     fetchTotalSellingPrice();
-    fetchCarDetails();
     fetchUserRoleAndUsername();
     fetchMonthlyCosts();
     fetchAccountDetails();
@@ -304,17 +310,25 @@ const Dashboard = () => {
       </div>
 
       <div className="flex-1 p-5 lg:p-5">
+
         <div className="flex justify-between mb-3 ">
           <h2 className="text-2xl font-bold">Dashboard</h2>
-
-          <div className="flex items-center space-x-2">
-            {/* <img
+          <h2 className="mt-1.5">
+            {currentDate.toLocaleDateString("en-US", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </h2>
+          {/* <div className="flex items-center space-x-2">
+            <img
               className="w-8 h-12 rounded-full"
               src="/Assets/Images/logo.png"
               alt="Profile"
             />
-            <span>Nikhil Motors</span> */}
-          </div>
+            <span>Nikhil Motors</span>
+          </div> */}
         </div>
         <div className="ml-auto mb-3 flex space-x-4">
           {userRole === "Admin" && (
@@ -349,14 +363,7 @@ const Dashboard = () => {
               </button>
             </>
           )}
-          <h2 className="">
-            {currentDate.toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </h2>
+
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">
