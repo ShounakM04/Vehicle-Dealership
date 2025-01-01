@@ -87,8 +87,11 @@ function AdminForm() {
     try {
       setUploading(true);
 
+      // Upload images first
+      await handleUpload();
+
       // Submit form data after images are uploaded
-      await axios.post("http://3.109.83.51/api/details", {
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -116,8 +119,7 @@ function AdminForm() {
           }
         });
 
-      // Upload images first
-      await handleUpload();
+
 
 
 

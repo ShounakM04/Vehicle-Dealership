@@ -49,11 +49,11 @@ const ContactUs = () => {
                         </p>
                         <div className="mt-8">
                             {/* Adjusted margin for QR code */}
-                            <img
+                           <a href="https://chat.whatsapp.com/KlAdjB3KgIl8PUv3VQEy8g" target="blank_"> <img
                                 className="w-40 h-40 mx-auto"
                                 src="/Assets/Images/qr.jpeg"
                                 alt="WhatsApp QR Code"
-                            />
+                            /></a>
                         </div>
                     </div>
 

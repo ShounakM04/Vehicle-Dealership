@@ -64,7 +64,7 @@ const DocumentUpload = ({ isOffice }) => {
 
     const addDescription = async (uniqueID) => {
         try {
-            await axios.post('http://3.109.83.51/api/Description',
+            await axios.post('http://localhost:8000/Description',
                 {
                     uniqueID: uniqueID,
                     description: description
