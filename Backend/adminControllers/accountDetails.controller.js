@@ -111,6 +111,16 @@ const filterByMonthAndYear = async (req, res) => {
     }
 };
 
+async function getmonthlyLogs(params) {
+    const {} = req.body;
+    try {
+        
+    } catch (error) {
+        console.log(`Error occured while generating monthly sales : ${error}`);
+        res.status(500).json({ error: "An error occurred while generating monthly sales" });
+    }
+}
+
 // Export the controllers
 module.exports = {
     addInvestment,

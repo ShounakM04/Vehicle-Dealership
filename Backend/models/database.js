@@ -15,6 +15,7 @@
 const pg = require("pg")
 require('dotenv').config();
 
+//console.log(typeof process.env.DATABASE_PASSWORD, process.env.DATABASE_PASSWORD);
 
 const db =  new pg.Client({
     user: process.env.DATABASE_USER,
@@ -22,6 +23,7 @@ const db =  new pg.Client({
     database:process.env.DATABASE_NAME,
     password:process.env.DATABASE_PASSWORD,
     port:process.env.DATABASE_PORT,
+   
 });
 
 db.connect();

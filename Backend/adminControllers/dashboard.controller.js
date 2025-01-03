@@ -5,7 +5,7 @@ async function handleDashboard(req, res) {
     // console.log(carSearch)
     try {
         let query = `
-            SELECT o.ownername, o.owneremail, o.ownerphone, c.carmake, c.carname, c.registernumber, c.status 
+            SELECT o.ownername, o.owneremail, o.ownerphone, c.carmake, c.carname, c.registernumber, c.status, c.onhomepage 
             FROM cardetails c
             JOIN ownerdetails o ON o.registernumber = c.registernumber
             WHERE 1=1
@@ -26,7 +26,8 @@ async function handleDashboard(req, res) {
             ownerphone: row.ownerphone,
             carmake: row.carmake,
             carname: row.carname,
-            registernumber: row.registernumber
+            registernumber: row.registernumber,
+            onhomepage : row.onhomepage
         }));
 
         res.send(carDetails);
@@ -36,4 +37,23 @@ async function handleDashboard(req, res) {
     }
 }
 
-module.exports = handleDashboard;
+async function handlepushtoHomepage(req,res) {
+    const onHomePage = req.body;
+    try {
+        await db.query(`UPDATE TABLE cardetails SET onhompage = $1`,[onHomePage]);
+
+        if(onHomePage == false){
+            return res.status(200).send({message : 'Successfully removed from homepage'});
+        }
+        return  res.status(200).send({message : 'Successfully displayed on homepage'});
+       
+        
+    } catch (error) {
+        console.error("Error occurred while loading car details:", error);
+        return res.status(500).send("Error occurred while loading the page");
+    }
+}
+
+module.exports = {handleDashboard,
+    handlepushtoHomepage
+};

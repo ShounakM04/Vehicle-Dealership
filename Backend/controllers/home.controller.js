@@ -26,7 +26,7 @@ async function handleHomePage(req, res) {
             query1 += ` AND (LOWER(c.carname) LIKE LOWER('%${carSearch}%') OR LOWER(c.registernumber) LIKE LOWER('%${carSearch}%'))`;
         }
 
-        query1 += ` ORDER BY c.registernumber`;
+        query1 += `AND onhomepage = TRUE ORDER BY c.registernumber`;
 
         const result = await db.query(query1);
 

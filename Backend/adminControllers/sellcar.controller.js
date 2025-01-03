@@ -3,6 +3,13 @@ const db = require("../models/database");
 const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
 
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');     
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
 async function handleSellCar(req, res) {
     try {
         console.log("Request body:", req.body);
@@ -29,15 +36,18 @@ async function handleSellCar(req, res) {
         const updateQuery = `UPDATE cardetails SET status = true WHERE registernumber = $1`;
         await db.query(updateQuery, [carID]);
 
-        const temp = "";
+        const query = await db.query(`SELECT vehiclebuyprice FROM cardetails WHERE registernumber = $1`,[carID]);
+        const buyingPrice = query.rows[0].vehiclebuyprice;
+        const profit = sellingPrice - buyingPrice;
 
+        const selldate = formatDate(new Date());
         // Insert data into the soldcardetails table, including the URLs
         await db.query(
             `INSERT INTO soldcardetails (
                 registernumber, selling_price, owner_name, contact_no, 
                 down_payment, total_installments, installment_amount, commission,description,payment_mode,account_paid_to
             ) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10,$11) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10,$11,$12,$13) 
             RETURNING *`,
             [
                 carID,
@@ -51,6 +61,8 @@ async function handleSellCar(req, res) {
                 description, 
                 paymentMode,
                 accountPaidTo,
+                selldate,
+                profit
             ]
         );
 
