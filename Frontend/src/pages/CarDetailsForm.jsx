@@ -265,11 +265,11 @@ function AdminForm() {
               id="onHomePageDisplay"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={onHomePageDisplay}
-              onChange={(e) => setOnHomePageDisplay(e.target.value === "yes")}
+              onChange={(e) => setOnHomePageDisplay(e.target.value == "true" ? true : false)}
             >
               <option value="" disabled>Select Vehicle</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </div>
 
