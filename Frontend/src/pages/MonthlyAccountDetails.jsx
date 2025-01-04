@@ -18,7 +18,7 @@ const MonthlyAccountDetails = () => {
   const fetchData = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://localhost:8000/accountDetails/filter`, {
+      const response = await axios.get(`http://3.109.83.51/api/accountDetails/filter`, {
         params: { month, year },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -34,19 +34,19 @@ const MonthlyAccountDetails = () => {
     }
   };
 
-  const fetchMonthlyProfit = async()=>{
+  const fetchMonthlyProfit = async () => {
     setIsFetching(true);
-    try{
-      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
-        params:{month, year},
-        headers:{
+    try {
+      const response = await axios.get(`http://3.109.83.51/api/profits/monthly`, {
+        params: { month, year },
+        headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         }
       })
       setMonthlyProfit(response.data.totalProfit);
       setIsFetching(false)
     }
-    catch(error){
+    catch (error) {
       console.log(error)
     }
   }
@@ -127,46 +127,46 @@ const MonthlyAccountDetails = () => {
 
       {/* Right Section (Total Data) */}
       <div className="w-full lg:w-1/2 p-5 bg-white shadow-lg rounded-lg overflow-y-auto h-[89vh]">
-  <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
-    Total Data for {new Date(year, month - 1).toLocaleString('default', { month: 'long' })} {year}
-  </h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
+          Total Data for {new Date(year, month - 1).toLocaleString('default', { month: 'long' })} {year}
+        </h2>
 
-  {isFetching ? (
-    <p className="text-center text-gray-600">Loading...</p>
-  ) : (
-    <div>
-      {/* Total Investment Section */}
-      <h3 className="font-semibold text-gray-700 mt-4 border-b pb-2">Total Investment</h3>
-      <p className="text-gray-600">
-        ₹<span className="font-bold">{totalData?.totalInvestment || 0}</span>
-      </p>
+        {isFetching ? (
+          <p className="text-center text-gray-600">Loading...</p>
+        ) : (
+          <div>
+            {/* Total Investment Section */}
+            <h3 className="font-semibold text-gray-700 mt-4 border-b pb-2">Total Investment</h3>
+            <p className="text-gray-600">
+              ₹<span className="font-bold">{totalData?.totalInvestment || 0}</span>
+            </p>
 
-      {/* Sales and Commission Section */}
-      <h3 className="font-semibold text-gray-700 mt-6 border-b pb-2">Sales & Commission</h3>
-      <p className="text-gray-600">
-        Sales: ₹<span className="font-bold">{totalData?.totalSales || 0}</span>
-      </p>
-      <p className="text-gray-600">
-        Commission: ₹<span className="font-bold">{totalData?.totalCommission || 0}</span>
-      </p>
-      <p className="text-gray-600">
-        In Hand Amount (Installments + Downpayments): ₹<span className="font-bold">{totalData?.totalInHandAmount || 0}</span>
-      </p>
-      <p className="text-gray-600">
-        Profit: ₹<span className="font-bold">{monthlyProfit || 0}</span>
-      </p>
+            {/* Sales and Commission Section */}
+            <h3 className="font-semibold text-gray-700 mt-6 border-b pb-2">Sales & Commission</h3>
+            <p className="text-gray-600">
+              Sales: ₹<span className="font-bold">{totalData?.totalSales || 0}</span>
+            </p>
+            <p className="text-gray-600">
+              Commission: ₹<span className="font-bold">{totalData?.totalCommission || 0}</span>
+            </p>
+            <p className="text-gray-600">
+              In Hand Amount (Installments + Downpayments): ₹<span className="font-bold">{totalData?.totalInHandAmount || 0}</span>
+            </p>
+            <p className="text-gray-600">
+              Profit: ₹<span className="font-bold">{monthlyProfit || 0}</span>
+            </p>
 
-      {/* Maintenance and Installments Section */}
-      <h3 className="font-semibold text-gray-700 mt-6 border-b pb-2">Maintenance & Installments</h3>
-      <p className="text-gray-600">
-        Maintenance: ₹<span className="font-bold">{totalData?.totalMaintenance || 0}</span>
-      </p>
-      <p className="text-gray-600">
-        Installments: ₹<span className="font-bold">{totalData?.totalInstallments || 0}</span>
-      </p>
-    </div>
-  )}
-</div>
+            {/* Maintenance and Installments Section */}
+            <h3 className="font-semibold text-gray-700 mt-6 border-b pb-2">Maintenance & Installments</h3>
+            <p className="text-gray-600">
+              Maintenance: ₹<span className="font-bold">{totalData?.totalMaintenance || 0}</span>
+            </p>
+            <p className="text-gray-600">
+              Installments: ₹<span className="font-bold">{totalData?.totalInstallments || 0}</span>
+            </p>
+          </div>
+        )}
+      </div>
 
     </div>
   );

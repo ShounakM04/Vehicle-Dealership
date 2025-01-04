@@ -60,7 +60,7 @@ const Dashboard = () => {
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/dashboard/total-selling-price",
+        "http://3.109.83.51/api/dashboard/total-selling-price",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("http://localhost:8000/logs/download", {
+      const response = await fetch("http://3.109.83.51/api/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -106,7 +106,7 @@ const Dashboard = () => {
       if (query) params.carSearch = query;
 
       console.log("Query : " + query);
-      const response = await axios.get("http://localhost:8000/dashboard", {
+      const response = await axios.get("http://3.109.83.51/api/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const fetchMonthlyCosts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/miscellaneous-costs/current-month",
+        "http://3.109.83.51/api/miscellaneous-costs/current-month",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -179,7 +179,7 @@ const Dashboard = () => {
 
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/accountDetails", {
+      const response = await axios.get("http://3.109.83.51/api/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -191,19 +191,19 @@ const Dashboard = () => {
   };
 
 
-  const fetchProfit = async()=>{
+  const fetchProfit = async () => {
 
-    try{
-      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
-        headers:{
+    try {
+      const response = await axios.get(`http://3.109.83.51/api/profits/monthly`, {
+        headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         }
       })
       setProfits(response.data.totalProfit);
       console.log(response.data.totalProfit)
-      
+
     }
-    catch(error){
+    catch (error) {
       console.log(error)
     }
   }
@@ -384,11 +384,11 @@ const Dashboard = () => {
           )}
 
         </div>
-        <div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"
-          >
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"
+        >
           <div onClick={() => navigate("/dashboard/monthly-details")}
-          className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95">
+            className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95">
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
             <p className="font-bold">Total Profits: ₹{profits}</p>
