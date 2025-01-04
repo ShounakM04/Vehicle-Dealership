@@ -92,7 +92,7 @@ function AdminForm() {
       await handleUpload();
 
       // Submit form data after images are uploaded
-      await axios.post("http://localhost:8000/details", {
+      await axios.post("http://3.109.83.51/api/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -113,7 +113,7 @@ function AdminForm() {
         insuranceEndDate,
         showInsuranceFields,
         showOwnerFields,
-        onhomepage:onHomePageDisplay
+        onhomepage: onHomePageDisplay
       },
         {
           headers: {

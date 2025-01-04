@@ -60,7 +60,7 @@ const Dashboard = () => {
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/dashboard/total-selling-price",
+        "http://3.109.83.51/api/dashboard/total-selling-price",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("http://localhost:8000/logs/download", {
+      const response = await fetch("http://3.109.83.51/api/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -106,7 +106,7 @@ const Dashboard = () => {
       if (query) params.carSearch = query;
 
       console.log("Query : " + query);
-      const response = await axios.get("http://localhost:8000/dashboard", {
+      const response = await axios.get("http://3.109.83.51/api/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const fetchMonthlyCosts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/miscellaneous-costs/current-month",
+        "http://3.109.83.51/api/miscellaneous-costs/current-month",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -179,7 +179,7 @@ const Dashboard = () => {
 
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/accountDetails", {
+      const response = await axios.get("http://3.109.83.51/api/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -194,7 +194,7 @@ const Dashboard = () => {
   const fetchProfit = async () => {
 
     try {
-      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
+      const response = await axios.get(`http://3.109.83.51/api/profits/monthly`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         }

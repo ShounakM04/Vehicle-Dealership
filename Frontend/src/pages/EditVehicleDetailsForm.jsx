@@ -57,7 +57,7 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/car/${id}`,
+                const response = await axios.get(`http://3.109.83.51/api/car/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -111,7 +111,7 @@ const EditVehicleDetailsForm = () => {
         }
         try {
             setWait(true);
-            const response = await axios.post("http://localhost:8000/edit-fields", {
+            const response = await axios.post("http://3.109.83.51/api/edit-fields", {
                 tablename: tablename,
                 fieldToEdit: fieldToEdit,
                 newValue: newValue,

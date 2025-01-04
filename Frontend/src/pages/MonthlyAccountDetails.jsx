@@ -18,7 +18,7 @@ const MonthlyAccountDetails = () => {
   const fetchData = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://localhost:8000/accountDetails/filter`, {
+      const response = await axios.get(`http://3.109.83.51/api/accountDetails/filter`, {
         params: { month, year },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -37,7 +37,7 @@ const MonthlyAccountDetails = () => {
   const fetchMonthlyProfit = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
+      const response = await axios.get(`http://3.109.83.51/api/profits/monthly`, {
         params: { month, year },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
