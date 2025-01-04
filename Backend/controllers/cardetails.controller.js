@@ -83,7 +83,6 @@ async function handleCarDetails(req, res) {
       insuranceStartDate || null,
       insuranceEndDate || null,
       soldStatus || false, // set default soldStatus to false if not provided
-      onhomepage || false
     ];
     if (showInsuranceFields == true) {
       values3 = [
@@ -94,7 +93,7 @@ async function handleCarDetails(req, res) {
         insuranceStartDate || null,
         insuranceEndDate || null,
         soldStatus || false, // set default soldStatus to false if not provided
-      onhomepage || false
+
 
       ];
       
