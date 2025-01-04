@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "http://3.109.83.51/api/validate-token",
+          "http://localhost:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {
@@ -169,6 +169,12 @@ function Navbar() {
 
           </div>
 
+          <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MdLocationOn className="h-6 w-6 rounded-full border-2" />
+          </a>
           <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
 
           {isHomeRoute && ( // Render search input only on the home route
@@ -222,9 +228,32 @@ function Navbar() {
         </div>
       </div>
 
+      {isHomeRoute && (
+
+        <div className="flex p-2 bg-blue-500 items-center md:hidden">
+          {/* Left Section */}
+          <div>
+            <div className="flex items-center">
+              <img src="/Assets/Images/call.svg" className="h-6" alt="" />
+              <p className="font-medium ml-2">General: +91 7058600679</p>
+            </div>
+            <p className="font-medium mt-1">Office: +91 9272111777</p>
+          </div>
+
+          {/* Right Section */}
+          <div className="ml-auto">
+            <a href="https://chat.whatsapp.com/KlAdjB3KgIl8PUv3VQEy8g">
+              <img src="/Assets/Images/whatsapp_group_logo2.png" className="h-8" alt="WhatsApp Group" />
+            </a>
+          </div>
+        </div>
+
+      )}
+
       {isOpen && (
         <div className="sm:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1">
+
             <a href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
             {/* <a href="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a> */}
             {/* <a href="/services" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a> */}

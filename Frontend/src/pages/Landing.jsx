@@ -48,7 +48,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://3.109.83.51/api/`, { params });
+        const response = await axios.get(`http://localhost:8000/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data?.map((car) => {
@@ -61,6 +61,7 @@ export default function Landing() {
             kilometers: "", // You might want to update this with actual data if available
             price: car.carprice,
             status: car.status,
+           onhomepage: car.onhomepage,
           };
         });
         setCars(carsData);
@@ -79,7 +80,7 @@ export default function Landing() {
       try {
         let folderPath;
         folderPath = 'Notices/'
-        const response = await axios.get('http://3.109.83.51/api/get-images', {
+        const response = await axios.get('http://localhost:8000/get-images', {
           params: {
             folderPath: folderPath
           }
@@ -195,7 +196,7 @@ export default function Landing() {
       {/* Car Cards Section */}
       <div className="flex flex-wrap gap-4 m-10 p-4">
         {cars?.map((car) => (
-          car.status === false && (
+          car.status === false &&  car.onhomepage == true && (
             <div
               key={car.id}
               className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%] md:w-[48%]"

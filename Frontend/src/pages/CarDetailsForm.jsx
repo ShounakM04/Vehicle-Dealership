@@ -23,6 +23,7 @@ function AdminForm() {
   const [insuranceEndDate, setInsuranceEndDate] = useState("");
   const [showInsuranceFields, setShowInsuranceFields] = useState(false);
   const [showOwnerFields, setShowOwnerFields] = useState(false);
+  const [onHomePageDisplay, setOnHomePageDisplay] = useState(false);
 
 
   const [vehicleType, setVehicleType] = useState('');
@@ -91,7 +92,7 @@ function AdminForm() {
       await handleUpload();
 
       // Submit form data after images are uploaded
-      await axios.post("http://3.109.83.51/api/details", {
+      await axios.post("http://localhost:8000/details", {
         vehicleName,
         brandName,
         registernumber,
@@ -111,7 +112,8 @@ function AdminForm() {
         insuranceStartDate,
         insuranceEndDate,
         showInsuranceFields,
-        showOwnerFields
+        showOwnerFields,
+        onhomepage:onHomePageDisplay
       },
         {
           headers: {
@@ -254,6 +256,24 @@ function AdminForm() {
               />
             </div>
           </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+          <div>
+            <label htmlFor="onHomePageDisplay" className="block text-gray-700 text-sm font-bold mb-2">On Home Page Display</label>
+            <select
+              id="onHomePageDisplay"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={onHomePageDisplay}
+              onChange={(e) => setOnHomePageDisplay(e.target.value === "yes")}
+            >
+              <option value="" disabled>Select Vehicle</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+
+
         </div>
 
 

@@ -26,7 +26,8 @@ const EditVehicleDetailsForm = () => {
             ownername: "",
             ownerphone: "",
             owneremail: "",
-            owneraddress: ""
+            owneraddress: "",
+            onhomepage: "",
         },
     });
 
@@ -47,7 +48,8 @@ const EditVehicleDetailsForm = () => {
         ownername: false,
         ownerphone: false,
         owneremail: false,
-        owneraddress: false
+        owneraddress: false,
+        onhomepage: false
     });
 
     const [inputValue, setInputValue] = useState("");
@@ -55,7 +57,7 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`http://3.109.83.51/api/car/${id}`,
+                const response = await axios.get(`http://localhost:8000/car/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -74,6 +76,7 @@ const EditVehicleDetailsForm = () => {
                         fuel: car.fuel,
                         vehiclebuyprice: car.vehiclebuyprice,
                         vehiclesellprice: car.vehiclesellprice,
+                        onhomepage: car.onhomepage,
 
                         insurancecompany: insurance?.insurancecompany,
                         insurancenumber: insurance?.insurancenumber,
@@ -108,7 +111,7 @@ const EditVehicleDetailsForm = () => {
         }
         try {
             setWait(true);
-            const response = await axios.post("http://3.109.83.51/api/edit-fields", {
+            const response = await axios.post("http://localhost:8000/edit-fields", {
                 tablename: tablename,
                 fieldToEdit: fieldToEdit,
                 newValue: newValue,
@@ -150,6 +153,8 @@ const EditVehicleDetailsForm = () => {
 
     const fuelOptions = ["petrol", "diesel", "cng"];
     const carMakeOptions = ["car", "bike", "tempo", "truck"];
+    const displayOptions = ["yes", "no"];
+
     let field;
 
     return (
@@ -360,7 +365,7 @@ const EditVehicleDetailsForm = () => {
                     </div>
 
 
-                    <div className="w-full md:w-[50%]">
+                    <div className="w-full md:w-[49%]">
 
                         <label htmlFor="vehiclesellprice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Selling Price (Display Price)</label>
                         <div className="relative w-full">
@@ -384,6 +389,54 @@ const EditVehicleDetailsForm = () => {
                             )}
                         </div>
                     </div>
+
+
+                    <div className="w-full md:w-[49%]">
+                        <label htmlFor="onhomepage" className="block text-gray-700 text-sm font-bold mb-2">On Home Page</label>
+                        <div className="relative w-full">
+                            {/* Dropdown for Vehicle Names */}
+                            {editableFields.onhomepage ? (
+                                <select
+                                    id={"onhomepage"}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                >
+                                    <option value="" disabled>Select Display Options</option>
+                                    {/* {displayOptions?.map((option, index) => (
+                                        <option key={index} value={option}>{option}</option>
+                                    ))} */}
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    id={"onhomepage"}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    value={vehicleData.vehicleDetails.onhomepage}
+                                    readOnly
+                                />
+                            )}
+
+                            {/* Edit Button */}
+                            <button
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                                onClick={() => setEditableFields({ ...editableFields, onhomepage: true })}
+                            >
+                                <i className="fas fa-pencil-alt"></i>
+                            </button>
+
+                            {/* {wait ? "wait..." : "OK"} and Cancel Buttons */}
+                            {editableFields.onhomepage && (
+                                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                                    <button onClick={() => handleVehicleDetailsEdit(inputValue, "onhomepage")} className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>{wait ? "wait..." : "OK"}</button>
+                                    <button onClick={() => handleCancelEdit("onhomepage")} className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? 'opacity-50 cursor-not-allowed' : ''}`}>CANCEL</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

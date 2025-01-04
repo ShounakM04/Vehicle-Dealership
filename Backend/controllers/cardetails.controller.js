@@ -26,7 +26,8 @@ async function handleCarDetails(req, res) {
       insuranceEndDate,
       showInsuranceFields,
       showOwnerFields,
-      soldStatus
+      soldStatus,
+      onhomepage
     } = req.body;
 
     // Validate mandatory fields
@@ -70,8 +71,8 @@ async function handleCarDetails(req, res) {
     }
 
     // Insert car details
-    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
-    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice];
+    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice,onhomepage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice,onhomepage];
     await db.query(query2, values2);
 
     let values3= [
@@ -82,6 +83,7 @@ async function handleCarDetails(req, res) {
       insuranceStartDate || null,
       insuranceEndDate || null,
       soldStatus || false, // set default soldStatus to false if not provided
+      onhomepage || false
     ];
     if (showInsuranceFields == true) {
       values3 = [
@@ -92,6 +94,8 @@ async function handleCarDetails(req, res) {
         insuranceStartDate || null,
         insuranceEndDate || null,
         soldStatus || false, // set default soldStatus to false if not provided
+      onhomepage || false
+
       ];
       
       
