@@ -169,7 +169,7 @@ function Navbar() {
 
           </div>
 
-          <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm"
+          <a href="https://www.google.co.in/maps/place/Nikhil+Motors/@16.7394676,74.3060399,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc10109ce728891:0x93fd2aa9da4338c8!8m2!3d16.7394676!4d74.3086148!16s%2Fg%2F11v3ty7l85?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm md:hidden"
             target="_blank"
             rel="noopener noreferrer"
           >
