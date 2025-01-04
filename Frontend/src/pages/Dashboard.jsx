@@ -477,7 +477,7 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {carDetails.map((car, index) => (
+                {carDetails?.map((car, index) => (
                   <tr key={index} className="border-b">
                     <td className="p-2">{car.ownername}</td>
                     <td className="p-2">{car.owneremail}</td>

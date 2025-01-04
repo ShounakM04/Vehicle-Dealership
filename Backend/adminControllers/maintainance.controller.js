@@ -38,7 +38,7 @@ async function handleGetMaintainanceDetails(req, res) {
         // console.log(`Image Keys for ${registernumber}: ${maintainanceDocsKeys}`);
 
         // Generate signed URLs for other images, starting from 1
-        const maintainanceDocsPromises = maintainanceDocsKeys.map(async (key, index) => {
+        const maintainanceDocsPromises = maintainanceDocsKeys?.map(async (key, index) => {
             return await getObjectURL(key); // Generate URL for each image key
         });
 
@@ -47,7 +47,7 @@ async function handleGetMaintainanceDetails(req, res) {
         // console.log(maintainanceDocs);
 
         // Create maintenanceRecords array
-        const maintenanceRecords = maintainanceDetails.map((detail, index) => ({
+        const maintenanceRecords = maintainanceDetails?.map((detail, index) => ({
             description: detail.maintainancedetails,
             price: detail.maintainancecost,
             maintainanceDate: detail.maintainancedate,

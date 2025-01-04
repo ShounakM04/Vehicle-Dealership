@@ -57,7 +57,7 @@ function CarDetails() {
               showThumbs={false}
               className="rounded-t-lg"
             >
-              {carData.images.map((image, index) => (
+              {carData.images?.map((image, index) => (
                 <div key={index}>
                   <img
                     src={image}  // Correctly use the image URL

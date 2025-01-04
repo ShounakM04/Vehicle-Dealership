@@ -38,11 +38,11 @@ export default function DriverOnsiteImagesAdd() {
             toast.success("Vehilce images added successfully!");
             navigate('/driverdashboard');
         } catch (error) {
-            
-                // Display error message in toast
-                console.log("Error in adding Vehicle Images. Please try again!")
-                toast.error("Error in adding Vehicle Images. Please try again!");
-            
+
+            // Display error message in toast
+            console.log("Error in adding Vehicle Images. Please try again!")
+            toast.error("Error in adding Vehicle Images. Please try again!");
+
         }
 
         console.log(id);
@@ -54,12 +54,12 @@ export default function DriverOnsiteImagesAdd() {
 
         try {
 
-            console.log("Subitted id : "+id);
-            
+            console.log("Subitted id : " + id);
+
 
             // Handle other image uploads if necessary (similar to DisplayImage)
             for (let i = 0; i < images.length; i++) {
-                const uniqueID = Date.now(); 
+                const uniqueID = Date.now();
                 const image = images[i];
                 const imageFileName = `${id}/OnsiteVehicleImages/${uniqueID}`;
                 const imageUploadURL = await getUploadURL(image, imageFileName);
@@ -121,7 +121,7 @@ export default function DriverOnsiteImagesAdd() {
                         />
 
                         <div className="flex flex-wrap gap-4 mb-5">
-                            {images.map((image, index) => {
+                            {images?.map((image, index) => {
                                 const imageURL = URL.createObjectURL(image);
                                 return (
                                     <img

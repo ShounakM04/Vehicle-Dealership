@@ -31,7 +31,7 @@ async function handleHomePage(req, res) {
         const result = await db.query(query1);
 
         // Create an array of promises for getting signed URLs
-        const carsWithImagesPromises = result.rows.map(async (row) => {
+        const carsWithImagesPromises = result.rows?.map(async (row) => {
             const carNumber = row.registernumber; // Get the car number from the row
             const displayImageKey = `${carNumber}/InventoryVehicleImages/0`; // Generate key for display image
 

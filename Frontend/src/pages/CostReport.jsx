@@ -301,7 +301,7 @@ const CostReport = () => {
                 showThumbs={false}
                 className="rounded-t-lg"
               >
-                {onsiteVehicleImages.map((image, index) => (
+                {onsiteVehicleImages?.map((image, index) => (
                   <div key={index}>
                     <img
                       src={image}
@@ -319,7 +319,7 @@ const CostReport = () => {
           <div className="overflow-y-auto max-h-40">
             {maintainanceData.maintenanceRecords.length > 0 ? (
               <ul className="mt-2">
-                {maintainanceData.maintenanceRecords.map((record, index) => {
+                {maintainanceData.maintenanceRecords?.map((record, index) => {
                   return (
                     <li
                       key={index}

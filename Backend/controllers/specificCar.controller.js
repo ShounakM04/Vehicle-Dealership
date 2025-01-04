@@ -7,7 +7,7 @@ async function listDocHelper(FolderName) {
     const DocsKeys = await listImagesInFolder(FolderName);
 
     // Generate signed URLs for other images, starting from 1
-    const DocsPromises = DocsKeys.map(async (key, index) => {
+    const DocsPromises = DocsKeys?.map(async (key, index) => {
         return await getObjectURL(key); // Generate URL for each image key
     });
 
@@ -50,7 +50,7 @@ async function handleSpecifiPage(req, res) {
             // console.log(`Image Keys for ${regisNum}: ${imageKeys}`);
 
             // // Generate signed URLs for other images, starting from 1
-            // const imagesPromises = imageKeys.map(async (key, index) => {
+            // const imagesPromises = imageKeys?.map(async (key, index) => {
             //     return await getObjectURL(key); // Generate URL for each image key
             // });
 

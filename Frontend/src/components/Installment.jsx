@@ -184,7 +184,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
         {loading ? ( // Show loading state
           <p>Loading...</p>
         ) : carDetails.length > 0 ? (
-          carDetails.map((car) => (
+          carDetails?.map((car) => (
             <div
               key={car.registernumber}
               className="grid grid-cols-2 gap-4 bg-gray-50 p-2 rounded-lg"
@@ -288,7 +288,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
             <h2 className="text-2xl font-bold p-2">Installment Details</h2>
             <div className="max-h-60 overflow-y-auto">
               {installments.length > 0 ? (
-                installments.map((inst, index) => (
+                installments?.map((inst, index) => (
                   <div key={index} className="p-4 border-b border-gray-200 mb-4">
                     {/* Installment Index */}
                     <div className="flex mb-2">

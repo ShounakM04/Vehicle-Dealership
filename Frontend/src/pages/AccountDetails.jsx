@@ -259,7 +259,7 @@ const AccountDetails = () => {
                                     </td>
                                 </tr>
                             ) : costs.length > 0 ? (
-                                costs.map((costItem, index) => (
+                                costs?.map((costItem, index) => (
                                     <tr key={index} className="border-t">
                                         <td className="border p-3">{costItem.description}</td>
                                         <td className="border p-3">{costItem.amount}</td>

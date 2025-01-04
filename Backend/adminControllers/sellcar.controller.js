@@ -4,10 +4,10 @@ const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
 function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');     
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
-  }
+}
 async function handleSellCar(req, res) {
     try {
         console.log("Request body:", req.body);
@@ -23,7 +23,7 @@ async function handleSellCar(req, res) {
             totalInstallments,
             installmentAmount,
             commission,
-            description, 
+            description,
             paymentMode,
             accountPaidTo,
         } = req.body;
@@ -53,7 +53,7 @@ async function handleSellCar(req, res) {
                 totalInstallments,
                 installmentAmount,
                 commission,
-                description, 
+                description,
                 paymentMode,
                 accountPaidTo,
                 selldate
@@ -72,7 +72,7 @@ async function listDocHelper(FolderName) {
     const DocsKeys = await listImagesInFolder(FolderName);
 
     // Generate signed URLs for other images, starting from 1
-    const DocsPromises = DocsKeys.map(async (key, index) => {
+    const DocsPromises = DocsKeys?.map(async (key, index) => {
         return await getObjectURL(key); // Generate URL for each image key
     });
 

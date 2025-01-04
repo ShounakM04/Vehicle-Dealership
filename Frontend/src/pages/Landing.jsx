@@ -51,7 +51,7 @@ export default function Landing() {
         const response = await axios.get(`http://3.109.83.51/api/`, { params });
         console.log(response.data);
         const data = response.data.carsWithImages;
-        const carsData = data.map((car) => {
+        const carsData = data?.map((car) => {
           const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
           return {
             id: car.registernumber,
@@ -109,7 +109,7 @@ export default function Landing() {
 
           <div className="mb-4">
             <h2 className="text-xl py-4 font-bold">FUEL TYPE</h2>
-            {["petrol", "diesel", "cng"].map((type) => (
+            {["petrol", "diesel", "cng"]?.map((type) => (
               <div className="flex items-center" key={type}>
                 <input
                   type="radio"
@@ -129,7 +129,7 @@ export default function Landing() {
 
           <div className="mb-4">
             <h2 className="text-xl py-6 font-bold">VEHICLE TYPE</h2>
-            {["car", "truck", "bike", "tempo"].map((type) => (
+            {["car", "truck", "bike", "tempo"]?.map((type) => (
               <div className="flex items-center" key={type}>
                 <input
                   type="radio"
@@ -173,7 +173,7 @@ export default function Landing() {
               showThumbs={false}
               className="rounded-t-lg"
             >
-              {noticeImages.map((image, index) => (
+              {noticeImages?.map((image, index) => (
                 <div key={index}>
                   <img
                     src={image}
@@ -194,7 +194,7 @@ export default function Landing() {
 
       {/* Car Cards Section */}
       <div className="flex flex-wrap gap-4 m-10 p-4">
-        {cars.map((car) => (
+        {cars?.map((car) => (
           car.status === false && (
             <div
               key={car.id}

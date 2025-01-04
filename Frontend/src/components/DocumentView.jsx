@@ -116,7 +116,7 @@ export default function DocumentView({ isOffice }) {
                             </div>
 
                             {/* Table Rows */}
-                            {fetchedImages.map((url, index) => {
+                            {fetchedImages?.map((url, index) => {
                                 let extractedUniqueid = null;
 
                                 // Check and extract uniqueid for both types of paths

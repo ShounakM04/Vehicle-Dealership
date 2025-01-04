@@ -6,8 +6,8 @@ async function handleGetDescription(req, res) {
         const result = await db.query(`SELECT uniqueid, description FROM imageDescription`);
 
         // Extracting the unique IDs and descriptions as separate arrays
-        const uniqueIds = result.rows.map(row => row.uniqueid);
-        const descriptions = result.rows.map(row => row.description);
+        const uniqueIds = result.rows?.map(row => row.uniqueid);
+        const descriptions = result.rows?.map(row => row.description);
 
         console.log("Fetched unique IDs:", uniqueIds);
         console.log("Fetched descriptions:", descriptions);
@@ -25,24 +25,24 @@ async function handleGetDescription(req, res) {
 
 async function handleAddDescription(req, res) {
     try {
-        const { uniqueID,description } = req.body;
+        const { uniqueID, description } = req.body;
         // console.log(custName, custContact, custQuery,"Date : " + date);
-        console.log("be : ",uniqueID);
-        console.log("be : ",description);
+        console.log("be : ", uniqueID);
+        console.log("be : ", description);
 
         const query = `INSERT INTO imageDescription (uniqueid, description) VALUES ($1, $2)`;
         const values = [uniqueID, description];
 
-        await db.query(query, values); 
-        res.status(201).send("Image Description query added"); 
+        await db.query(query, values);
+        res.status(201).send("Image Description query added");
 
     } catch (error) {
         console.log(`Error occurred while adding Image Description query: ${error}`);
-        
-        if (error.code === '23505') { 
+
+        if (error.code === '23505') {
             res.status(400).json({ message: 'Duplicate entry. Image Description query already exists.' });
         } else {
-            res.status(500).json({ message: 'Internal Server Error' }); 
+            res.status(500).json({ message: 'Internal Server Error' });
         }
     }
 }
@@ -65,5 +65,5 @@ async function handleDeleteDescription(req, res) {
 module.exports = {
     handleGetDescription,
     handleAddDescription,
-    handleDeleteDescription 
+    handleDeleteDescription
 };

@@ -137,7 +137,7 @@ const DocumentUpload = ({ isOffice }) => {
                     />
 
                     <div className="flex flex-wrap gap-4 mb-5">
-                        {images.map((image, index) => {
+                        {images?.map((image, index) => {
                             const imageURL = URL.createObjectURL(image);
                             return (
                                 <img

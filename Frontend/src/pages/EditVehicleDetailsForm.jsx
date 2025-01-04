@@ -230,7 +230,7 @@ const EditVehicleDetailsForm = () => {
                                     onChange={(e) => setInputValue(e.target.value)}
                                 >
                                     <option value="" disabled>Select Vehicle</option>
-                                    {carMakeOptions.map((option, index) => (
+                                    {carMakeOptions?.map((option, index) => (
                                         <option key={index} value={option}>{option}</option>
                                     ))}
                                 </select>
@@ -301,7 +301,7 @@ const EditVehicleDetailsForm = () => {
                                     onChange={(e) => setInputValue(e.target.value)}
                                 >
                                     <option value="" disabled>Select Vehicle</option>
-                                    {fuelOptions.map((option, index) => (
+                                    {fuelOptions?.map((option, index) => (
                                         <option key={index} value={option}>{option}</option>
                                     ))}
                                 </select>

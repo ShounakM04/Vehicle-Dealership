@@ -13,17 +13,17 @@ async function handleImageUpload(req, res) {
         const folderName = `${carNumber}/InventoryVehicleImages/`;
 
         // Upload the display image if provided
-        const displayImageUrl = req.files['displayImage'] 
+        const displayImageUrl = req.files['displayImage']
             ? await uploadToS3(req.files['displayImage'][0].buffer, `${folderName}0`, req.files['displayImage'][0].mimetype) // Use '0' for display image
             : null;
 
         console.log("Display Image URL: " + displayImageUrl);
 
         // Upload other images if provided
-        const otherImageUrls = req.files['images[]'] 
-            ? await Promise.all(req.files['images[]'].map((file, index) => 
+        const otherImageUrls = req.files['images[]']
+            ? await Promise.all(req.files['images[]']?.map((file, index) =>
                 uploadToS3(file.buffer, `${folderName}${index + 1}`, file.mimetype) // Use sequential names starting from '1'
-            )) 
+            ))
             : [];
 
         console.log("Other Images URLs: " + otherImageUrls);

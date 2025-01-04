@@ -121,7 +121,7 @@ function CustomerEnquiry() {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
       });
-      const formattedEnquiries = response.data.enquiries.map(enquiry => ({
+      const formattedEnquiries = response.data.enquiries?.map(enquiry => ({
         serialnum: enquiry.serialnum,
         customerName: enquiry.custname,
         customerPhone: enquiry.custcontact,
@@ -206,7 +206,7 @@ function CustomerEnquiry() {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Customer Enquiries ({countQueries})</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.isArray(enquiries) && enquiries.map((enquiry, index) => (
+          {Array.isArray(enquiries) && enquiries?.map((enquiry, index) => (
             <EnquiryCard
               key={index}
               customerName={enquiry.customerName}
