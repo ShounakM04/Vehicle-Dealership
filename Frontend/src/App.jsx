@@ -26,6 +26,7 @@ import MiscellaneousCosts from "./pages/MiscellaneousCosts";
 import AccountDetails from "./pages/AccountDetails";
 import DocumentView from "./components/DocumentView";
 import ContactUs from "./pages/ContactUs";
+import MonthlyAccountDetails from "./pages/MonthlyAccountDetails";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -368,6 +369,19 @@ const router = createBrowserRouter([
           </Layout>
         </ProtectedUserRoute>
 
+      </ProtectedRoute>
+
+    ),
+  },
+  {
+    path: "dashboard/monthly-details",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
+          <Layout>
+            <MonthlyAccountDetails/>
+          </Layout>
+        </ProtectedUserRoute>
       </ProtectedRoute>
 
     ),

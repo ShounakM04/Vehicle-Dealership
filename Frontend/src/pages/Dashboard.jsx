@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [username, setUsername] = useState("");
   const [monthlyCost, setMonthlyCost] = useState(0);
   const [totalSellingPrice, setTotalSellingPrice] = useState(0);
+  const [profits, setProfits] = useState(0);
   const [accountDetails, setAccountDetails] = useState({
     totalBuy: 0,
     totalMaintainance: 0,
@@ -189,6 +190,23 @@ const Dashboard = () => {
     }
   };
 
+
+  const fetchProfit = async()=>{
+
+    try{
+      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        }
+      })
+      setProfits(response.data.totalProfit);
+      console.log(response.data.totalProfit)
+      
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   useEffect(() => {
 
     fetchCarDetails();
@@ -199,6 +217,7 @@ const Dashboard = () => {
     fetchUserRoleAndUsername();
     fetchMonthlyCosts();
     fetchAccountDetails();
+    fetchProfit()
     setLoading(false);
   }, []);
 
@@ -365,10 +384,14 @@ const Dashboard = () => {
           )}
 
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
-          <div className="bg-purple-300 pl-5 p-3 rounded text-white min-h-4">
+        <div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"
+          >
+          <div onClick={() => navigate("/dashboard/monthly-details")}
+          className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95">
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
+            <p className="font-bold">Total Profits: ₹{profits}</p>
           </div>
 
           <div

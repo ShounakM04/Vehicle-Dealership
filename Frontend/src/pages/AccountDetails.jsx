@@ -69,9 +69,9 @@ const AccountDetails = () => {
                     },
                 }
             );
-            console.log(response.data.costs);
-            if (Array.isArray(response.data.costs)) {
-                setCosts(response.data.costs);
+            console.log(response.data.investmentCosts);
+            if (Array.isArray(response.data.investmentCosts)) {
+                setCosts(response.data.investmentCosts);
             } else {
                 setCosts([]); // Fallback if data is not as expected
             }

@@ -22,7 +22,7 @@ async function deleteOldLogs(bucketName) {
             Key: filename,
         });
         await s3Client.send(command);
-        console.log(`Log file for ${twoDaysAgoDate} deleted successfully.`);
+        // console.log(`Log file for ${twoDaysAgoDate} deleted successfully.`);
     } catch (error) {
         if (error.name !== 'NoSuchKey') {
             console.error(`Error deleting log file for ${twoDaysAgoDate}:`, error);
@@ -48,7 +48,7 @@ async function createDefaultLogFile() {
             ContentType: "text/csv",
         });
 
-        console.log(`Creating default log file for ${todayDate}...`);
+        // console.log(`Creating default log file for ${todayDate}...`);
         await s3Client.send(command);
         console.log(`Default log file created: ${filename}`);
     } catch (error) {
@@ -66,43 +66,58 @@ cron.schedule("0 0 * * *", () => {
 async function appendLogToS3(bucketName, filename, logEntry) {
     try {
         let currentContent = '';
-        // console.log("appendLogToS3 called");
+        let logsArray = [];
 
         // Try to retrieve the existing file contents (if it exists)
         try {
             const command = new GetObjectCommand({ Bucket: bucketName, Key: filename });
             const response = await s3Client.send(command);
             currentContent = await response.Body.transformToString();
-            // console.log(`Current Content: ${currentContent}`);
         } catch (error) {
-            // If file doesn't exist, we proceed without fetching any content
+            // If file doesn't exist, proceed without fetching any content
             if (error.name !== 'NoSuchKey') {
+                console.log(`Log file does not exist yet, creating a new one.`);
+            } else {
                 console.error("Error fetching log file: ", error);
                 throw error;
             }
-            console.log(`Log file does not exist yet, creating a new one.`);
         }
 
-        // Append the new log entry to the current content
-        const updatedContent = currentContent + `\n${logEntry}`;
-        // console.log(`Updated Content to Upload: ${updatedContent}`);
+        // Parse existing logs into an array
+        if (currentContent.trim()) {
+            logsArray = currentContent.split('\n').filter(line => line.trim());
+        }
 
-        // Upload the updated content back to S3
+        // Add the new log entry
+        logsArray.push(logEntry);
+
+        // Sort logs in descending order based on the timestamp
+        logsArray.sort((a, b) => {
+            const dateA = new Date(a.split(' : ')[0].trim());
+            const dateB = new Date(b.split(' : ')[0].trim());
+            return dateB - dateA; // Descending order
+        });
+
+        // Join the sorted logs back into a single string
+        const updatedContent = logsArray.join('\n');
+
+        // Upload the updated logs to S3
         const uploadCommand = new PutObjectCommand({
             Bucket: bucketName,
             Key: filename,
             Body: updatedContent,
-            ContentType: "text/csv",
+            ContentType: "text/plain", // Adjusted to plain text for general logs
         });
 
-        console.log("Uploading log to S3...");
+        // console.log("Uploading log to S3...");
         await s3Client.send(uploadCommand);
-        console.log(`Log uploaded to S3: ${filename}`);
+        console.log(`Log successfully uploaded to S3: ${filename}`);
     } catch (error) {
         console.error("Error uploading log to S3:", error);
         throw error;
     }
 }
+
 
 function logResReq() {
     return async (req, res, next) => {
@@ -129,7 +144,6 @@ function logResReq() {
             const vehicleNumber = req.body.registernumber || 'Unknown';
             logMessage = `${timestamp} : ${user} added an installment for vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'DELETE' && req.path.includes('/delete/car')) {
-            console.log(req.path)
             const vehicleNumber = req.query.deletedID || 'Unknown';
             logMessage = `${timestamp} : ${user} deleted vehicle with vehicle number: ${vehicleNumber}`;
         } else if (req.method === 'POST' && req.path.includes('/customer')) {

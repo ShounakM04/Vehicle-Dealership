@@ -2,11 +2,16 @@
 const db = require("../models/database");
 const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
-
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');     
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
 async function handleSellCar(req, res) {
     try {
         console.log("Request body:", req.body);
-
+        const selldate = formatDate(new Date());
 
         // Destructure fields from form data in req.body.formData
         const {
@@ -35,9 +40,9 @@ async function handleSellCar(req, res) {
         await db.query(
             `INSERT INTO soldcardetails (
                 registernumber, selling_price, owner_name, contact_no, 
-                down_payment, total_installments, installment_amount, commission,description,payment_mode,account_paid_to
+                down_payment, total_installments, installment_amount, commission,description,payment_mode,account_paid_to, selldate
             ) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10,$11) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10,$11,$12) 
             RETURNING *`,
             [
                 carID,
@@ -51,6 +56,7 @@ async function handleSellCar(req, res) {
                 description, 
                 paymentMode,
                 accountPaidTo,
+                selldate
             ]
         );
 
