@@ -92,7 +92,7 @@ function AdminForm() {
       await handleUpload();
 
       // Submit form data after images are uploaded
-      await axios.post("http://3.109.83.51/api/details", {
+      await axios.post("https://nikhilmotors.com/api/details", {
         vehicleName,
         brandName,
         registernumber,

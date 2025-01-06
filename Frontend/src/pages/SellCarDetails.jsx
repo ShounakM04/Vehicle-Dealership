@@ -43,7 +43,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `http://3.109.83.51/api/car/${currDeleteId}`,
+        `https://nikhilmotors.com/api/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -119,7 +119,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("http://3.109.83.51/api/dashboard/sell-car", formData,
+      await axios.post("https://nikhilmotors.com/api/dashboard/sell-car", formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`

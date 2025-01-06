@@ -25,7 +25,7 @@ function AddDriver() {
             return;
         }
 
-        const endpoint = "http://3.109.83.51/api/register?isDriver=true"; // Update with your actual endpoint
+        const endpoint = "https://nikhilmotors.com/api/register?isDriver=true"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);

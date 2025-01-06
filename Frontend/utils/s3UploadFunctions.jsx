@@ -7,7 +7,7 @@ export async function getUploadURL(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.get('http://3.109.83.51/api/upload/generate-upload-url', {
+    const response = await axios.get('https://nikhilmotors.com/api/upload/generate-upload-url', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -53,7 +53,7 @@ export async function deleteFromS3(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.delete('http://3.109.83.51/api/delete-image', {
+    const response = await axios.delete('https://nikhilmotors.com/api/delete-image', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }

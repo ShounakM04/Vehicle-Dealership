@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "http://3.109.83.51/api/validate-token",
+          "https://nikhilmotors.com/api/validate-token",
           {}, // No body needed for this request
           {
             headers: {

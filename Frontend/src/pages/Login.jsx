@@ -25,10 +25,10 @@ function Login() {
             return;
         }
 
-        //http://3.109.83.51/api/
-        //http://3.109.83.51/api/
+        //https://nikhilmotors.com/api/
+        //https://nikhilmotors.com/api/
         //http://65.2.78.63/
-        const endpoint = "http://3.109.83.51/api/login"; // Update with your actual endpoint
+        const endpoint = "https://nikhilmotors.com/api/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)
