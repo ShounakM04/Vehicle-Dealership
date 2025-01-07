@@ -45,7 +45,7 @@ const DocumentUpload = ({ isOffice }) => {
             // Upload images first
             await handleUpload();
 
-            toast.success("Vehilce images added successfully!");
+            toast.success("Documents added successfully!");
             if (window.location.pathname.includes('/dashboard')) {
                 // If the current URL contains '/dashboard', navigate to '/dashboard'
                 navigate('/dashboard');

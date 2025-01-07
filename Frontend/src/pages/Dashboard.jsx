@@ -391,7 +391,7 @@ const Dashboard = () => {
             className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95">
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
-            <p className="font-bold">Total Profits: ₹{profits}</p>
+            {userRole === "Admin" && <p className="font-bold">Total Profits: ₹{profits}</p>}
           </div>
 
           <div

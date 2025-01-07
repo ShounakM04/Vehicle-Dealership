@@ -8,12 +8,31 @@ const MonthlyAccountDetails = () => {
   const [totalData, setTotalData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [monthlyProfit, setMonthlyProfit] = useState();
-
+  const [isAdmin, setIsAdmin] = useState();
   useEffect(() => {
     fetchData();
     fetchMonthlyProfit();
 
   }, [month, year]);
+  
+  useEffect(() => {
+      function fetchRole() {
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+        if (token) {
+          try {
+            decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+          } catch (error) {
+            console.error("Invalid token", error);
+          }
+        }
+        if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+          setIsAdmin(true);
+        }
+      }
+      fetchRole();
+    }, []);
 
   const fetchData = async () => {
     setIsFetching(true);
@@ -152,9 +171,9 @@ const MonthlyAccountDetails = () => {
             <p className="text-gray-600">
               In Hand Amount (Installments + Downpayments): ₹<span className="font-bold">{totalData?.totalInHandAmount || 0}</span>
             </p>
-            <p className="text-gray-600">
+            {isAdmin && <p className="text-gray-600">
               Profit: ₹<span className="font-bold">{monthlyProfit || 0}</span>
-            </p>
+            </p>}
 
             {/* Maintenance and Installments Section */}
             <h3 className="font-semibold text-gray-700 mt-6 border-b pb-2">Maintenance & Installments</h3>

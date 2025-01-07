@@ -167,6 +167,8 @@ function logResReq() {
             logMessage = `${timestamp} : ${user} edited fields of vehicle details`;
         } else if (req.method === 'POST' && req.path.includes('/miscellaneous-costs/add')){
             logMessage = `${timestamp} : ${user} Added miscellaneous costs`;
+        } else if (req.method === 'POST' && req.path === 'Description'){
+            logMessage = `${timestamp} : ${user} Added Documents`;
         }
 
         // console.log("Log Message:", logMessage);
