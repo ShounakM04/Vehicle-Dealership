@@ -18,7 +18,7 @@ function AddNoticeImage() {
     try {
       let folderPath;
       folderPath = 'Notices/'
-      const response = await axios.get('https://nikhilmotors.com/api/get-images', {
+      const response = await axios.get('https://www.nikhilmotors.com/api/get-images', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -115,7 +115,7 @@ function AddNoticeImage() {
 
       const path = `Notices/${uniqueID}`
 
-      await axios.delete(`https://nikhilmotors.com/api/dashboard/delete-notice`, {
+      await axios.delete(`https://www.nikhilmotors.com/api/dashboard/delete-notice`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }, params: { path: path }

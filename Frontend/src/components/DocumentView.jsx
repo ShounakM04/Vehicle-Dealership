@@ -31,7 +31,7 @@ export default function DocumentView({ isOffice }) {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('https://nikhilmotors.com/api/get-images', {
+            const response1 = await axios.get('https://www.nikhilmotors.com/api/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -41,7 +41,7 @@ export default function DocumentView({ isOffice }) {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('https://nikhilmotors.com/api/Description', {
+            const response2 = await axios.get('https://www.nikhilmotors.com/api/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

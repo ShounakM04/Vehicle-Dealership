@@ -72,7 +72,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             // console.log("CurrRole : "+currRole);
 
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('https://nikhilmotors.com/api/maintainance',
+            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
                 {
                     headers: {
@@ -120,7 +120,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://nikhilmotors.com/api/car/${currId}`, {
+                `https://www.nikhilmotors.com/api/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

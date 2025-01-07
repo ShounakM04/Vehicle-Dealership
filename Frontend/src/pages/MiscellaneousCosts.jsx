@@ -23,7 +23,7 @@ const MiscellaneousCosts = () => {
     setIsFetching(true); // Start loading
     try {
       const response = await axios.get(
-        "https://nikhilmotors.com/api/miscellaneous-costs/filter",
+        "https://www.nikhilmotors.com/api/miscellaneous-costs/filter",
         {
           params: {
             month: filterMonth + 1, // Adjust for 0-based month
@@ -56,7 +56,7 @@ const MiscellaneousCosts = () => {
     setLoading(true); // Show loading while adding cost
     try {
       const response = await axios.post(
-        "https://nikhilmotors.com/api/miscellaneous-costs/add",
+        "https://www.nikhilmotors.com/api/miscellaneous-costs/add",
         {
           description,
           cost,

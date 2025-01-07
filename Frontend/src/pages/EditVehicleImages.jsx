@@ -24,7 +24,7 @@ const EditVehicleImages = ({ id }) => {
     // Fetch images function to be called on mount and after upload
     const fetchImages = async () => {
         try {
-            const response = await axios.get(`https://nikhilmotors.com/api/car/${id}`,
+            const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -171,7 +171,7 @@ const EditVehicleImages = ({ id }) => {
 
             const path = `${id}/InventoryVehicleImages/${uniqueID}`
 
-            await axios.delete(`https://nikhilmotors.com/api/delete-image`, {
+            await axios.delete(`https://www.nikhilmotors.com/api/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
