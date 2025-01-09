@@ -27,6 +27,7 @@ import AccountDetails from "./pages/AccountDetails";
 import DocumentView from "./components/DocumentView";
 import ContactUs from "./pages/ContactUs";
 import MonthlyAccountDetails from "./pages/MonthlyAccountDetails";
+import ActiveAccounts from "./pages/ActiveAccounts";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -268,6 +269,19 @@ const router = createBrowserRouter([
 
           <Layout>
             <DocumentView />
+          </Layout>
+        </ProtectedUserRoute>
+
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/ActiveAccounts",
+    element: (
+      <ProtectedRoute>
+        <ProtectedUserRoute requiredRoles={["admin"]}>
+          <Layout>
+            <ActiveAccounts/>
           </Layout>
         </ProtectedUserRoute>
 

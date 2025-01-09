@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from "axios";
 import EditVehicleImages from "./EditVehicleImages";
-
+import { jwtDecode } from "jwt-decode";
 const EditVehicleDetailsForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -155,8 +155,17 @@ const EditVehicleDetailsForm = () => {
     const carMakeOptions = ["car", "bike", "tempo", "truck"];
     const displayOptions = ["yes", "no"];
 
+    const token = localStorage.getItem('authToken')
     let field;
-
+    let decodedToken;
+      if (token) {
+        try {
+          decodedToken = jwtDecode(token);
+          console.log(decodedToken);
+        } catch (error) {
+          console.error("Invalid token", error);
+        }
+      }
     return (
         <div className="container mx-auto pl-16 pr-16 pb-16 pt-8">
             <div className="mb-4">
@@ -340,8 +349,8 @@ const EditVehicleDetailsForm = () => {
 
 
                     <div className="w-full md:w-[49%]">
-
-                        <label htmlFor="vehiclebuyprice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Buying Price</label>
+                            {/* {console.log("hi",decodedToken.isAdmin)} */}
+                     {decodedToken.isAdmin &&<> <label htmlFor="vehiclebuyprice" className="block text-gray-700 text-sm font-bold mb-2">Vehicle Buying Price</label>
                         <div className="relative w-full">
                             <input
                                 type="text"
@@ -362,6 +371,7 @@ const EditVehicleDetailsForm = () => {
                                 </div>
                             )}
                         </div>
+                        </>  }
                     </div>
 
 

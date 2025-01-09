@@ -57,6 +57,10 @@ const Dashboard = () => {
     navigate("/AddDriver");
   };
 
+  const activeIds = (e)=>{
+    e.preventDefault();
+    navigate('/ActiveAccounts')
+  }
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
@@ -369,6 +373,12 @@ const Dashboard = () => {
                 className="bg-green-500 text-white px-4 py-2 rounded"
               >
                 Download Logs
+              </button>
+              <button
+                onClick={activeIds}
+                className="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Active IDs
               </button>
             </>
           )}

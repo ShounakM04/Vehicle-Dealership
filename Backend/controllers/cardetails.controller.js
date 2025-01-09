@@ -36,7 +36,6 @@ async function handleCarDetails(req, res) {
       vehicleName,
       brandName,
       vehicleColor,
-      vehicleBuyPrice,
       vehicleType,
     };
 
@@ -49,9 +48,9 @@ async function handleCarDetails(req, res) {
     }
 
     // Ensure carPrice is a positive number
-    if (vehicleBuyPrice <= 0) {
-      return res.status(400).send({ error: "Car price must be a positive number" });
-    }
+    // if (vehicleBuyPrice <= 0) {
+    //   return res.status(400).send({ error: "Car price must be a positive number" });
+    // }
 
     // Validate specific formats if needed
     if (showOwnerFields && ownerPhone && !/^\d{10}$/.test(ownerPhone)) {

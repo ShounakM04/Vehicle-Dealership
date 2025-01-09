@@ -30,7 +30,7 @@ const PORT = 8000
   const { authenticateToken, authorizeEmployeeOrAdmin ,authorizeDriverOrEmployeeOrAdmin, authorizeAdmin} = require("./controllers/userRole-auth.js");
   const BillGenerate = require('./adminRoutes/billgenerate.route.js')
   const ValidateTokenRoute = require("./routes/ValidateToken.route.js");
-
+  const ActiveAccountRoute = require("./adminRoutes/activeAccounts.routes.js")
 
   // const corsOptions = {
   //     origin: '*', // Allow all origins
@@ -84,6 +84,7 @@ app.use("/edit-fields", carDetailsEdit)
 app.use("/logs", authorizeAdmin, LogDownloadRoute)
 app.use("/miscellaneous-costs",authenticateToken, authorizeEmployeeOrAdmin,miscellaneousCostRoute);
 app.use("/installments", InstallmentRoute);
+app.use("/activeAccounts", ActiveAccountRoute);
 app.use("/Description",handleAddDescriptionRoute);
 app.use("/accountDetails",handleAddAccountDetailsRoute);
 app.use("/bill", BillGenerate)
