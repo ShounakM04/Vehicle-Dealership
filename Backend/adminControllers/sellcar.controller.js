@@ -1,4 +1,3 @@
-
 const db = require("../models/database");
 const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 

@@ -27,7 +27,11 @@ async function handleCarDetails(req, res) {
       showInsuranceFields,
       showOwnerFields,
       soldStatus,
-      onhomepage
+      onhomepage,
+      fitness_upto_date,
+      registration_date,
+      description,
+      kilometers,
     } = req.body;
 
     // Validate mandatory fields
@@ -70,11 +74,13 @@ async function handleCarDetails(req, res) {
     }
 
     // Insert car details
-    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice,onhomepage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
-    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice,onhomepage];
+    const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice,onhomepage,kilometers,fitness_upto_date,registration_date,description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`;
+    const values2 = [registernumber, vehicleName, vehicleType, brandName, vehicleColor, vehicleBuyPrice, fuel, vehicleSellPrice, onhomepage,kilometers,fitness_upto_date,registration_date,description];
+
+
     await db.query(query2, values2);
 
-    let values3= [
+    let values3 = [
       registernumber,
       insuranceCompany || "Not Provided",
       insuranceNumber || "Not Provided",
@@ -95,9 +101,9 @@ async function handleCarDetails(req, res) {
 
 
       ];
-      
-      
-      
+
+
+
     }
     // Insert insurance details
     const query3 = `
@@ -111,7 +117,7 @@ async function handleCarDetails(req, res) {
       soldstatus
     ) 
     VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-    
+
     await db.query(query3, values3);
 
     // Insert owner details
@@ -128,6 +134,7 @@ async function handleCarDetails(req, res) {
     }
 
     await db.query(query4, values4);
+    
     res.status(200).send("Details entered into the database successfully");
   } catch (error) {
     // Log error for debugging
