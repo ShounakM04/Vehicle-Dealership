@@ -10,10 +10,12 @@ import { jwtDecode } from "jwt-decode";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
+
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
   const [soldStatus, setSoldStatus] = useState();
   const navigate = useNavigate();
+  // const [buying]
   const [vehicleData, setvehicleData] = useState({
     buyingPrice: 12000,
     sellingPrice: 0,
@@ -133,7 +135,7 @@ const CostReport = () => {
         toast.success("Bill generated successfully!");
 
         // Open the URL in a new tab
-        const newTab = window.open(response.data.fileUrl, '_blank');
+        const newTab = window.open(response.data.fileUrl, "_blank");
         if (newTab) {
           newTab.focus(); // Focus on the new tab
         } else {
@@ -143,7 +145,11 @@ const CostReport = () => {
       setLoading(false);
     } catch (error) {
       // Handle the case when the bill already exists (or any error occurs)
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         toast.error(error.response.data.message); // Error message from the backend
       } else {
         toast.error("Failed to generate bill.");
@@ -198,6 +204,7 @@ const CostReport = () => {
       <div className="flex flex-col lg:flex-row p-5 bg-gray-100 ">
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-2 lg:mb-0 ">
           <h2 className="text-2xl font-bold mb-2">Vehicle Details</h2>
+          {/* {console.log("efef",vehicleData.buyingPrice)} */}
           {isAdmin === true && (
             <div className="ml-auto mb-4 flex space-x-4">
               <button
@@ -358,11 +365,35 @@ const CostReport = () => {
           </div>
 
           {/* Total Maintenance Cost */}
-          <div className="mt-2 p-4 bg-yellow-100 text-yellow-800 font-semibold rounded">
-            <h3 className="text-lg">
-              Total Maintenance Cost: ₹{maintainanceData.totalMaintenanceCost}
+          
+            <div className="mt-4 p-6 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold mb-2">
+              Total Maintenance Cost:{" "}
+              <span className="font-semibold">
+                ₹{maintainanceData.totalMaintenanceCost}
+              </span>
             </h3>
+
+            {isAdmin && (
+              <>
+                <h3 className="text-xl font-bold mb-2">
+                Buying Price:{" "}
+                <span className="font-semibold">₹{vehicleData.buyingPrice}</span>
+              </h3>
+              <h3 className="text-xl font-bold">
+                Total:{" "}
+                <span className="font-semibold">
+                  ₹
+                  {vehicleData.buyingPrice +
+                    maintainanceData.totalMaintenanceCost}
+                </span>
+              </h3>
+              </>
+            )}
+            
           </div>
+          
+          
 
           {/* Insurance Commission */}
           {/* <div className="mt-4 p-4 bg-orange-200 text-orange-800 font-semibold rounded">
