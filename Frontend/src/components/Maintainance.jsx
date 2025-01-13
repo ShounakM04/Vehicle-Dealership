@@ -38,20 +38,6 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         })
     }
 
-    function fetchToken() {
-        const token = localStorage.getItem("authToken");
-        let decodedToken;
-        if (token) {
-            try {
-                decodedToken = jwtDecode(token);
-                console.log(decodedToken);
-            } catch (error) {
-                console.error("Invalid token", error);
-            }
-        }
-        console.log(decodedToken);
-        setDecodedToken(decodedToken);
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,18 +45,32 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         try {
             setAdding(true);
 
-            fetchToken();
+            const token = localStorage.getItem("authToken");
+            console.log("++++++ " + token)
+            let decodedToken;
+            if (token) {
+                try {
+                    decodedToken = jwtDecode(token);
+                    console.log("temppppp " + decodedToken);
+                } catch (error) {
+                    console.error("Invalid token", error);
+                }
+            }
+            // console.log(decodedToken);
+            // setDecodedToken(decodedToken);
 
+            let currRole = decodedToken.isDriver ? "driver" : decodedToken.isAdmin ? "admin" : decodedToken.isEmployee ? "employee" : "";
+            console.log("CurrRole : " + currRole);
+            console.log(decodedToken);
 
-            let currRole = isDriver ? "driver" : isAdmin ? "admin" : isEmployee ? "employee" : "";
-            if (!currRole) currRole = role;
+            // if (!currRole) currRole = role;
 
             // if(decodedToken)
             // {
             //     currRole += ` ${decodedToken.username}`;
             // }
-            // console.log("CurrRole : "+currRole);
 
+            
             console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
             const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
                 { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
