@@ -110,7 +110,7 @@ function AdminForm() {
 
       // Submit form data after images are uploaded
       await axios.post(
-        "https://www.nikhilmotors.com/api/details",
+        "http://localhost:8000/details",
         {
           vehicleName,
           brandName,

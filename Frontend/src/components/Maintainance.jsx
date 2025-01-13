@@ -56,24 +56,16 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                     console.error("Invalid token", error);
                 }
             }
-            // console.log(decodedToken);
-            // setDecodedToken(decodedToken);
 
-            let currRole = decodedToken.isDriver ? "driver" : decodedToken.isAdmin ? "admin" : decodedToken.isEmployee ? "employee" : "";
-            console.log("CurrRole : " + currRole);
+
+            let UserName = decodedToken.username ? decodedToken.username  : "Unkown";
+            console.log("UserName : " + UserName);
             console.log(decodedToken);
 
-            // if (!currRole) currRole = role;
 
-            // if(decodedToken)
-            // {
-            //     currRole += ` ${decodedToken.username}`;
-            // }
-
-            
-            console.log(globalRegisterNumber, description, price, currRole, maintainanceDate)
-            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
-                { registernumber: globalRegisterNumber, description, price, role: currRole, maintainanceDate },
+            console.log(globalRegisterNumber, description, price, UserName, maintainanceDate)
+            const response = await axios.post('http://localhost:8000/maintainance',
+                { registernumber: globalRegisterNumber, description, price, UserName, maintainanceDate },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -120,7 +112,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://www.nikhilmotors.com/api/car/${currId}`, {
+                `http://localhost:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

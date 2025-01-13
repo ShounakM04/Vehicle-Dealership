@@ -70,12 +70,12 @@ async function handleGetMaintainanceDetails(req, res) {
 }
 
 async function handlePostMaintainanceDetails(req, res) {
-    const { registernumber, description, price, role, maintainanceDate } = req.body;
+    const { registernumber, description, price, UserName, maintainanceDate } = req.body;
     // console.log(req.body);
     // console.log(req.user); // Check if the user is correctly set
 
     // Check for missing fields
-    if (!registernumber || !description || !price || !maintainanceDate || !role) {
+    if (!registernumber || !description || !price || !maintainanceDate || !UserName) {
         return res.status(400).send("Enter all the details correctly");
     }
 
@@ -103,7 +103,7 @@ async function handlePostMaintainanceDetails(req, res) {
             price,
             description,
             maintainanceDate,
-            role,
+            UserName,
             nextIndex
         ];
         const result = await db.query(query, values);
