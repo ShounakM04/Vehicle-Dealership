@@ -413,7 +413,7 @@ const Dashboard = () => {
                 onClick={activeIds}
                 className="bg-green-500 text-white px-4 py-2 rounded w-full lg:w-auto"
               >
-                Active IDs
+                Account IDs
               </button>
               <button
                 onClick={handleChangePass}
