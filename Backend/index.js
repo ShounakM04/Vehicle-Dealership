@@ -60,25 +60,25 @@ const PORT = 8000
   // app.use(cors(corsOptions));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  
+
 
   // Rate limiting middleware
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes window
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after 10 minutes.",
-  keyGenerator: (req) => req.ip, // Limit by IP address
-  statusCode: 429, // HTTP status code for rate limiting
-  handler: (req, res, next, options) => {
-    // Custom handler in case of rate limit exceeded
-    res.status(options.statusCode).json({
-      message: options.message,
-    });
-  },
-});
+// const limiter = rateLimit({
+//   windowMs: 10 * 60 * 1000, // 10 minutes window
+//   max: 100, // Limit each IP to 100 requests per windowMs
+//   message: "Too many requests from this IP, please try again after 10 minutes.",
+//   keyGenerator: (req) => req.ip, // Limit by IP address
+//   statusCode: 429, // HTTP status code for rate limiting
+//   handler: (req, res, next, options) => {
+//     // Custom handler in case of rate limit exceeded
+//     res.status(options.statusCode).json({
+//       message: options.message,
+//     });
+//   },
+// });
 
-// Apply the rate limiter to all routes
-app.use(limiter);
+// // Apply the rate limiter to all routes
+// app.use(limiter);
 
 
 // Use your custom logging middleware
