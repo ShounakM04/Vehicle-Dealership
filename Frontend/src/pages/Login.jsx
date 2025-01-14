@@ -25,10 +25,10 @@ function Login() {
             return;
         }
 
-        //http://localhost:8000/
-        //http://localhost:8000/
+        //https://www.nikhilmotors.com/api/
+        //https://www.nikhilmotors.com/api/
         //http://65.2.78.63/
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        const endpoint = "https://www.nikhilmotors.com/api/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true)

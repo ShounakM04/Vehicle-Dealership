@@ -61,7 +61,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`, {
+        const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -122,7 +122,7 @@ const CostReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:8000/bill/generate-bill`,
+        `https://www.nikhilmotors.com/api/bill/generate-bill`,
         { registerNumber: id },
         {
           headers: {
@@ -162,7 +162,7 @@ const CostReport = () => {
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
-      const response = await axios.get("http://localhost:8000/maintainance", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -343,7 +343,7 @@ const CostReport = () => {
                             "en-GB"
                           )}
                         </p>
-                        <p>Done By: {record.role}</p>
+                        <p>Done By: {record.username}</p>
                         <p>
                           Receipt:{" "}
                           <a
@@ -365,8 +365,8 @@ const CostReport = () => {
           </div>
 
           {/* Total Maintenance Cost */}
-          
-            <div className="mt-4 p-6 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-lg shadow-md">
+
+          <div className="mt-4 p-6 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-lg shadow-md">
             <h3 className="text-xl font-bold mb-2">
               Total Maintenance Cost:{" "}
               <span className="font-semibold">
@@ -377,23 +377,23 @@ const CostReport = () => {
             {isAdmin && (
               <>
                 <h3 className="text-xl font-bold mb-2">
-                Buying Price:{" "}
-                <span className="font-semibold">₹{vehicleData.buyingPrice}</span>
-              </h3>
-              <h3 className="text-xl font-bold">
-                Total:{" "}
-                <span className="font-semibold">
-                  ₹
-                  {vehicleData.buyingPrice +
-                    maintainanceData.totalMaintenanceCost}
-                </span>
-              </h3>
+                  Buying Price:{" "}
+                  <span className="font-semibold">₹{vehicleData.buyingPrice}</span>
+                </h3>
+                <h3 className="text-xl font-bold">
+                  Total:{" "}
+                  <span className="font-semibold">
+                    ₹
+                    {vehicleData.buyingPrice +
+                      maintainanceData.totalMaintenanceCost}
+                  </span>
+                </h3>
               </>
             )}
-            
+
           </div>
-          
-          
+
+
 
           {/* Insurance Commission */}
           {/* <div className="mt-4 p-4 bg-orange-200 text-orange-800 font-semibold rounded">

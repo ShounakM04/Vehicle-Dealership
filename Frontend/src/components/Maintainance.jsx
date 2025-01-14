@@ -58,14 +58,16 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             }
 
 
-            let UserName = decodedToken.username ? decodedToken.username  : "Unkown";
-            console.log("UserName : " + UserName);
+            let username = decodedToken.username ? decodedToken.username : "Unkown";
+
+            let userdesignation = decodedToken.isAdmin ? "Admin" : decodedToken.isEmployee ? "Employee" : decodedToken.isDriver ? "Driver" : "Unknown";
+            console.log("username : " + username);
             console.log(decodedToken);
 
 
-            console.log(globalRegisterNumber, description, price, UserName, maintainanceDate)
-            const response = await axios.post('http://localhost:8000/maintainance',
-                { registernumber: globalRegisterNumber, description, price, UserName, maintainanceDate },
+            console.log(globalRegisterNumber, description, price, username, userdesignation, maintainanceDate)
+            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
+                { registernumber: globalRegisterNumber, description, price, username, maintainanceDate },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -112,7 +114,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `http://localhost:8000/car/${currId}`, {
+                `https://www.nikhilmotors.com/api/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
