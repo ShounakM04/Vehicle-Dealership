@@ -64,7 +64,7 @@ function AdminForm() {
   };
 
   const handleUpload = async () => {
-    setUploading(true);
+    // setUploading(true);
 
     try {
       // Generate the S3 upload URL for the display image
@@ -86,13 +86,44 @@ function AdminForm() {
         await uploadToS3(imageUploadURL, image);
       }
 
-      setUploading(false);
+      // setUploading(false);
       return true;
     } catch (error) {
-      setUploading(false);
+      // setUploading(false);
       throw error;
     }
   };
+
+
+  const resetState = () => {
+    setVehicleName("");
+    setBrandName("");
+    setregisternumber("");
+    setInsuranceCompany("");
+    setPolicyNumber("");
+    setPolicyTenure("");
+    setOwnerName("");
+    setOwnerPhone("");
+    setOwnerEmail("");
+    setOwnerAddress("");
+    setVehicleColor("");
+    setVehicleSellPrice("");
+    setInsuranceStartDate("");
+    setInsuranceEndDate("");
+    setShowInsuranceFields(false);
+    setShowOwnerFields(false);
+    setOnHomePageDisplay(false);
+    setfitness_upto_date("");
+    setregistration_date("");
+    setDescription("");
+    setKilometers(0);
+    setVehicleType("");
+    setUploading(false);
+    setImages([]);
+    setDisplayImage(null);
+    setFuel("");
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +141,7 @@ function AdminForm() {
 
       // Submit form data after images are uploaded
       await axios.post(
-        "https://www.nikhilmotors.com/api/details",
+        "http://localhost:8000/details",
         {
           vehicleName,
           brandName,
@@ -146,7 +177,8 @@ function AdminForm() {
       );
 
       toast.success("Vehicle details added successfully!");
-      navigate("/dashboard");
+      resetState();
+      // navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.status == 400) {
         // Display error message in toast

@@ -66,7 +66,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
 
             console.log(globalRegisterNumber, description, price, username, userdesignation, maintainanceDate)
-            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
+            const response = await axios.post('http://localhost:8000/maintainance',
                 { registernumber: globalRegisterNumber, description, price, username, maintainanceDate },
                 {
                     headers: {
@@ -114,7 +114,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://www.nikhilmotors.com/api/car/${currId}`, {
+                `http://localhost:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

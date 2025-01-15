@@ -17,12 +17,12 @@ const CostReport = () => {
   const navigate = useNavigate();
   // const [buying]
   const [vehicleData, setvehicleData] = useState({
-    buyingPrice: 12000,
-    sellingPrice: 0,
-    insuranceCommission: 500,
+    insuranceCommission: 0,
     maintenanceRecords: [],
     installments: [],
     carDetails: {
+      buyingprice: 0,
+      sellingprice: 0,
       carNo: "",
       ownerName: "",
       ownerPhone: "",
@@ -61,7 +61,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`, {
+        const response = await axios.get(`http://localhost:8000/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -86,6 +86,8 @@ const CostReport = () => {
             type: car.carmake,
             fuelType: car.fuel,
             carCompany: car.carcompany,
+            buyingprice:car.vehiclebuyprice,
+            sellingprice:car.vehiclesellprice
           },
         }));
       } catch (error) {
@@ -122,7 +124,7 @@ const CostReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `https://www.nikhilmotors.com/api/bill/generate-bill`,
+        `http://localhost:8000/bill/generate-bill`,
         { registerNumber: id },
         {
           headers: {
@@ -162,7 +164,7 @@ const CostReport = () => {
   const fetchMaintenanceDetails = async () => {
     try {
       console.log("hi+" + id);
-      const response = await axios.get("https://www.nikhilmotors.com/api/maintainance", {
+      const response = await axios.get("http://localhost:8000/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -378,13 +380,14 @@ const CostReport = () => {
               <>
                 <h3 className="text-xl font-bold mb-2">
                   Buying Price:{" "}
-                  <span className="font-semibold">₹{vehicleData.buyingPrice}</span>
+                  {console.log(vehicleData.carDetails)}
+                  <span className="font-semibold">₹{vehicleData.carDetails.buyingprice}</span>
                 </h3>
                 <h3 className="text-xl font-bold">
                   Total:{" "}
                   <span className="font-semibold">
                     ₹
-                    {vehicleData.buyingPrice +
+                    {Number(vehicleData.carDetails.buyingprice) +
                       maintainanceData.totalMaintenanceCost}
                   </span>
                 </h3>

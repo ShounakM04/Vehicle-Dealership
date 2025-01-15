@@ -19,7 +19,7 @@ export default function ActiveAccounts() {
     const fetchAccounts = async () => {
       try {
         const response = await axios.get(
-          "https://www.nikhilmotors.com/api/activeAccounts/getaccounts",
+          "http://localhost:8000/activeAccounts/getaccounts",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -60,7 +60,7 @@ export default function ActiveAccounts() {
     try {
       // Send the DELETE request to the server
       setLoading(true);
-      await axios.delete(`https://www.nikhilmotors.com/api/activeAccounts/deleteAccount`, {
+      await axios.delete(`http://localhost:8000/activeAccounts/deleteAccount`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

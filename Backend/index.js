@@ -3,7 +3,7 @@ const logResReq = require("./log.js"); // Import without destructuring
 const cors = require("cors");
 const rateLimit = require('express-rate-limit');
 
-const PORT = 8000 
+const PORT = 8000
 
   const app = express();
 
@@ -60,7 +60,7 @@ const PORT = 8000
   // app.use(cors(corsOptions));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-
+  
 
   // Rate limiting middleware
 // const limiter = rateLimit({
