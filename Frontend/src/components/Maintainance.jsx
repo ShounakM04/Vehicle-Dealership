@@ -191,7 +191,9 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                                 maxLength="10"
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
+                                onChange={(e) => setInputValue(e.target.value
+                                    .replace(/^\s+/, "")
+                                    .replace(/[a-z]/g, (char) => char.toUpperCase()))}
                             />
                         </div>
                         <button
