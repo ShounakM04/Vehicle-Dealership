@@ -43,7 +43,7 @@ function CustomerEnquiry() {
       const { serialnum, customerPhone } = selectedEnquiry;
 
 
-      await axios.delete('http://localhost:8000/customer', {
+      await axios.delete('https://www.nikhilmotors.com/api/customer', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -80,7 +80,7 @@ function CustomerEnquiry() {
       setUploading(true);
       const submissionDate = (new Date).toLocaleString();
       await axios.post(
-        'http://localhost:8000/customer',
+        'https://www.nikhilmotors.com/api/customer',
         {
           custName: customerName,
           custContact: customerPhone,
@@ -116,7 +116,7 @@ function CustomerEnquiry() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/customer', {
+      const response = await axios.get('https://www.nikhilmotors.com/api/customer', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
