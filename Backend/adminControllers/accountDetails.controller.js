@@ -239,7 +239,7 @@ const filterByMonthAndYear = async (req, res) => {
     try {
         // Fetch costs for the filtered month and year from multiple tables
         const investmentCosts = await db.query(
-            `SELECT amount, description, date FROM investment WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2`,
+            `SELECT * FROM investment WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2`,
             [month, year]
         );
         const maintenanceCosts = await db.query(
