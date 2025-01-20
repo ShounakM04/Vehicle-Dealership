@@ -5,14 +5,14 @@ import {jwtDecode} from "jwt-decode";
 
 const ProtectedUserRoute = ({ children, requiredRoles }) => {
   const navigate = useNavigate();
-  console.log(requiredRoles)
+  // console.log(requiredRoles)
 
   const token = localStorage.getItem("authToken");
   let decodedToken;
   if (token) {
     try {
        decodedToken = jwtDecode(token);
-  console.log(decodedToken);
+  // console.log(decodedToken);
 
     } catch (error) {
       console.error("Invalid token", error);

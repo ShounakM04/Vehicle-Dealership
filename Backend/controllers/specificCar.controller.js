@@ -20,7 +20,7 @@ async function listDocHelper(FolderName) {
 async function handleSpecifiPage(req, res) {
     try {
         const regisNum = req.params.registernumber;
-        console.log(`Registration Number: ${regisNum}`);
+        // console.log(`Registration Number: ${regisNum}`);
         const values = [regisNum];
 
         // Query to fetch car details

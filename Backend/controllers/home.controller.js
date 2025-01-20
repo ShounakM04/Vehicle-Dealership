@@ -37,7 +37,7 @@ async function handleHomePage(req, res) {
 
             // Generate signed URL for display image
             const displayImageUrl = await getObjectURL(displayImageKey);
-            console.log(`Display Image URL: ${displayImageUrl}`);
+            // console.log(`Display Image URL: ${displayImageUrl}`);
 
 
             return {

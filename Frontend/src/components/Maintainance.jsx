@@ -46,12 +46,12 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             setAdding(true);
 
             const token = localStorage.getItem("authToken");
-            console.log("++++++ " + token)
+            // console.log("++++++ " + token)
             let decodedToken;
             if (token) {
                 try {
                     decodedToken = jwtDecode(token);
-                    console.log("temppppp " + decodedToken);
+                    // console.log("temppppp " + decodedToken);
                 } catch (error) {
                     console.error("Invalid token", error);
                 }
@@ -61,12 +61,12 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             let username = decodedToken.username ? decodedToken.username : "Unkown";
 
             let userdesignation = decodedToken.isAdmin ? "Admin" : decodedToken.isEmployee ? "Employee" : decodedToken.isDriver ? "Driver" : "Unknown";
-            console.log("username : " + username);
-            console.log(decodedToken);
+            // console.log("username : " + username);
+            // console.log(decodedToken);
 
 
-            console.log(globalRegisterNumber, description, price, username, userdesignation, maintainanceDate)
-            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
+            // console.log(globalRegisterNumber, description, price, username, userdesignation, maintainanceDate)
+            const response = await axios.post('http://localhost:8000/maintainance',
                 { registernumber: globalRegisterNumber, description, price, username, maintainanceDate },
                 {
                     headers: {
@@ -76,7 +76,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
             if (files.length != 0) {
                 const nextIndex = response.data.nextIndex;
-                console.log("nextIndex : " + nextIndex);;
+                // console.log("nextIndex : " + nextIndex);;
                 // Handle other image uploads if necessary (similar to DisplayImage)
 
                 const file = files[0];
@@ -96,7 +96,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             setRole('');
 
             toast.success('Maintenance record added successfully!');
-            console.log(response.data);
+            // console.log(response.data);
             setDriverSubittedId(false);
 
         } catch (error) {
@@ -114,14 +114,14 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `https://www.nikhilmotors.com/api/car/${currId}`, {
+                `http://localhost:8000/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
             }
             );
             setCarData(response.data); // Store the fetched car data
-            console.log(response.data); // Log the fetched car data
+            // console.log(response.data); // Log the fetched car data
         } catch (err) {
             setCarData(null);
             console.error("Error fetching car details:", err);
@@ -159,7 +159,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
         }
 
-        console.log(registernumber);
+        // console.log(registernumber);
     }
 
     return (

@@ -22,7 +22,7 @@ export default function DriverDashboard() {
         if (token) {
             try {
                 decodedToken = jwtDecode(token);
-                console.log(decodedToken);
+                // console.log(decodedToken);
 
             } catch (error) {
                 console.error("Invalid token", error);

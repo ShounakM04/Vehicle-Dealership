@@ -9,7 +9,7 @@ const generateAdminToken = ({userID, username, password}) =>{
 
 const generateEmployeeToken = ({userID, username, password}) =>{
     const token =  jwt.sign({userID,username, password, isEmployee :true},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'6h'});
-    console.log("token");
+    // console.log("token");
     return token;
 }
 

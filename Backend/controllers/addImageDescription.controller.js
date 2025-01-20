@@ -9,8 +9,8 @@ async function handleGetDescription(req, res) {
         const uniqueIds = result.rows?.map(row => row.uniqueid);
         const descriptions = result.rows?.map(row => row.description);
 
-        console.log("Fetched unique IDs:", uniqueIds);
-        console.log("Fetched descriptions:", descriptions);
+        // console.log("Fetched unique IDs:", uniqueIds);
+        // console.log("Fetched descriptions:", descriptions);
 
         // Sending the response with both arrays
         res.json({
@@ -25,13 +25,13 @@ async function handleGetDescription(req, res) {
 
 async function handleAddDescription(req, res) {
     try {
-        const { uniqueID, description } = req.body;
+        const { uniqueID, description, docType } = req.body;
         // console.log(custName, custContact, custQuery,"Date : " + date);
-        console.log("be : ", uniqueID);
-        console.log("be : ", description);
+        // console.log("be : ", uniqueID);
+        // console.log("be : ", description);
 
-        const query = `INSERT INTO imageDescription (uniqueid, description) VALUES ($1, $2)`;
-        const values = [uniqueID, description];
+        const query = `INSERT INTO imageDescription (uniqueid, description, doctype) VALUES ($1, $2, $3)`;
+        const values = [uniqueID, description, docType];
 
         await db.query(query, values);
         res.status(201).send("Image Description query added");

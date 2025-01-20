@@ -22,7 +22,7 @@ const MonthlyAccountDetails = () => {
       if (token) {
         try {
           decodedToken = jwtDecode(token);
-          console.log(decodedToken);
+          // console.log(decodedToken);
         } catch (error) {
           console.error("Invalid token", error);
         }
@@ -37,7 +37,7 @@ const MonthlyAccountDetails = () => {
   const fetchData = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://www.nikhilmotors.com/api/accountDetails/filter`, {
+      const response = await axios.get(`http://localhost:8000/accountDetails/filter`, {
         params: { month, year },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -56,7 +56,7 @@ const MonthlyAccountDetails = () => {
   const fetchMonthlyProfit = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://www.nikhilmotors.com/api/profits/monthly`, {
+      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
         params: { month, year },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,

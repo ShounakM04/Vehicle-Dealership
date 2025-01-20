@@ -40,7 +40,7 @@ function AdminForm() {
   if (token) {
     try {
       decodedToken = jwtDecode(token);
-      console.log(decodedToken);
+      // console.log(decodedToken);
     } catch (error) {
       console.error("Invalid token", error);
     }
@@ -74,7 +74,7 @@ function AdminForm() {
           DisplayImage,
           displayImageFileName
         );
-        console.log(displayImageUploadURL);
+        // console.log(displayImageUploadURL);
         await uploadToS3(displayImageUploadURL, DisplayImage);
       }
 
@@ -127,7 +127,7 @@ function AdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Clicked");
+    // console.log("Clicked");
     if (vehicleBuyPrice < 0) {
       toast.error("Vehicle price cannot be negative");
       return;
@@ -141,7 +141,7 @@ function AdminForm() {
 
       // Submit form data after images are uploaded
       await axios.post(
-        "https://www.nikhilmotors.com/api/details",
+        "http://localhost:8000/details",
         {
           vehicleName,
           brandName,

@@ -23,9 +23,9 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
   const fetchCarDetails = async () => {
     try {
-      console.log("Params : " + carID);
+      // console.log("Params : " + carID);
       const response = await axios.get(
-        `https://www.nikhilmotors.com/api/dashboard/sold-cars`, // Update to your actual endpoint
+        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -35,7 +35,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
       );
       setCarDetails(response.data.dbData);
       setInsuranceDoc(response.data.soldCarInsuranceDocs);
-      console.log("ithe", response.data);
+      // console.log("ithe", response.data);
       setSoldCarImages(response.data.soldCarImages);
     } catch (err) {
       // setError("Error fetching car details");
@@ -48,7 +48,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`https://www.nikhilmotors.com/api/installments`, {
+      const response = await axios.get(`http://localhost:8000/installments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -69,7 +69,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     setUploading(true);
     try {
       const response = await axios.post(
-        "https://www.nikhilmotors.com/api/installments",
+        "http://localhost:8000/installments",
         {
           registernumber: carID,
           amount: installmentAmount,
@@ -163,14 +163,14 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("https://www.nikhilmotors.com/api/profits", {
+      const response = await axios.get("http://localhost:8000/profits", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         params: { registernumber: carID },
       });
       setProfit(response.data.profit);
-      console.log(response.data.profit);
+      // console.log(response.data.profit);
     } catch (error) {
       console.log(error);
     }

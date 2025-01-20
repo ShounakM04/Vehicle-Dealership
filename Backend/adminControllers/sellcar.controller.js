@@ -4,7 +4,7 @@ const { getObjectURL, listImagesInFolder } = require("../amazonS3/s3config");
 
 async function handleSellCar(req, res) {
     try {
-        console.log("Request body:", req.body);
+        //console.log("Request body:", req.body);
         // const selldate = (new Date()).now;
 
         // Destructure fields from form data in req.body.formData
@@ -22,7 +22,7 @@ async function handleSellCar(req, res) {
             accountPaidTo,
         } = req.body;
 
-        console.log("In controller: CarID - " + carID);
+        //console.log("In controller: CarID - " + carID);
 
         // Update car status to sold in the cardetails table
         const updateQuery = `UPDATE cardetails SET status = true WHERE registernumber = $1`;

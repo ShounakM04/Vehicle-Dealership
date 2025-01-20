@@ -24,7 +24,7 @@ const EditVehicleImages = ({ id }) => {
     // Fetch images function to be called on mount and after upload
     const fetchImages = async () => {
         try {
-            const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`,
+            const response = await axios.get(`http://localhost:8000/car/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -40,7 +40,7 @@ const EditVehicleImages = ({ id }) => {
 
             if (match) {
                 checkDisplayImage = match[1];
-                console.log(checkDisplayImage);
+                // console.log(checkDisplayImage);
             } else {
                 console.log('No unique ID found');
             }
@@ -51,7 +51,7 @@ const EditVehicleImages = ({ id }) => {
             else {
                 setDisplayImage("No Image");
             }
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             console.error("Error fetching images:", error);
             // toast.error("Failed to load images");
@@ -88,12 +88,12 @@ const EditVehicleImages = ({ id }) => {
         setUploading(true);
 
         try {
-            console.log(id);
+            // console.log(id);
             // Generate the S3 upload URL for the display image
             if (NewDisplayImage) {
                 const displayImageFileName = `${id}/InventoryVehicleImages/0`;
                 const displayImageUploadURL = await getUploadURL(NewDisplayImage, displayImageFileName);
-                console.log(displayImageUploadURL);
+                // console.log(displayImageUploadURL);
                 await uploadToS3(displayImageUploadURL, NewDisplayImage);
             }
 
@@ -155,7 +155,7 @@ const EditVehicleImages = ({ id }) => {
         try {
             setIsLoading(true); // Start fade-up effect
             const deleteUrl = fetchedImages[selectedImageSerial];
-            console.log("Del : " + deleteUrl);
+            // console.log("Del : " + deleteUrl);
 
             // Extract the uniqueID from the URL
             const regex = /\/InventoryVehicleImages\/(\d+)\?/;
@@ -164,20 +164,21 @@ const EditVehicleImages = ({ id }) => {
 
             if (match) {
                 uniqueID = match[1];
-                console.log(uniqueID);
+                // console.log(uniqueID);
             } else {
-                console.log('No unique ID found');
+                // console.log('No unique ID found');
             }
 
             const path = `${id}/InventoryVehicleImages/${uniqueID}`
 
-            await axios.delete(`https://www.nikhilmotors.com/api/delete-image`, {
+            await axios.delete(`http://localhost:8000/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
                 ,
                 params: {
-                    path: path
+                    path: path,
+                    uniqueID:uniqueID
 
                 }
             });

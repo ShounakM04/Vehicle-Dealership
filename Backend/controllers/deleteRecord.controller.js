@@ -3,7 +3,7 @@ const db = require("../models/database")
 async function handleRecordDeletion(req, res){
     try {
         const regisNum = req.query.deletedID;
-        console.log(regisNum)
+        // console.log(regisNum)
         const query = `delete from cardetails where registernumber =($1)`;
         const values = [regisNum];
         await db.query(query, values);

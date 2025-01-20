@@ -1,4 +1,5 @@
 const { uploadToS3, deleteObject, listImagesInFolder, getObjectURL } = require('../amazonS3/s3config');
+const db = require("../models/database");
 
 // Controller to directly call uploadToS3Image and return pre-signed URL
 async function generatePresignedUploadUrl(req, res) {
@@ -14,7 +15,7 @@ async function generatePresignedUploadUrl(req, res) {
 
         // Directly call uploadToS3Image with an empty buffer and filename
         const uploadUrl = await uploadToS3(path, filetype);
-        console.log("Controller url : " + uploadUrl);
+        // console.log("Controller url : " + uploadUrl);
 
         res.status(200).send({ uploadUrl });
     } catch (error) {
@@ -24,7 +25,7 @@ async function generatePresignedUploadUrl(req, res) {
 }
 
 async function handleDeleteImage(req, res) {
-    const { path } = req.query;  // Now using query parameter
+    const { path, uniqueID } = req.query;  // Now using query parameter
 
     if (!path) {
         return res.status(400).send("uniqueID number is required");
@@ -34,6 +35,16 @@ async function handleDeleteImage(req, res) {
         // Delete the image with the specified serialnum
         const deletePath = path;
         await deleteObject(deletePath);
+
+        // console.log("helow"+uniqueID)
+        if(uniqueID)
+        {
+        // console.log("helow"+uniqueID)
+
+            const query = `DELETE FROM imagedescription WHERE uniqueid = $1`;
+            const values = [uniqueID];
+            await db.query(query, values);
+        }
 
         // Return success message if the image was deleted
         res.send(`Image deleted successfully`);
@@ -51,7 +62,7 @@ async function handleGetImages(req, res) {
         // const NoticeFolder = `Notices/`;
         // let ImageFolder = 'Notices/';
         const ImageFolder = req.query.folderPath;
-        console.log(ImageFolder)
+        // console.log(ImageFolder)
 
         // Fetch image keys from the S3 folder
         const ImagesKeys = await listImagesInFolder(ImageFolder);

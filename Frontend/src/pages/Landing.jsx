@@ -48,8 +48,8 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`https://www.nikhilmotors.com/api/`, { params });
-        console.log(response.data);
+        const response = await axios.get(`http://localhost:8000/`, { params });
+        // console.log(response.data);
         const data = response.data.carsWithImages;
         const carsData = data?.map((car) => {
           const firstImage = car.displayImage; // Updated to use imageurl instead of displayImage
@@ -80,7 +80,7 @@ export default function Landing() {
       try {
         let folderPath;
         folderPath = 'Notices/'
-        const response = await axios.get('https://www.nikhilmotors.com/api/get-images', {
+        const response = await axios.get('http://localhost:8000/get-images', {
           params: {
             folderPath: folderPath
           }
@@ -88,7 +88,7 @@ export default function Landing() {
         const imageUrls = response.data;
 
         setNoticeImages(imageUrls);  // Set fetched image URLs
-        console.log("Notice Images:", imageUrls);
+        // console.log("Notice Images:", imageUrls);
       } catch (error) {
         console.error("Error fetching notice images:", error);
       }

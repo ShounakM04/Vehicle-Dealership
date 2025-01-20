@@ -14,7 +14,7 @@ const DocumentUpload = ({ isOffice }) => {
 
     const { id } = useParams();
 
-    console.log(id);
+    // console.log(id);
 
     const handleGoBack = () => {
         if (isOffice == true) {
@@ -64,10 +64,12 @@ const DocumentUpload = ({ isOffice }) => {
 
     const addDescription = async (uniqueID) => {
         try {
-            await axios.post('https://www.nikhilmotors.com/api/Description',
+            let docType = (isOffice == true) ? "Office" : "Admin";
+            await axios.post('http://localhost:8000/Description',
                 {
                     uniqueID: uniqueID,
-                    description: description
+                    description: description,
+                    docType: docType
                 },
                 {
                     headers: {
@@ -98,7 +100,7 @@ const DocumentUpload = ({ isOffice }) => {
                 const imageFileName = `${folder}/${uniqueID}`;
                 const imageUploadURL = await getUploadURL(image, imageFileName);
                 await uploadToS3(imageUploadURL, image);
-                console.log("Descp : " + description)
+                // console.log("Descp : " + description)
                 await addDescription(uniqueID);
 
             }

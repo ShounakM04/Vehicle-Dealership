@@ -65,7 +65,7 @@ const EditVehicleDetailsForm = () => {
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
-                const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`,
+                const response = await axios.get(`http://localhost:8000/car/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -112,7 +112,7 @@ const EditVehicleDetailsForm = () => {
 
     const handleVehicleDetailsEdit = async (newValue, fieldToEdit) => {
 
-        console.log(fieldToEdit);
+        // console.log(fieldToEdit);
         let tablename = "cardetails";
 
         if (fieldToEdit == "insurancecompany" || fieldToEdit == "insurancenumber" || fieldToEdit == "insurancestartdate" || fieldToEdit == "insuranceenddate" || fieldToEdit == "insurancetenure") {
@@ -123,7 +123,7 @@ const EditVehicleDetailsForm = () => {
         }
         try {
             setWait(true);
-            const response = await axios.post("https://www.nikhilmotors.com/api/edit-fields", {
+            const response = await axios.post("http://localhost:8000/edit-fields", {
                 tablename: tablename,
                 fieldToEdit: fieldToEdit,
                 newValue: newValue,
@@ -173,7 +173,7 @@ const EditVehicleDetailsForm = () => {
     if (token) {
         try {
             decodedToken = jwtDecode(token);
-            console.log(decodedToken);
+            // console.log(decodedToken);
         } catch (error) {
             console.error("Invalid token", error);
         }

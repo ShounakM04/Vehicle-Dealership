@@ -72,7 +72,7 @@ async function handleUserLogin(req,res) {
         if(userDetails.userdesignation === 'Driver'){
             token = generateDriverToken({userID: userDetails.userID, username: userDetails.username, password: userDetails.userPassword});
         }
-        console.log(token)
+        //console.log(token)
         res.setHeader('Authorization' , `Bearer ${token}`);
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
         return res.json(token);

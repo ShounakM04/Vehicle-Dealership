@@ -23,7 +23,7 @@ function Navbar() {
       try {
         // Make the request with the correct Authorization header
         const response = await axios.post(
-          "https://www.nikhilmotors.com/api/validate-token",
+          "http://localhost:8000/validate-token",
           {}, // No body needed for this request
           {
             headers: {
@@ -61,7 +61,7 @@ function Navbar() {
   };
 
   const handleSearch = () => {
-    console.log('Searching for:', query);
+    // console.log('Searching for:', query);
     // Implement your search logic here
 
   };
@@ -74,7 +74,7 @@ function Navbar() {
 
       try {
         decodedToken = jwtDecode(token);
-        console.log(decodedToken);
+        // console.log(decodedToken);
 
       } catch (error) {
         console.error("Invalid token", error);

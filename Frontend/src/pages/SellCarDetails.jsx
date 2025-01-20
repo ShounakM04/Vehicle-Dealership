@@ -43,7 +43,7 @@ function SellCarDetails() {
     setError(null);
     try {
       const response = await axios.get(
-        `https://www.nikhilmotors.com/api/car/${currDeleteId}`,
+        `http://localhost:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -51,7 +51,7 @@ function SellCarDetails() {
         }
       );
       setCarData(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (err) {
       setCarData(null);
       console.error("Error fetching Vehicle details:", err);
@@ -99,9 +99,9 @@ function SellCarDetails() {
       setLoading(true);
 
       const registernumber = carData.car.registernumber;
-      console.log(registernumber);
+      // console.log(registernumber);
       // Handle other image uploads if necessary (similar to DisplayImage)
-      console.log(formData.carPhotos);
+      // console.log(formData.carPhotos);
       for (let i = 0; i < formData.carPhotos.length; i++) {
         const image = formData.carPhotos[i];
         const imageFileName = `${registernumber}/SoldCarImages/${i + 1}`;
@@ -119,7 +119,7 @@ function SellCarDetails() {
 
       // sellFormData.append("carID", formData.carID);
 
-      await axios.post("https://www.nikhilmotors.com/api/dashboard/sell-car", formData,
+      await axios.post("http://localhost:8000/dashboard/sell-car", formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`

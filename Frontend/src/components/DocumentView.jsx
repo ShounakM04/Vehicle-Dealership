@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { FaTrashAlt } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom'
 import { FaFileAlt } from "react-icons/fa";
 export default function DocumentView({ isOffice }) {
     const [fetchedImages, setFetchedImages] = useState([]);
     const [fetchedDescription, setFetchedDescription] = useState([]);
     const [fetchedUniqueIds, setFetchedUniqueIds] = useState([]);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageSerial, setSelectedImageSerial] = useState(null);
+      const [isLoading, setIsLoading] = useState(false); // State for screen overlay
+    
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -31,7 +35,7 @@ export default function DocumentView({ isOffice }) {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('https://www.nikhilmotors.com/api/get-images', {
+            const response1 = await axios.get('http://localhost:8000/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -41,7 +45,7 @@ export default function DocumentView({ isOffice }) {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('https://www.nikhilmotors.com/api/Description', {
+            const response2 = await axios.get('http://localhost:8000/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -50,8 +54,8 @@ export default function DocumentView({ isOffice }) {
             setFetchedUniqueIds(response2.data.uniqueids);
 
 
-            console.log(response2.data);
-            console.log(response1.data);
+            // console.log(response2.data);
+            // console.log(response1.data);
 
         } catch (error) {
             console.error("Error fetching notice images:", error);
@@ -75,6 +79,71 @@ export default function DocumentView({ isOffice }) {
 
     };
 
+    const confirmDelete = (serialnum) => {
+        setSelectedImageSerial(serialnum);
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = async () => {
+        try {
+            setIsLoading(true); // Start fade-up effect
+            const deleteUrl = fetchedImages[selectedImageSerial];
+            // console.log("Del : " + deleteUrl);
+
+            // Extract the uniqueID from the URL
+            let regex = /\/OfficeDocuments\/(\d+)\?/;
+
+            if(!isOffice)
+            {
+                regex = new RegExp(`/${id}/AdminDocuments/(\\d+)\\?`);
+            }
+            const match = deleteUrl.match(regex);
+            let uniqueID;
+
+            if (match) {
+                uniqueID = match[1];
+                // console.log(uniqueID);
+            } else {
+                // console.log('No unique ID found');
+            }
+
+            let path = `OfficeDocuments/${uniqueID}`;
+
+            if (!isOffice || isOffice != true) {
+                path = `${id}/AdminDocuments/${uniqueID}`;
+            }
+
+            // console.log(uniqueID);
+
+            await axios.delete(`http://localhost:8000/delete-image`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }, params: { path: path,uniqueID:uniqueID }
+            });
+            toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
+
+            // Update the state to reflect the change
+            setFetchedImages((prevImages) =>
+                prevImages.filter((_, index) => index !== selectedImageSerial)
+            );
+
+        } catch (error) {
+            console.error("Error deleting notice image:", error);
+            toast.error("Failed to delete notice image");
+        } finally {
+            setIsLoading(false); // Remove fade-up effect
+            setIsModalOpen(false);
+            setSelectedImageSerial(null);
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedImageSerial(null);
+    };
+
+
+
     let descMap;
 
     return (
@@ -88,6 +157,7 @@ export default function DocumentView({ isOffice }) {
                     >
                         Back to Dashboard
                     </button>
+
 
 
                     <div className="py-4 w-full">
@@ -147,32 +217,46 @@ export default function DocumentView({ isOffice }) {
                                         </div>
 
                                         {/* Document Column */}
-                                        <div className="w-full md:w-2/3 px-4 flex justify-center">
-                                            <a
-                                                href={url}
-                                                download
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex justify-center items-center w-full md:w-3/4 px-4"
-                                            >
-                                                {/* Attempt to load image first */}
-                                                {!imageErrors[index] ? (
-                                                    <img
-                                                        src={url}
-                                                        alt={`Document ${index + 1}`}
-                                                        className="w-3/4 md:w-2/3 rounded-lg shadow-lg cursor-pointer hover:opacity-80"
-                                                        title="Click to Download Image"
-                                                        onError={() => handleImageError(index)} // Handle error by updating state
-                                                    />
-                                                ) : (
-                                                    // Fallback to generic document icon
-                                                    <div className="flex flex-col items-center">
-                                                        <FaFileAlt className="text-gray-600 text-5xl mb-2" />
-                                                        <p className="text-blue-500 underline">Click to Download</p>
-                                                    </div>
-                                                )}
-                                            </a>
+                                        <div className="w-full md:w-2/3 px-4 flex flex-col items-center">
+                                            <div className="relative w-full md:w-3/4">
+                                                <a
+                                                    href={url}
+                                                    download
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="block"
+                                                >
+                                                    {/* Attempt to load image */}
+                                                    {!imageErrors[index] ? (
+                                                        <img
+                                                            src={url}
+                                                            alt={`Document ${index + 1}`}
+                                                            className="w-full rounded-lg shadow-lg cursor-pointer hover:opacity-80"
+                                                            title="Click to Download Image"
+                                                            onError={() => handleImageError(index)} // Handle error by updating state
+                                                        />
+                                                    ) : (
+                                                        // Fallback to generic document icon
+                                                        <div className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-4 shadow-lg">
+                                                            <FaFileAlt className="text-gray-600 text-5xl mb-2" />
+                                                            <p className="text-blue-500 underline">Click to Download</p>
+                                                        </div>
+                                                    )}
+                                                </a>
+
+                                                {/* Delete Button */}
+                                                <div className="flex justify-end mt-2">
+                                                    <button
+                                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
+                                                        onClick={() => confirmDelete(index)}
+                                                    >
+                                                        <FaTrashAlt />
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
+
+
                                     </div>
                                 );
                             })}
@@ -181,6 +265,31 @@ export default function DocumentView({ isOffice }) {
 
 
                 </div>
+
+                {/* Confirmation Modal */}
+                {isModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                            <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this image?</h3>
+                            <div className="flex justify-end">
+                                <button
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                    onClick={handleDelete}
+                                    disabled={isLoading}
+                                >
+                                    Yes, Delete
+                                </button>
+                                <button
+                                    className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
+                                    onClick={closeModal}
+                                    disabled={isLoading}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
         </>

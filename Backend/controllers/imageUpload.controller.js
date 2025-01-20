@@ -17,7 +17,7 @@ async function handleImageUpload(req, res) {
             ? await uploadToS3(req.files['displayImage'][0].buffer, `${folderName}0`, req.files['displayImage'][0].mimetype) // Use '0' for display image
             : null;
 
-        console.log("Display Image URL: " + displayImageUrl);
+        // console.log("Display Image URL: " + displayImageUrl);
 
         // Upload other images if provided
         const otherImageUrls = req.files['images[]']
@@ -26,7 +26,7 @@ async function handleImageUpload(req, res) {
             ))
             : [];
 
-        console.log("Other Images URLs: " + otherImageUrls);
+        // console.log("Other Images URLs: " + otherImageUrls);
 
 
         res.send("Images uploaded successfully");

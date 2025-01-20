@@ -18,7 +18,7 @@ function AddNoticeImage() {
     try {
       let folderPath;
       folderPath = 'Notices/'
-      const response = await axios.get('https://www.nikhilmotors.com/api/get-images', {
+      const response = await axios.get('http://localhost:8000/get-images', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         },
@@ -27,7 +27,7 @@ function AddNoticeImage() {
         }
       });
       setFetchedImages(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching notice images:", error);
       toast.error("Failed to load notice images");
@@ -99,7 +99,7 @@ function AddNoticeImage() {
     try {
       setIsLoading(true); // Start fade-up effect
       const deleteUrl = fetchedImages[selectedImageSerial];
-      console.log("Del : " + deleteUrl);
+      // console.log("Del : " + deleteUrl);
 
       // Extract the uniqueID from the URL
       const regex = /\/Notices\/(\d+)\?/;
@@ -108,14 +108,14 @@ function AddNoticeImage() {
 
       if (match) {
         uniqueID = match[1];
-        console.log(uniqueID);
+        // console.log(uniqueID);
       } else {
         console.log('No unique ID found');
       }
 
       const path = `Notices/${uniqueID}`
 
-      await axios.delete(`https://www.nikhilmotors.com/api/dashboard/delete-notice`, {
+      await axios.delete(`http://localhost:8000/dashboard/delete-notice`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }, params: { path: path }

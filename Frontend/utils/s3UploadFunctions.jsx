@@ -7,7 +7,7 @@ export async function getUploadURL(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.get('https://www.nikhilmotors.com/api/upload/generate-upload-url', {
+    const response = await axios.get('http://localhost:8000/upload/generate-upload-url', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -18,7 +18,7 @@ export async function getUploadURL(file, path) {
       }
     });
     // console.log(response.data.uploadUrl);
-    console.log(response)
+    // console.log(response)
     return response.data.uploadUrl;
   } catch (error) {
     console.error('Error getting upload URL:', error);
@@ -36,7 +36,7 @@ export async function uploadToS3(url, file) {
       },
       body: file
     })
-    console.log("Uploaded successfully.")
+    // console.log("Uploaded successfully.")
   } catch (error) {
     console.error('Error uploading file to S3:', error);
     toast.error("Couldn't upload to S3");
@@ -53,7 +53,7 @@ export async function deleteFromS3(file, path) {
     const filename = file.name;
     const filetype = file.type;
 
-    const response = await axios.delete('https://www.nikhilmotors.com/api/delete-image', {
+    const response = await axios.delete('http://localhost:8000/delete-image', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -64,7 +64,7 @@ export async function deleteFromS3(file, path) {
       }
     });
     // console.log(response.data.uploadUrl);
-    console.log(response)
+    // console.log(response)
     return;
   } catch (error) {
     console.error('Error in deleting image:', error);

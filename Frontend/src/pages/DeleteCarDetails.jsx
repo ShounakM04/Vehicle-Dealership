@@ -27,7 +27,7 @@ function DeleteCarDetails() {
     setError(null); // Reset error before fetch
     try {
       const response = await axios.get(
-        `https://www.nikhilmotors.com/api/car/${currDeleteId}`,
+        `http://localhost:8000/car/${currDeleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -35,7 +35,7 @@ function DeleteCarDetails() {
         }
       );
       setCarData(response.data); // Store the fetched car data
-      console.log(response.data); // Log the fetched car data
+      // console.log(response.data); // Log the fetched car data
     } catch (err) {
       setCarData(null);
       console.error("Error fetching car details:", err);
@@ -71,8 +71,8 @@ function DeleteCarDetails() {
     // API call goes here: axios.delete(`/api/vehicles/${submittedID}`)
     try {
       setDeleting(true);
-      console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
-      const response = await axios.delete(`https://www.nikhilmotors.com/api/delete/car`, {
+      // console.log(`Deleting entry for Vehicle with ID: ${submittedID}`);
+      const response = await axios.delete(`http://localhost:8000/delete/car`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -82,7 +82,7 @@ function DeleteCarDetails() {
         },
       });
 
-      console.log("Delete entry : " + response.data); // Log the fetched car data
+      // console.log("Delete entry : " + response.data); // Log the fetched car data
 
       toast.success(
         `Vehicle with Reg ID ${submittedID} deleted successfully!`,

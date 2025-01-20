@@ -59,7 +59,7 @@ async function addInstallments(req, res) {
 }
 const getInstallments = async (req, res) => {
     const { registernumber } = req.query;
-    console.log(registernumber);
+    //console.log(registernumber);
 
     try {
         // Query to fetch installments and sum of the 'amount' column

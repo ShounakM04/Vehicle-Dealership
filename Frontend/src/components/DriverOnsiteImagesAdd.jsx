@@ -45,7 +45,7 @@ export default function DriverOnsiteImagesAdd() {
 
         }
 
-        console.log(id);
+        // console.log(id);
     }
 
 
@@ -54,7 +54,7 @@ export default function DriverOnsiteImagesAdd() {
 
         try {
 
-            console.log("Subitted id : " + id);
+            // console.log("Subitted id : " + id);
 
 
             // Handle other image uploads if necessary (similar to DisplayImage)
