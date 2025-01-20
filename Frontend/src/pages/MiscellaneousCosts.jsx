@@ -15,29 +15,29 @@ const MiscellaneousCosts = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editedItem, setEditedItem] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(); 
-  
+  const [isAdmin, setIsAdmin] = useState();
+
   useEffect(() => {
     fetchCosts();
   }, [filterMonth, filterYear]);
   useEffect(() => {
-        function fetchRole() {
-          const token = localStorage.getItem("authToken");
-          let decodedToken;
-          if (token) {
-            try {
-              decodedToken = jwtDecode(token);
-              console.log(decodedToken);
-            } catch (error) {
-              console.error("Invalid token", error);
-            }
-          }
-          if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
-            setIsAdmin(true);
-          }
+    function fetchRole() {
+      const token = localStorage.getItem("authToken");
+      let decodedToken;
+      if (token) {
+        try {
+          decodedToken = jwtDecode(token);
+          console.log(decodedToken);
+        } catch (error) {
+          console.error("Invalid token", error);
         }
-        fetchRole();
-      }, []);
+      }
+      if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+        setIsAdmin(true);
+      }
+    }
+    fetchRole();
+  }, []);
   // Function to format date for display (DD/MM/YYYY)
   const formatDisplayDate = (dateString) => {
     try {
@@ -145,12 +145,12 @@ const MiscellaneousCosts = () => {
       const updates = [];
       const fields = ["description", "cost", "date"];
       const originalItem = costs.find(c => c.id === editingId);
-      
+
       fields.forEach(field => {
-        let comparison = field === 'date' 
-          ? formatDateForInput(originalItem[field]) 
+        let comparison = field === 'date'
+          ? formatDateForInput(originalItem[field])
           : originalItem[field];
-          
+
         if (editedItem[field] !== comparison) {
           updates.push(
             axios.post(
@@ -216,9 +216,8 @@ const MiscellaneousCosts = () => {
           />
           <button
             type="submit"
-            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={loading}
           >
             {loading ? "Adding..." : "Add Cost"}
@@ -327,13 +326,13 @@ const MiscellaneousCosts = () => {
                         <div className="space-x-2">
                           <button
                             onClick={handleSaveEdit}
-                            className="text-green-500"
+                            className="bg-green-500 text-white py-1 px-3 rounded"
                           >
                             Save
                           </button>
                           <button
                             onClick={handleCancelEdit}
-                            className="text-red-500"
+                            className="bg-red-500 text-white py-1 px-3 rounded"
                           >
                             Cancel
                           </button>

@@ -19,7 +19,7 @@ const AccountDetails = () => {
   const [isFetching, setIsFetching] = useState(false); // Loading state for fetching data
   const [editMode, setEditMode] = useState(false); // Flag to toggle edit mode
   const [editableItem, setEditableItem] = useState(null); // Item being edited
-  const [isAdmin, setIsAdmin] = useState(); 
+  const [isAdmin, setIsAdmin] = useState();
   const [accountDetails, setAccountDetails] = useState({
     totalBuy: 0,
     totalMaintainance: 0,
@@ -33,23 +33,23 @@ const AccountDetails = () => {
   });
   const navigate = useNavigate();
   useEffect(() => {
-      function fetchRole() {
-        const token = localStorage.getItem("authToken");
-        let decodedToken;
-        if (token) {
-          try {
-            decodedToken = jwtDecode(token);
-            console.log(decodedToken);
-          } catch (error) {
-            console.error("Invalid token", error);
-          }
-        }
-        if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
-          setIsAdmin(true);
+    function fetchRole() {
+      const token = localStorage.getItem("authToken");
+      let decodedToken;
+      if (token) {
+        try {
+          decodedToken = jwtDecode(token);
+          console.log(decodedToken);
+        } catch (error) {
+          console.error("Invalid token", error);
         }
       }
-      fetchRole();
-    }, []);
+      if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+        setIsAdmin(true);
+      }
+    }
+    fetchRole();
+  }, []);
   const fetchAccountDetails = async () => {
     try {
       const response = await axios.get("https://www.nikhilmotors.com/api/accountDetails", {
@@ -224,9 +224,8 @@ const AccountDetails = () => {
           />
           <button
             type="submit"
-            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-blue-500 text-white px-6 py-2 rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={loading}
           >
             {loading ? "Adding..." : "Add Investment"}
@@ -343,7 +342,7 @@ const AccountDetails = () => {
                   <tr key={index} className="border-t">
                     <td className="border p-3">
                       {editMode &&
-                      editableItem?.serial_number === costItem.serial_number ? (
+                        editableItem?.serial_number === costItem.serial_number ? (
                         <input
                           type="text"
                           value={editDescription}
@@ -356,7 +355,7 @@ const AccountDetails = () => {
                     </td>
                     <td className="border p-3">
                       {editMode &&
-                      editableItem?.serial_number === costItem.serial_number ? (
+                        editableItem?.serial_number === costItem.serial_number ? (
                         <input
                           type="number"
                           value={editAmount}
@@ -369,7 +368,7 @@ const AccountDetails = () => {
                     </td>
                     <td className="border p-3">
                       {editMode &&
-                      editableItem?.serial_number === costItem.serial_number ? (
+                        editableItem?.serial_number === costItem.serial_number ? (
                         <input
                           type="date"
                           value={editDate}
@@ -382,17 +381,17 @@ const AccountDetails = () => {
                     </td>
                     {isAdmin && <td className="border p-3">
                       {editMode &&
-                      editableItem?.serial_number === costItem.serial_number ? (
+                        editableItem?.serial_number === costItem.serial_number ? (
                         <>
                           <button
                             onClick={handleSaveEdit}
-                            className="text-green-500"
+                            className="bg-green-500 text-white py-1 px-3 rounded"
                           >
                             Save
                           </button>
                           <button
                             onClick={handleCancelEdit}
-                            className="text-red-500"
+                            className="bg-red-500 text-white py-1 px-3 rounded ml-2"
                           >
                             Cancel
                           </button>
