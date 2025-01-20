@@ -25,7 +25,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     try {
       // console.log("Params : " + carID);
       const response = await axios.get(
-        `http://localhost:8000/dashboard/sold-cars`, // Update to your actual endpoint
+        `https://www.nikhilmotors.com/api/dashboard/sold-cars`, // Update to your actual endpoint
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -48,7 +48,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`http://localhost:8000/installments`, {
+      const response = await axios.get(`https://www.nikhilmotors.com/api/installments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -69,7 +69,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     setUploading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/installments",
+        "https://www.nikhilmotors.com/api/installments",
         {
           registernumber: carID,
           amount: installmentAmount,
@@ -163,7 +163,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/profits", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/profits", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

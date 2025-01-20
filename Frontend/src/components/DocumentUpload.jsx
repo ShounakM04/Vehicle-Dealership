@@ -65,7 +65,7 @@ const DocumentUpload = ({ isOffice }) => {
     const addDescription = async (uniqueID) => {
         try {
             let docType = (isOffice == true) ? "Office" : "Admin";
-            await axios.post('http://localhost:8000/Description',
+            await axios.post('https://www.nikhilmotors.com/api/Description',
                 {
                     uniqueID: uniqueID,
                     description: description,

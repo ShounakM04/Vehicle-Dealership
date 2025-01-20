@@ -10,8 +10,8 @@ export default function DocumentView({ isOffice }) {
     const [fetchedUniqueIds, setFetchedUniqueIds] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageSerial, setSelectedImageSerial] = useState(null);
-      const [isLoading, setIsLoading] = useState(false); // State for screen overlay
-    
+    const [isLoading, setIsLoading] = useState(false); // State for screen overlay
+
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function DocumentView({ isOffice }) {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('http://localhost:8000/get-images', {
+            const response1 = await axios.get('https://www.nikhilmotors.com/api/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -45,7 +45,7 @@ export default function DocumentView({ isOffice }) {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('http://localhost:8000/Description', {
+            const response2 = await axios.get('https://www.nikhilmotors.com/api/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -93,8 +93,7 @@ export default function DocumentView({ isOffice }) {
             // Extract the uniqueID from the URL
             let regex = /\/OfficeDocuments\/(\d+)\?/;
 
-            if(!isOffice)
-            {
+            if (!isOffice) {
                 regex = new RegExp(`/${id}/AdminDocuments/(\\d+)\\?`);
             }
             const match = deleteUrl.match(regex);
@@ -115,10 +114,10 @@ export default function DocumentView({ isOffice }) {
 
             // console.log(uniqueID);
 
-            await axios.delete(`http://localhost:8000/delete-image`, {
+            await axios.delete(`https://www.nikhilmotors.com/api/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
-                }, params: { path: path,uniqueID:uniqueID }
+                }, params: { path: path, uniqueID: uniqueID }
             });
             toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
 
