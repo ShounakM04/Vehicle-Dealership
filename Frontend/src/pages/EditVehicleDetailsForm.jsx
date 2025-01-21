@@ -65,7 +65,7 @@ const EditVehicleDetailsForm = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`, {
+        const response = await axios.get(`http://localhost:8000/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -132,7 +132,7 @@ const EditVehicleDetailsForm = () => {
     try {
       setWait(true);
       const response = await axios.post(
-        "https://www.nikhilmotors.com/api/edit-fields",
+        "http://localhost:8000/edit-fields",
         {
           tablename: tablename,
           fieldToEdit: fieldToEdit,
@@ -238,17 +238,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "carname")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("carname")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -292,17 +290,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "carcompany")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("carcompany")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -312,78 +308,76 @@ const EditVehicleDetailsForm = () => {
           </div>
 
           <div className="w-full md:w-[49%]">
-  <label
-    htmlFor="carmake"
-    className="block text-gray-700 text-sm font-bold mb-2"
-  >
-    Vehicle Type
-  </label>
-  <div className="relative w-full">
-    {/* Dropdown for Vehicle Types */}
-    {editableFields.carmake ? (
-      <select
-        id="carmake"
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      >
-        <option value="" disabled>
-          Select Vehicle
-        </option>
-        {carMakeOptions?.map((option, index) => (
-          <option key={index} value={option}>
-            {option.charAt(0).toUpperCase() + option.slice(1)} {/* Capitalize first letter */}
-          </option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        id="carmake"
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        value={
-          vehicleData.vehicleDetails.carmake
-            ? vehicleData.vehicleDetails.carmake.charAt(0).toUpperCase() +
-              vehicleData.vehicleDetails.carmake.slice(1)
-            : ""
-        } // Capitalize the display of the read-only value
-        readOnly
-      />
-    )}
+            <label
+              htmlFor="carmake"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Vehicle Type
+            </label>
+            <div className="relative w-full">
+              {/* Dropdown for Vehicle Types */}
+              {editableFields.carmake ? (
+                <select
+                  id="carmake"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select Vehicle
+                  </option>
+                  {carMakeOptions?.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)} {/* Capitalize first letter */}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  id="carmake"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    vehicleData.vehicleDetails.carmake
+                      ? vehicleData.vehicleDetails.carmake.charAt(0).toUpperCase() +
+                      vehicleData.vehicleDetails.carmake.slice(1)
+                      : ""
+                  } // Capitalize the display of the read-only value
+                  readOnly
+                />
+              )}
 
-    {/* Edit Button */}
-    <button
-      className="absolute right-2 top-1/2 transform -translate-y-1/2"
-      onClick={() =>
-        setEditableFields({ ...editableFields, carmake: true })
-      }
-    >
-      <i className="fas fa-pencil-alt"></i>
-    </button>
+              {/* Edit Button */}
+              <button
+                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                onClick={() =>
+                  setEditableFields({ ...editableFields, carmake: true })
+                }
+              >
+                <i className="fas fa-pencil-alt"></i>
+              </button>
 
-    {/* OK and Cancel Buttons */}
-    {editableFields.carmake && (
-      <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-        <button
-          onClick={() => handleVehicleDetailsEdit(inputValue, "carmake")}
-          className={`bg-green-500 text-white py-1 px-3 rounded ${
-            wait ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {wait ? "wait..." : "OK"}
-        </button>
-        <button
-          onClick={() => handleCancelEdit("carmake")}
-          className={`bg-red-500 text-white py-1 px-3 rounded ${
-            wait ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          CANCEL
-        </button>
-      </div>
-    )}
-  </div>
-</div>
+              {/* OK and Cancel Buttons */}
+              {editableFields.carmake && (
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                  <button
+                    onClick={() => handleVehicleDetailsEdit(inputValue, "carmake")}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    {wait ? "wait..." : "OK"}
+                  </button>
+                  <button
+                    onClick={() => handleCancelEdit("carmake")}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    CANCEL
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
 
 
           <div className="w-full md:w-[49%]">
@@ -421,17 +415,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "carcolor")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("carcolor")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -474,9 +466,9 @@ const EditVehicleDetailsForm = () => {
                   value={
                     vehicleData.vehicleDetails.fuel
                       ? vehicleData.vehicleDetails.fuel
-                          .charAt(0)
-                          .toUpperCase() +
-                        vehicleData.vehicleDetails.fuel.slice(1)
+                        .charAt(0)
+                        .toUpperCase() +
+                      vehicleData.vehicleDetails.fuel.slice(1)
                       : ""
                   } // Capitalize the display of the read-only value
                   readOnly
@@ -498,17 +490,15 @@ const EditVehicleDetailsForm = () => {
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
                   <button
                     onClick={() => handleVehicleDetailsEdit(inputValue, "fuel")}
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("fuel")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -562,17 +552,15 @@ const EditVehicleDetailsForm = () => {
                             "vehiclebuyprice"
                           )
                         }
-                        className={`bg-green-500 text-white py-1 px-3 rounded ${
-                          wait ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
+                        className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                       >
                         {wait ? "wait..." : "OK"}
                       </button>
                       <button
                         onClick={() => handleCancelEdit("vehiclebuyprice")}
-                        className={`bg-red-500 text-white py-1 px-3 rounded ${
-                          wait ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
+                        className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                       >
                         CANCEL
                       </button>
@@ -621,17 +609,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "vehiclesellprice")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("vehiclesellprice")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -675,17 +661,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "kilometers")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("kilometers")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -732,17 +716,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "fitness_upto_date")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("fitness_upto_date")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -789,17 +771,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "registration_date")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("registration_date")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -845,17 +825,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "description")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("description")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -949,17 +927,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "insurancecompany")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("insurancecompany")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -1006,17 +982,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "insurancenumber")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("insurancenumber")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -1041,9 +1015,9 @@ const EditVehicleDetailsForm = () => {
                   editableFields.insurancestartdate
                     ? inputValue
                     : vehicleData.vehicleDetails.insurancestartdate?.slice(
-                        0,
-                        10
-                      )
+                      0,
+                      10
+                    )
                 }
                 readOnly={!editableFields.insurancestartdate}
                 onChange={handleInputChange}
@@ -1066,17 +1040,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "insurancestartdate")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("insurancestartdate")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -1123,17 +1095,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "insuranceenddate")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("insuranceenddate")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -1180,17 +1150,15 @@ const EditVehicleDetailsForm = () => {
                     onClick={() =>
                       handleVehicleDetailsEdit(inputValue, "insurancetenure")
                     }
-                    className={`bg-green-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {wait ? "wait..." : "OK"}
                   </button>
                   <button
                     onClick={() => handleCancelEdit("insurancetenure")}
-                    className={`bg-red-500 text-white py-1 px-3 rounded ${
-                      wait ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     CANCEL
                   </button>
@@ -1239,17 +1207,15 @@ const EditVehicleDetailsForm = () => {
                       onClick={() =>
                         handleVehicleDetailsEdit(inputValue, "ownername")
                       }
-                      className={`bg-green-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       {wait ? "wait..." : "OK"}
                     </button>
                     <button
                       onClick={() => handleCancelEdit("ownername")}
-                      className={`bg-red-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       CANCEL
                     </button>
@@ -1293,17 +1259,15 @@ const EditVehicleDetailsForm = () => {
                       onClick={() =>
                         handleVehicleDetailsEdit(inputValue, "ownerphone")
                       }
-                      className={`bg-green-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       {wait ? "wait..." : "OK"}
                     </button>
                     <button
                       onClick={() => handleCancelEdit("ownerphone")}
-                      className={`bg-red-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       CANCEL
                     </button>
@@ -1347,17 +1311,15 @@ const EditVehicleDetailsForm = () => {
                       onClick={() =>
                         handleVehicleDetailsEdit(inputValue, "owneremail")
                       }
-                      className={`bg-green-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       {wait ? "wait..." : "OK"}
                     </button>
                     <button
                       onClick={() => handleCancelEdit("owneremail")}
-                      className={`bg-red-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       CANCEL
                     </button>
@@ -1401,17 +1363,15 @@ const EditVehicleDetailsForm = () => {
                       onClick={() =>
                         handleVehicleDetailsEdit(inputValue, "owneraddress")
                       }
-                      className={`bg-green-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       {wait ? "wait..." : "OK"}
                     </button>
                     <button
                       onClick={() => handleCancelEdit("owneraddress")}
-                      className={`bg-red-500 text-white py-1 px-3 rounded ${
-                        wait ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                     >
                       CANCEL
                     </button>

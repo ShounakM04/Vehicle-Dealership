@@ -52,7 +52,7 @@ const AccountDetails = () => {
   }, []);
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("https://www.nikhilmotors.com/api/accountDetails", {
+      const response = await axios.get("http://localhost:8000/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -69,7 +69,7 @@ const AccountDetails = () => {
     setIsFetching(true); // Start loading
     try {
       const response = await axios.get(
-        "https://www.nikhilmotors.com/api/accountDetails/filter",
+        "http://localhost:8000/accountDetails/filter",
         {
           params: {
             month: filterMonth + 1, // Adjust for 0-based month
@@ -126,7 +126,7 @@ const AccountDetails = () => {
         const updatePromises = Object.entries(updatedData).map(
           ([field, value]) =>
             axios.post(
-              "https://www.nikhilmotors.com/api/editMiscellaneous",
+              "http://localhost:8000/editMiscellaneous",
               {
                 tablename: "investment",
                 fieldToEdit: field,
@@ -170,7 +170,7 @@ const AccountDetails = () => {
     setLoading(true); // Show loading while adding amount
     try {
       const response = await axios.post(
-        "https://www.nikhilmotors.com/api/accountDetails/addInvestment",
+        "http://localhost:8000/accountDetails/addInvestment",
         {
           description,
           amount,

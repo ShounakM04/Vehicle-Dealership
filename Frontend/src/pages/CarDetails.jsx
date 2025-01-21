@@ -13,6 +13,8 @@ import {
   Tag,
   FileText,
   Shield,
+  Fuel
+  
 } from "lucide-react";
 
 function CarDetails() {
@@ -26,7 +28,7 @@ function CarDetails() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://www.nikhilmotors.com/api/landingcar/${params.id}`,
+          `http://localhost:8000/landingcar/${params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -141,6 +143,16 @@ function CarDetails() {
                     }
                   />
                 )}
+                {carData.car.fuel && carData.car.fuel !== "Not Provided" && (
+                  <DetailItem
+                    icon={<Fuel />}
+                    label="Fuel Type"
+                    value={
+                      carData.car.fuel.charAt(0).toUpperCase() +
+                      carData.car.fuel.slice(1)
+                    }
+                  />
+                )}
                 {carData.car.carcompany && (
                   <DetailItem
                     icon={<Tag />}
@@ -151,7 +163,7 @@ function CarDetails() {
                     }
                   />
                 )}
-                {carData.car.carcolor && carData.car.carcolor !== "Not Provided"&& (
+                {carData.car.carcolor && carData.car.carcolor !== "Not Provided" && (
                   <DetailItem
                     icon={<Palette />}
                     label="Color"

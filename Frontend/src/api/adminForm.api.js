@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "https://www.nikhilmotors.com/api/";
+const API_URL = "http://localhost:8000/";
 
 
 export const submitAdminForm = async (formData) => {
