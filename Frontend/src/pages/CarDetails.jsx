@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import axios from "axios";
+import {
+  Car,
+  ShieldCheck,
+  Info,
+  Calendar,
+  Gauge,
+  Palette,
+  Tag,
+  FileText,
+  Shield,
+} from "lucide-react";
 
 function CarDetails() {
   const params = useParams();
@@ -12,7 +23,7 @@ function CarDetails() {
 
   useEffect(() => {
     const fetchCarDetails = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await axios.get(
           `https://www.nikhilmotors.com/api/landingcar/${params.id}`,
@@ -24,40 +35,77 @@ function CarDetails() {
         );
         if (response.status === 200) {
           setCarData(response.data);
-          // console.log(response.data);
         }
       } catch (err) {
         if (err.response && err.response.status === 400) {
-          setError("Car not found"); // Set specific error message for 404
+          setError("Car not found");
         } else {
-          setError("Error fetching car details"); // General error message
+          setError("Error fetching car details");
         }
         console.error("Error fetching car details:", err);
       } finally {
-        setLoading(false); // End loading regardless of success or error
+        setLoading(false);
       }
     };
 
     fetchCarDetails();
   }, [params.id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading vehicle details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+          <Info className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto">
-      <main className="py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white shadow-md rounded-md p-4">
-            <h1 className="text-2xl font-bold mb-4">
+    <div className="h-[calc(100vh-80px)] bg-gray-50 pt-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <div className="mx-8">
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+              <Car className="w-8 h-8 text-blue-500" />
               {carData.car.carcompany} {carData.car.carname}
             </h1>
+            <p className="text-gray-500 mt-2">
+              Registration number: {carData.car.registernumber}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Image Gallery Section */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden p-2 sm:p-4">
             <Carousel
               showArrows={true}
               autoPlay={true}
               infiniteLoop={true}
-              showThumbs={false}
-              className="rounded-t-lg"
+              showThumbs={true}
+              showStatus={false}
+              className="custom-carousel mx-2 sm:mx-4 md:mx-8"
+              renderThumbs={(children) =>
+                children.map((item, index) => (
+                  <div key={index} className="h-14 w-full">
+                    {item}
+                  </div>
+                ))
+              }
             >
               {carData.images?.map((image, index) => (
                 <div
@@ -74,127 +122,150 @@ function CarDetails() {
             </Carousel>
           </div>
 
-          <div className="bg-white shadow-md rounded-md p-4">
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              Vehicle Details
-            </h2>
-            <h3 className="text-lg font-semibold mb-2">Vehicle Information</h3>
-            <ul className="space-y-2">
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Vehicle Number :</span>
-                <span>{carData.car.registernumber || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Vehicle Name:</span>
-                <span>{carData.car.carname || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Vehicle Type:</span>
-                <span>{carData.car.carmake || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Company:</span>
-                <span>{carData.car.carcompany || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Color:</span>
-                <span>{carData.car.carcolor || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Kilometers :</span>
-                <span>{carData.car.kilometers || "Not provided"}</span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Fitness Upto :</span>
-                <span>
-                  {carData.car.fitness_upto_date &&
-                  new Date(carData.car.fitness_upto_date).getTime() !== 0
-                    ? new Date(
+          {/* Details Section */}
+          <div className="space-y-6">
+            {/* Vehicle Information */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Info className="w-5 h-5 text-blue-500" />
+                Vehicle Information
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {carData.car.carmake && carData.car.carmake !== "Not Provided" && (
+                  <DetailItem
+                    icon={<Car />}
+                    label="Vehicle Type"
+                    value={
+                      carData.car.carmake.charAt(0).toUpperCase() +
+                      carData.car.carmake.slice(1)
+                    }
+                  />
+                )}
+                {carData.car.carcompany && (
+                  <DetailItem
+                    icon={<Tag />}
+                    label="Company"
+                    value={
+                      carData.car.carcompany.charAt(0).toUpperCase() +
+                      carData.car.carcompany.slice(1)
+                    }
+                  />
+                )}
+                {carData.car.carcolor && carData.car.carcolor !== "Not Provided"&& (
+                  <DetailItem
+                    icon={<Palette />}
+                    label="Color"
+                    value={
+                      carData.car.carcolor.charAt(0).toUpperCase() +
+                      carData.car.carcolor.slice(1)
+                    }
+                  />
+                )}
+                {carData.car.kilometers > 0 && (
+                  <DetailItem
+                    icon={<Gauge />}
+                    label="Kilometers"
+                    value={carData.car.kilometers}
+                  />
+                )}
+                {carData.car.fitness_upto_date &&
+                  new Date(carData.car.fitness_upto_date).getTime() !== 0 && (
+                    <DetailItem
+                      icon={<Calendar />}
+                      label="Fitness Upto"
+                      value={new Date(
                         carData.car.fitness_upto_date
-                      ).toLocaleDateString("en-GB")
-                    : "Not provided"}
-                </span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Registration Date :</span>
-                <span>
-                  {carData.car.registration_date &&
-                  new Date(carData.car.registration_date).getTime() !== 0
-                    ? new Date(
+                      ).toLocaleDateString("en-GB")}
+                    />
+                  )}
+                {carData.car.registration_date &&
+                  new Date(carData.car.registration_date).getTime() !== 0 && (
+                    <DetailItem
+                      icon={<Calendar />}
+                      label="Registration Date"
+                      value={new Date(
                         carData.car.registration_date
-                      ).toLocaleDateString("en-GB")
-                    : "Not provided"}
-                </span>
-              </li>
-              <li className="flex justify-between items-center border-b pb-2">
-                <span className="font-semibold">Price:</span>
-                <span className="text-blue-500">
-                  {carData.car.vehiclesellprice === 0 || "Not provided"}
-                </span>
-              </li>
-              <li className="flex justify-between items-start border-b pb-2">
-                <span className="font-semibold">Description:</span>
-                <div className="ml-2 w-full">
-                  <p className="break-words whitespace-normal">
-                    {carData.car.description || "Not provided"}
+                      ).toLocaleDateString("en-GB")}
+                    />
+                  )}
+              </div>
+
+              {/* Price Section */}
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold text-gray-900">
+                    Price
+                  </span>
+                  <span className="text-2xl font-bold text-blue-600">
+                    {carData.car.vehiclesellprice === 0
+                      ? "Not provided"
+                      : `₹${carData.car.vehiclesellprice.toLocaleString()}`}
+                  </span>
+                </div>
+              </div>
+
+              {/* Description */}
+              {carData.car.description && carData.car.description !== "Not Provided" && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-2">
+                    <FileText className="w-5 h-5 text-blue-500" />
+                    Description
+                  </h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">
+                    {carData.car.description}
                   </p>
                 </div>
-              </li>
-            </ul>
+              )}
+            </div>
 
-            {/* Insurance Section */}
+            {/* Insurance Information */}
             {carData.insurance && carData.insurance.insurancetenure != 0 && (
-              <>
-                <h3 className="text-lg font-semibold mb-2 mt-4">
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-blue-500" />
                   Insurance Information
-                </h3>
-                <ul className="space-y-2">
-                  <li className="flex justify-between items-center border-b pb-2">
-                    <span className="font-semibold">Insurance Company:</span>
-                    <span>{carData.insurance.insurancecompany}</span>
-                  </li>
-                  <li className="flex justify-between items-center border-b pb-2">
-                    <span className="font-semibold">Policy Number:</span>
-                    <span>{carData.insurance.insurancenumber}</span>
-                  </li>
-                  <li className="flex justify-between items-center border-b pb-2">
-                    <span className="font-semibold">Policy Tenure:</span>
-                    <span>{carData.insurance.insurancetenure} years</span>
-                  </li>
-                  <li className="flex justify-between items-center border-b pb-2">
-                    <span className="font-semibold">Insurance Upto:</span>
-                    <span>
-                      {new Date(
-                        carData.insurance.insuranceenddate
-                      ).toLocaleDateString("en-GB")}
-                    </span>
-                  </li>
-                </ul>
-              </>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DetailItem
+                    icon={<ShieldCheck />}
+                    label="Insurance Company"
+                    value={carData.insurance.insurancecompany}
+                  />
+                  <DetailItem
+                    icon={<ShieldCheck />}
+                    label="Policy Number"
+                    value={carData.insurance.insurancenumber}
+                  />
+                  <DetailItem
+                    icon={<ShieldCheck />}
+                    label="Policy Tenure"
+                    value={`${carData.insurance.insurancetenure} years`}
+                  />
+                  <DetailItem
+                    icon={<ShieldCheck />}
+                    label="Insurance Upto"
+                    value={new Date(
+                      carData.insurance.insuranceenddate
+                    ).toLocaleDateString("en-GB")}
+                  />
+                </div>
+              </div>
             )}
-            {/* Owner Section */}
-            {/* <h3 className="text-lg font-semibold mb-2 mt-4">Owner Information</h3>
-            <ul>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Owner Name:</span>
-                <span>{carData.owner.ownername}</span>
-              </li>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Phone Number:</span>
-                <span>{carData.owner.ownerphone}</span>
-              </li>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Email:</span>
-                <span>{carData.owner.owneremail}</span>
-              </li>
-              <li className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Address:</span>
-                <span>{carData.owner.owneraddress}</span>
-              </li>
-            </ul> */}
           </div>
         </div>
-      </main>
+      </div>
+    </div>
+  );
+}
+
+function DetailItem({ icon, label, value }) {
+  return (
+    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+      <div className="text-blue-500 mt-1">{icon}</div>
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="font-medium text-gray-900">{value || "Not provided"}</p>
+      </div>
     </div>
   );
 }
