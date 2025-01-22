@@ -88,7 +88,7 @@ app.use("/login", LoginRoute);
 app.use('/validate-token',ValidateTokenRoute)
 app.use("/landingcar",unauthorizedSpecificCar )
 app.use(authenticateToken);
-app.use(logResReq());
+// app.use(logResReq());
 // Using Routes
 app.use("/upload",  authenticateToken, authorizeDriverOrEmployeeOrAdmin, Imageroute);
 app.use("/details",authenticateToken, authorizeEmployeeOrAdmin, DetailsRoute);

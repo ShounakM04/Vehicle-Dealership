@@ -35,11 +35,14 @@ async function handleSpecifiPage(req, res) {
         const query4 = `SELECT * FROM ownerdetails WHERE registernumber = $1`;
         const ownerResults = await db.query(query4, values);
 
+        const query5 = `SELECT * FROM finance WHERE registernumber = $1`;
+        const financeResults = await db.query(query5, values);
+
         if (detailsResult.rows.length > 0) {
             const car = detailsResult.rows[0];
             const insurance = insuranceResults.rows[0]; // Assuming one insurance record per car
             const owner = ownerResults.rows[0]; // Assuming one owner record per car
-
+            const finance = financeResults.rows[0];
             // S3 folder structure for images (e.g., regisNum/VehicleImages/)
             const inventoryImagesFolder = `${regisNum}/InventoryVehicleImages/`;
             const onsiteImagesFolder = `${regisNum}/OnsiteVehicleImages/`
@@ -59,7 +62,7 @@ async function handleSpecifiPage(req, res) {
             const onsiteImages = await listDocHelper(onsiteImagesFolder);
 
             // console.log(insurance);
-            res.json({ car, images, insurance, owner, onsiteImages });
+            res.json({ car, images, insurance, owner, onsiteImages, finance });
         } else {
             res.status(400).send("Car not found");
         }

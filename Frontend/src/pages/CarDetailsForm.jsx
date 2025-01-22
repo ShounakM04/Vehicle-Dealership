@@ -35,6 +35,14 @@ function AdminForm() {
   const [images, setImages] = useState([]);
   const [DisplayImage, setDisplayImage] = useState(null);
   const [fuel, setFuel] = useState("");
+
+  const [companyName, setCompanyName] = useState("");
+  const [branchName, setBranchName] = useState("");
+  const [managerName1, setManagerName1] = useState("");
+  const [contact1, setContact1] = useState("");
+  const [managerName2, setManagerName2] = useState("");
+  const [contact2, setContact2] = useState("");
+
   const token = localStorage.getItem("authToken");
   let decodedToken;
   if (token) {
@@ -122,6 +130,12 @@ function AdminForm() {
     setImages([]);
     setDisplayImage(null);
     setFuel("");
+    setCompanyName("");
+    setBranchName("");
+    setManagerName1("");
+    setContact1("");
+    setManagerName2("");
+    setContact2("");
   };
 
 
@@ -168,6 +182,13 @@ function AdminForm() {
           registration_date,
           description,
           kilometers,
+          company_name:companyName,
+          branch_name:branchName,
+          manager_name1:managerName1,
+          contact1:contact1,
+          manager_name2:managerName2,
+          contact2:contact2,
+          
         },
         {
           headers: {
@@ -456,8 +477,106 @@ function AdminForm() {
               <option value="false">No</option>
             </select>
           </div>
-        </div>
 
+
+        </div>
+        <h2 className="text-xl font-bold mb-2">Finance Company Details</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label
+              htmlFor="company_name"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Finance Company Name
+            </label>
+            <input
+              type="text"
+              id="company_name"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="branch_name"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Finance Branch Name
+            </label>
+            <input
+              type="text"
+              id="branch_name"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={branchName}
+              onChange={(e) => setBranchName(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label
+              htmlFor="manager_name1"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              First Manager Name
+            </label>
+            <input
+              type="text"
+              id="manager_name1"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={managerName1}
+              onChange={(e) => setManagerName1(e.target.value)}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="contact1"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              First Manager Contact
+            </label>
+            <input
+              type="text"
+              id="contact1"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={contact1}
+              onChange={(e) => setContact1(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label
+              htmlFor="manager_name2"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+             Second Manager Name
+            </label>
+            <input
+              type="text"
+              id="manager_name2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={managerName2}
+              onChange={(e) => setManagerName2(e.target.value)}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="contact2"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Second Manager Contact
+            </label>
+            <input
+              type="text"
+              id="contact2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={contact2}
+              onChange={(e) => setContact2(e.target.value)}
+            />
+          </div>
+        </div>
         {/* Insurance Details */}
         <div>
           {/* Checkbox to toggle insurance form */}
@@ -472,7 +591,7 @@ function AdminForm() {
               Add Insurance Details
             </label>
           </div>
-
+          
           {showInsuranceFields && (
             <div>
               {/* Insurance Details */}

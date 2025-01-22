@@ -32,6 +32,12 @@ async function  handleCarDetails(req, res) {
       registration_date,
       description,
       kilometers,
+      company_name, 
+      branch_name, 
+      manager_name1,
+      contact1,    
+      manager_name2,
+      contact2, 
     } = req.body;
 
     // Validate mandatory fields
@@ -133,8 +139,19 @@ async function  handleCarDetails(req, res) {
     }
 
     await db.query(query4, values4);
-    
-    res.status(200).send("Details entered into the database successfully");
+    const query5 = `INSERT INTO finance (company_name, branch_name, manager_name1, contact1, manager_name2, contact2, registernumber) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+    const values5 = [
+      company_name || "Not Provided",
+      branch_name || "Not Provided",
+      manager_name1 || "Not Provided",
+      contact1 || "Not Provided",
+      manager_name2 || "Not Provided",
+      contact2 || "Not Provided",
+      registernumber,
+    ];
+
+    await db.query(query5, values5);
+    res.status(200).send("Vehicle Details entered successfully");
   } catch (error) {
     // Log error for debugging
     console.error(`Error: ${error.message}`);

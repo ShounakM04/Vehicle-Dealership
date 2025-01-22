@@ -32,6 +32,12 @@ const EditVehicleDetailsForm = () => {
       registration_date: "",
       description: "",
       kilometers: "",
+      company_name:"",
+      branch_name:"",
+      manager_name1:"",
+      contact1:"",
+      manager_name2:"",
+      contact2:"",
     },
   });
 
@@ -58,6 +64,12 @@ const EditVehicleDetailsForm = () => {
     registration_date: false,
     description: false,
     kilometers: false,
+    company_name:false,
+    branch_name:false,
+    manager_name1:false,
+    contact1:false,
+    manager_name2:false,
+    contact2:false,
   });
 
   const [inputValue, setInputValue] = useState("");
@@ -70,7 +82,7 @@ const EditVehicleDetailsForm = () => {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         });
-        const { car, images, insurance, owner } = response.data;
+        const { car, images, insurance, owner, finance } = response.data;
         setVehicleData((prevData) => ({
           ...prevData,
           vehicleDetails: {
@@ -98,6 +110,13 @@ const EditVehicleDetailsForm = () => {
             ownerphone: owner?.ownerphone,
             owneremail: owner?.owneremail,
             owneraddress: owner?.owneraddress,
+
+            company_name:finance?.company_name,
+            branch_name:finance?.branch_name,
+            manager_name1:finance?.manager_name1,
+            contact1:finance?.contact1,
+            manager_name2:finance?.manager_name2,
+            contact2:finance?.contact2,
           },
         }));
       } catch (error) {
@@ -128,6 +147,16 @@ const EditVehicleDetailsForm = () => {
       fieldToEdit == "owneraddress"
     ) {
       tablename = "ownerdetails";
+    } 
+    if (
+      fieldToEdit == "company_name" ||
+      fieldToEdit == "branch_name" ||
+      fieldToEdit == "manager_name1" ||
+      fieldToEdit == "contact1" ||
+      fieldToEdit == "manager_name2" ||
+      fieldToEdit == "contact2"
+    ) {
+      tablename = "finance";
     }
     try {
       setWait(true);
@@ -1370,6 +1399,321 @@ const EditVehicleDetailsForm = () => {
                     </button>
                     <button
                       onClick={() => handleCancelEdit("owneraddress")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h1 className="text-xl font-bold mb-2 mt-6 ">Finance Details</h1>
+          <div className="flex flex-wrap gap-4">
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="company_name"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Company Name
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"company_name"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.company_name
+                      ? inputValue
+                      : vehicleData.vehicleDetails.company_name
+                  }
+                  readOnly={!editableFields.company_name}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, company_name: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.company_name && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "company_name")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("company_name")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="branch_name"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Branch Name
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"branch_name"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.branch_name
+                      ? inputValue
+                      : vehicleData.vehicleDetails.branch_name
+                  }
+                  readOnly={!editableFields.branch_name}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, branch_name: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.branch_name && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "branch_name")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("branch_name")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="manager_name1"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Manager-1 Name
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"manager_name1"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.manager_name1
+                      ? inputValue
+                      : vehicleData.vehicleDetails.manager_name1
+                  }
+                  readOnly={!editableFields.manager_name1}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, manager_name1: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.manager_name1 && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "manager_name1")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("manager_name1")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="contact1"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Manager-1 Contact
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"contact1"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.contact1
+                      ? inputValue
+                      : vehicleData.vehicleDetails.contact1
+                  }
+                  readOnly={!editableFields.contact1}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, contact1: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.contact1 && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "contact1")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("contact1")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="manager_name2"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Manager-2 Name
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"manager_name2"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.manager_name2
+                      ? inputValue
+                      : vehicleData.vehicleDetails.manager_name2
+                  }
+                  readOnly={!editableFields.manager_name2}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, manager_name2: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.manager_name2 && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "manager_name2")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("manager_name2")}
+                      className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full md:w-[49%]">
+              <label
+                htmlFor="contact2"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Manager-2 Contact
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  id={"contact2"}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={
+                    editableFields.contact2
+                      ? inputValue
+                      : vehicleData.vehicleDetails.contact2
+                  }
+                  readOnly={!editableFields.contact2}
+                  onChange={handleInputChange}
+                />
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() =>
+                    setEditableFields({ ...editableFields, contact2: true })
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+
+                {editableFields.contact2 && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button
+                      onClick={() =>
+                        handleVehicleDetailsEdit(inputValue, "contact2")
+                      }
+                      className={`bg-green-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    >
+                      {wait ? "wait..." : "OK"}
+                    </button>
+                    <button
+                      onClick={() => handleCancelEdit("contact2")}
                       className={`bg-red-500 text-white py-1 px-3 rounded ${wait ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                     >

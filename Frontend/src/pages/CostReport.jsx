@@ -10,7 +10,6 @@ import { jwtDecode } from "jwt-decode";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-
 const CostReport = () => {
   const { id } = useParams(); // Get the car ID from the URL
   const [soldStatus, setSoldStatus] = useState();
@@ -38,7 +37,7 @@ const CostReport = () => {
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [financeData, setFinanceData] = useState(null);
   const [fetchedVehicleData, setFetchedVehicleData] = useState(null);
   const [vehicleImages, setvehicleImages] = useState([]);
   const [onsiteVehicleImages, setOnsiteVehicleImages] = useState([]);
@@ -71,8 +70,8 @@ const CostReport = () => {
         setFetchedVehicleData(response.data);
         setvehicleImages(images);
         setOnsiteVehicleImages(onsiteImages);
-
-        // console.log(response.data);
+        setFinanceData(response.data.finance);
+        console.log(response.data);
 
         setvehicleData((prevData) => ({
           ...prevData,
@@ -87,7 +86,7 @@ const CostReport = () => {
             fuelType: car.fuel,
             carCompany: car.carcompany,
             buyingprice: car.vehiclebuyprice,
-            sellingprice: car.vehiclesellprice
+            sellingprice: car.vehiclesellprice,
           },
         }));
       } catch (error) {
@@ -242,28 +241,55 @@ const CostReport = () => {
               <div className="w-1/2 pr-2">
                 <h2 className="font-bold text-xl">Vehicle Details</h2>
                 <p className="break-words">
-                  Registration Number: {vehicleData.carDetails.carNo}
+                  Registration Number:{" "}
+                  {vehicleData.carDetails.carNo || "Not Provided"}
                 </p>
                 <p className="break-words">
-                  Vehicle Company: {vehicleData.carDetails.carCompany}
+                  Vehicle Company:{" "}
+                  {vehicleData.carDetails.carCompany || "Not Provided"}
                 </p>
                 <p className="break-words">
-                  Model: {vehicleData.carDetails.model}
+                  Model: {vehicleData.carDetails.model || "Not Provided"}
                 </p>
-                {/* <p className="break-words">Type: {vehicleData.carDetails.type}</p>
-      <p className="break-words">Fuel Type: {vehicleData.carDetails.fuelType}</p>
-      <p className="break-words">Color: {vehicleData.carDetails.color}</p> */}
               </div>
               <div className="w-1/2 pl-2">
                 <h4 className="font-bold text-xl">Owner Details</h4>
                 <p className="break-words">
-                  Owner: {vehicleData.carDetails.ownerName}
+                  Owner: {vehicleData.carDetails.ownerName || "Not Provided"}
                 </p>
                 <p className="break-words">
-                  Phone: {vehicleData.carDetails.ownerPhone}
+                  Phone: {vehicleData.carDetails.ownerPhone || "Not Provided"}
                 </p>
                 <p className="break-words">
-                  Email: {vehicleData.carDetails.ownerEmail}
+                  Email: {vehicleData.carDetails.ownerEmail || "Not Provided"}
+                </p>
+              </div>
+            </div>
+            {console.log(financeData)}
+            <div className="flex justify-between mt-4">
+              <div className="w-1/2 pr-2">
+                <h2 className="font-bold text-xl">Finance Details</h2>
+                <p className="break-words">
+                  Finance Company: {financeData?.company_name || "Not Provided"}
+                </p>
+                <p className="break-words">
+                  Manager 1: {financeData?.manager_name1 || "Not Provided"}
+                </p>
+                <p className="break-words">
+                  Manager 1 Contact: {financeData?.contact1 || "Not Provided"}
+                </p>
+              </div>
+              <div className="w-1/2 pl-2">
+                <h2 className="font-bold text-xl">&nbsp;</h2>
+                <p className="break-words">
+                  Finance Company Branch:{" "}
+                  {financeData?.branch_name || "Not Provided"}
+                </p>
+                <p className="break-words">
+                  Manager 2: {financeData?.manager_name2 || "Not Provided"}
+                </p>
+                <p className="break-words">
+                  Manager 2 Contact: {financeData?.contact2 || "Not Provided"}
                 </p>
               </div>
             </div>
@@ -379,9 +405,10 @@ const CostReport = () => {
             {isAdmin && (
               <>
                 <h3 className="text-xl font-bold mb-2">
-                  Buying Price:{" "}
-                  {/* {console.log(vehicleData.carDetails)} */}
-                  <span className="font-semibold">₹{vehicleData.carDetails.buyingprice}</span>
+                  Buying Price: {/* {console.log(vehicleData.carDetails)} */}
+                  <span className="font-semibold">
+                    ₹{vehicleData.carDetails.buyingprice}
+                  </span>
                 </h3>
                 <h3 className="text-xl font-bold">
                   Total:{" "}
@@ -393,10 +420,7 @@ const CostReport = () => {
                 </h3>
               </>
             )}
-
           </div>
-
-
 
           {/* Insurance Commission */}
           {/* <div className="mt-4 p-4 bg-orange-200 text-orange-800 font-semibold rounded">
