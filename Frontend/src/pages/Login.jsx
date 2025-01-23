@@ -3,17 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 
-
-
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
-
-
 
     async function loginHandler(event) {
         event.preventDefault();
@@ -25,14 +20,10 @@ function Login() {
             return;
         }
 
-        //http://localhost:8000/
-        //http://localhost:8000/
-        //http://65.2.78.63/
         const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
 
         try {
-            setIsLoading(true)
-            // Trim and convert username and password to lowercase
+            setIsLoading(true);
             const trimmedUsername = username.trim().toLowerCase();
             const trimmedPassword = password.trim().toLowerCase();
 
@@ -40,34 +31,28 @@ function Login() {
                 userID: trimmedUsername,
                 userPass: trimmedPassword
             });
+
             const token = response.data; // Assuming the token is sent as response data
             localStorage.setItem('authToken', token);
-            alert("Login Successful");
-
+            alert("Login Successful!");
 
             let decodedToken;
             if (token) {
                 try {
                     decodedToken = jwtDecode(token);
-                    // console.log(decodedToken);
-
                 } catch (error) {
                     console.error("Invalid token", error);
-
                 }
             }
-            if (decodedToken.isAdmin == true || decodedToken.isEmployee == true) {
 
-                navigate("/dashboard");  // Navigate to dashboard upon success
-            }
-            else if (decodedToken.isDriver == true) {
+            if (decodedToken.isAdmin === true || decodedToken.isEmployee === true) {
+                navigate("/dashboard"); 
+            } else if (decodedToken.isDriver === true) {
                 navigate("/driverdashboard");
             }
-            setIsLoading(false)
+            setIsLoading(false);
         } catch (error) {
-            // Enhanced error handling
             if (error.response) {
-                // Server responded with a status other than 2xx
                 console.error("Login failed: ", error.response.data);
 
                 if (error.response.status === 400) {
@@ -78,47 +63,40 @@ function Login() {
                     setErrorMessage("An unexpected error occurred. Please try again.");
                 }
             } else if (error.request) {
-                // Request was made but no response was received
                 console.error("No response received: ", error.request);
                 setErrorMessage("Server is not responding. Please try again later.");
             } else {
-                // Something else happened in setting up the request
                 console.error("Error setting up the request: ", error.message);
                 setErrorMessage("There was an error during the login process.");
             }
-
-            // toast.error("Login failed.", { position: "top-center", autoClose: 2000 });
+            setIsLoading(false);
         }
-        setIsLoading(false)
-
-        // setUsername('');
-        // setPassword('');
     }
 
     return (
-        <div className='flex items-center justify-center h-[calc(100vh-80px)] bg-gradient-to-r from-green-400 to-blue-500 p-4'>
-            <form className='bg-white shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-md' onSubmit={loginHandler}>
-                <div className='mb-6 sm:mb-8 text-center font-bold text-2xl sm:text-4xl text-gray-800'>
+        <div className='flex items-center justify-center h-[calc(100vh-80px)] bg-gray-100 p-4'>
+            <form className='bg-white shadow-md rounded-md p-6 sm:p-8 w-full max-w-md border border-gray-300' onSubmit={loginHandler}>
+                <div className='mb-6 sm:mb-8 text-center font-bold text-2xl sm:text-3xl text-gray-800'>
                     <p>User Login</p>
                 </div>
                 <div className='mb-4 sm:mb-6'>
-                    <label className='block mb-2 text-gray-700 font-medium'>USER ID :</label>
+                    <label className='block mb-2 text-gray-700 font-medium'>User ID:</label>
                     <input
                         type="text"
                         name="username"
                         value={username}
-                        className='w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                         required
                         onChange={(event) => { setUsername(event.target.value) }}
                     />
                 </div>
                 <div className='mb-4 sm:mb-6'>
-                    <label className='block mb-2 text-gray-700 font-medium'>PASSWORD:</label>
+                    <label className='block mb-2 text-gray-700 font-medium'>Password:</label>
                     <input
                         type="password"
                         name="password"
                         value={password}
-                        className='w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                         required
                         onChange={(event) => { setPassword(event.target.value) }}
                     />
@@ -126,7 +104,7 @@ function Login() {
                 <div className='text-center'>
                     <button
                         type='submit'
-                        className='w-full px-3 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors duration-300'
+                        className='w-full px-3 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors duration-300'
                     >
                         {isLoading ? (
                             <span className="loader">Logging in...</span> // Simple text loader, you can add a spinner here

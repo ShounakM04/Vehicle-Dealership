@@ -517,11 +517,11 @@ const Dashboard = () => {
               <thead className="sticky top-0 bg-gray-200 z-10">
                 <tr className="text-left">
                   <th className="p-2">Owner Name</th>
-                  <th className="p-2">Email</th>
+                  <th className="p-2">Registration No.</th>
+                  <th className="p-2">Finance Company</th>
                   <th className="p-2">Phone No.</th>
                   <th className="p-2">Vehicle Type</th>
                   <th className="p-2">Vehicle Name</th>
-                  <th className="p-2">Registration No.</th>
                   <th className="p-2">Status</th>
                   <th className="p-2">Display</th>
                   <th className="p-2">View</th>
@@ -532,11 +532,11 @@ const Dashboard = () => {
                 {carDetails?.map((car, index) => (
                   <tr key={index} className="border-b">
                     <td className="p-2">{car.ownername}</td>
+                    <td className="p-2">{car.registernumber}</td>
                     <td className="p-2">{car.owneremail}</td>
                     <td className="p-2">{car.ownerphone}</td>
                     <td className="p-2">{car.carmake}</td>
                     <td className="p-2">{car.carname}</td>
-                    <td className="p-2">{car.registernumber}</td>
                     <td className="p-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${car.status === true

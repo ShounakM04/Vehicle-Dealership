@@ -35,7 +35,8 @@ export default function DriverOnsiteImagesAdd() {
             // Upload images first
             await handleUpload();
 
-            toast.success("Vehilce images added successfully!");
+            // toast.success("Vehilce images added successfully!");
+            alert("Vehicle images added successfully!");
             navigate('/driverdashboard');
         } catch (error) {
 

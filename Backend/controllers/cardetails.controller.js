@@ -32,6 +32,7 @@ async function  handleCarDetails(req, res) {
       registration_date,
       description,
       kilometers,
+
       company_name, 
       branch_name, 
       manager_name1,
@@ -73,6 +74,7 @@ async function  handleCarDetails(req, res) {
     const query = `SELECT * FROM cardetails WHERE registernumber = $1`;
     const values = [registernumber];
     const result = await db.query(query, values);
+
     if (result.rows.length > 0) {
       return res.status(400).send({ error: "Registration number already exists. Please enter a unique registration number." });
     }
@@ -97,9 +99,9 @@ async function  handleCarDetails(req, res) {
     if (showInsuranceFields == true) {
       values3 = [
         registernumber,
-        insuranceCompany,
-        insuranceNumber,
-        insuranceTenure,
+        insuranceCompany || "Not Provided",
+        insuranceNumber || "Not Provided",
+        insuranceTenure || 0,
         insuranceStartDate || null,
         insuranceEndDate || null,
         soldStatus || false, // set default soldStatus to false if not provided
@@ -151,6 +153,7 @@ async function  handleCarDetails(req, res) {
     ];
 
     await db.query(query5, values5);
+    
     res.status(200).send("Vehicle Details entered successfully");
   } catch (error) {
     // Log error for debugging

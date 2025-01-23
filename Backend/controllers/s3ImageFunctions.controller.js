@@ -25,7 +25,7 @@ async function generatePresignedUploadUrl(req, res) {
 }
 
 async function handleDeleteImage(req, res) {
-    const { path, uniqueID } = req.query;  // Now using query parameter
+    const { path } = req.query;  // Now using query parameter
 
     if (!path) {
         return res.status(400).send("uniqueID number is required");
@@ -36,15 +36,7 @@ async function handleDeleteImage(req, res) {
         const deletePath = path;
         await deleteObject(deletePath);
 
-        // console.log("helow"+uniqueID)
-        if(uniqueID)
-        {
-        // console.log("helow"+uniqueID)
-
-            const query = `DELETE FROM imagedescription WHERE uniqueid = $1`;
-            const values = [uniqueID];
-            await db.query(query, values);
-        }
+        
 
         // Return success message if the image was deleted
         res.send(`Image deleted successfully`);

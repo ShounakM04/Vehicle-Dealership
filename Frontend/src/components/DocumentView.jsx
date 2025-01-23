@@ -4,13 +4,19 @@ import axios from "axios";
 import { FaTrashAlt } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom'
 import { FaFileAlt } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+
+
 export default function DocumentView({ isOffice }) {
     const [fetchedImages, setFetchedImages] = useState([]);
     const [fetchedDescription, setFetchedDescription] = useState([]);
     const [fetchedUniqueIds, setFetchedUniqueIds] = useState([]);
+    const [fetchedDocUploadedBy, setFetchedDocUploadedBy] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageSerial, setSelectedImageSerial] = useState(null);
     const [isLoading, setIsLoading] = useState(false); // State for screen overlay
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isEmployee, setIsEmployee] = useState(false);
 
 
     const { id } = useParams();
@@ -26,6 +32,26 @@ export default function DocumentView({ isOffice }) {
             [index]: true, // Mark this index as having an image load error
         }));
     };
+
+
+    function fetchRole() {
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+        if (token) {
+            try {
+                decodedToken = jwtDecode(token);
+                // console.log(decodedToken);
+            } catch (error) {
+                console.error("Invalid token", error);
+            }
+        }
+        if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+            setIsAdmin(true);
+        } else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+            setIsEmployee(true);
+        }
+    }
+
 
 
     const fetchImages = async () => {
@@ -51,6 +77,7 @@ export default function DocumentView({ isOffice }) {
                 }
             });
             setFetchedDescription(response2.data.descriptions);
+            setFetchedDocUploadedBy(response2.data.docuploadedby);
             setFetchedUniqueIds(response2.data.uniqueids);
 
 
@@ -66,6 +93,7 @@ export default function DocumentView({ isOffice }) {
     // Call fetchImages on component mount
     useEffect(() => {
         fetchImages();
+        fetchRole();
     }, []);
 
 
@@ -117,9 +145,17 @@ export default function DocumentView({ isOffice }) {
             await axios.delete(`http://localhost:8000/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
-                }, params: { path: path, uniqueID: uniqueID }
+                }, params: { path: path }
             });
-            toast.success(`Notice image with serial number ${selectedImageSerial} deleted successfully!`);
+
+            await axios.delete(`http://localhost:8000/delete-imagedescription`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }, params: { uniqueID:uniqueID}
+            });
+
+
+            toast.success(`Document with serial number ${selectedImageSerial} deleted successfully!`);
 
             // Update the state to reflect the change
             setFetchedImages((prevImages) =>
@@ -171,7 +207,10 @@ export default function DocumentView({ isOffice }) {
                         {(() => {
                             descMap = new Map();
                             fetchedUniqueIds.forEach((uniqueId, index) => {
-                                descMap.set(uniqueId, fetchedDescription[index] || "No Description Available");
+                                descMap.set(uniqueId, {
+                                    description: fetchedDescription[index] || "No Description Available",
+                                    uploadedBy: fetchedDocUploadedBy[index] || "Unknown",
+                                });
                             });
                             return null; // No UI change, only map creation
                         })()}
@@ -201,63 +240,126 @@ export default function DocumentView({ isOffice }) {
                                 }
 
                                 // Fetch description from the map
-                                const description = extractedUniqueid && descMap.has(extractedUniqueid)
-                                    ? descMap.get(extractedUniqueid)
-                                    : "No Description Available";
+                                const entry = extractedUniqueid && descMap.has(extractedUniqueid) ? descMap.get(extractedUniqueid) : null;
+                                const description = entry?.description || "No Description Available";
+                                const uploadedBy = entry?.uploadedBy || "Unknown";
+                                // console.log(uploadedBy);
 
-                                return (
-                                    <div
-                                        key={index}
-                                        className="flex flex-col md:flex-row items-center justify-between w-full py-6 border-t"
-                                    >
-                                        {/* Description Column */}
-                                        <div className="w-full md:w-1/3 px-4 text-center md:text-right border-r border-gray-300">
-                                            <p className="text-md font-medium">{description}</p>
-                                        </div>
+                                if(isAdmin || isOffice)
+                                {  
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="flex flex-col md:flex-row items-center justify-between w-full py-6 border-t"
+                                        >
+                                            {/* Description Column */}
+                                            <div className="w-full md:w-1/3 px-4 text-center md:text-right border-r border-gray-300">
+                                                <p className="text-md font-medium">{description}</p>
+                                            </div>
 
-                                        {/* Document Column */}
-                                        <div className="w-full md:w-2/3 px-4 flex flex-col items-center">
-                                            <div className="relative w-full md:w-3/4">
-                                                <a
-                                                    href={url}
-                                                    download
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block"
-                                                >
-                                                    {/* Attempt to load image */}
-                                                    {!imageErrors[index] ? (
-                                                        <img
-                                                            src={url}
-                                                            alt={`Document ${index + 1}`}
-                                                            className="w-full rounded-lg shadow-lg cursor-pointer hover:opacity-80"
-                                                            title="Click to Download Image"
-                                                            onError={() => handleImageError(index)} // Handle error by updating state
-                                                        />
-                                                    ) : (
-                                                        // Fallback to generic document icon
-                                                        <div className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-4 shadow-lg">
-                                                            <FaFileAlt className="text-gray-600 text-5xl mb-2" />
-                                                            <p className="text-blue-500 underline">Click to Download</p>
-                                                        </div>
-                                                    )}
-                                                </a>
-
-                                                {/* Delete Button */}
-                                                <div className="flex justify-end mt-2">
-                                                    <button
-                                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
-                                                        onClick={() => confirmDelete(index)}
+                                            {/* Document Column */}
+                                            <div className="w-full md:w-2/3 px-4 flex flex-col items-center">
+                                                <div className="relative w-full md:w-3/4">
+                                                    <a
+                                                        href={url}
+                                                        download
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="block"
                                                     >
-                                                        <FaTrashAlt />
-                                                    </button>
+                                                        {/* Attempt to load image */}
+                                                        {!imageErrors[index] ? (
+                                                            <img
+                                                                src={url}
+                                                                alt={`Document ${index + 1}`}
+                                                                className="w-full rounded-lg shadow-lg cursor-pointer hover:opacity-80"
+                                                                title="Click to Download Image"
+                                                                onError={() => handleImageError(index)} // Handle error by updating state
+                                                            />
+                                                        ) : (
+                                                            // Fallback to generic document icon
+                                                            <div className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-4 shadow-lg">
+                                                                <FaFileAlt className="text-gray-600 text-5xl mb-2" />
+                                                                <p className="text-blue-500 underline">Click to Download</p>
+                                                            </div>
+                                                        )}
+                                                    </a>
+
+                                                    {/* Delete Button */}
+                                                    <div className="flex justify-end mt-2">
+                                                        <button
+                                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
+                                                            onClick={() => confirmDelete(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+
+
                                         </div>
+                                    );
+                                }
+                                else if(isEmployee &&  uploadedBy == "Employee")
+                                {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="flex flex-col md:flex-row items-center justify-between w-full py-6 border-t"
+                                        >
+                                            {/* Description Column */}
+                                            <div className="w-full md:w-1/3 px-4 text-center md:text-right border-r border-gray-300">
+                                                <p className="text-md font-medium">{description}</p>
+                                            </div>
+
+                                            {/* Document Column */}
+                                            <div className="w-full md:w-2/3 px-4 flex flex-col items-center">
+                                                <div className="relative w-full md:w-3/4">
+                                                    <a
+                                                        href={url}
+                                                        download
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="block"
+                                                    >
+                                                        {/* Attempt to load image */}
+                                                        {!imageErrors[index] ? (
+                                                            <img
+                                                                src={url}
+                                                                alt={`Document ${index + 1}`}
+                                                                className="w-full rounded-lg shadow-lg cursor-pointer hover:opacity-80"
+                                                                title="Click to Download Image"
+                                                                onError={() => handleImageError(index)} // Handle error by updating state
+                                                            />
+                                                        ) : (
+                                                            // Fallback to generic document icon
+                                                            <div className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-4 shadow-lg">
+                                                                <FaFileAlt className="text-gray-600 text-5xl mb-2" />
+                                                                <p className="text-blue-500 underline">Click to Download</p>
+                                                            </div>
+                                                        )}
+                                                    </a>
+
+                                                    {/* Delete Button */}
+                                                    <div className="flex justify-end mt-2">
+                                                        <button
+                                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
+                                                            onClick={() => confirmDelete(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
-                                    </div>
-                                );
+                                        </div>
+                                    );
+                                }
+                                else{
+                                    return null;
+                                }
                             })}
                         </div>
                     </div>

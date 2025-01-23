@@ -33,6 +33,7 @@ const PORT = 8000
   const ValidateTokenRoute = require("./routes/ValidateToken.route.js");
   const ActiveAccountRoute = require("./adminRoutes/activeAccounts.routes.js")
   const editMiscellaneousRoute = require("./adminRoutes/editMiscellaneous.route.js")
+  const deleteImageDescription = require('./routes/deleteImageDescription.route.js')
   // const corsOptions = {
   //     origin: '*', // Allow all origins
   //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
@@ -110,6 +111,7 @@ app.use("/Description",handleAddDescriptionRoute);
 app.use("/accountDetails",handleAddAccountDetailsRoute);
 app.use("/bill", BillGenerate)
 app.use("/editMiscellaneous", editMiscellaneousRoute)
+app.use("/delete-imagedescription",deleteImageDescription)
 
 // Correct `app.listen` without req and res parameters
 app.listen(PORT, () => {

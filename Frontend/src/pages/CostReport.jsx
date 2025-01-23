@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"; // For getting the pa
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaTrash } from "react-icons/fa";
+import { FaTrashAlt } from 'react-icons/fa';
 import { Maintainance } from "../components/Maintainance";
 import Installment from "../components/Installment";
 import { jwtDecode } from "jwt-decode";
@@ -50,6 +50,10 @@ const CostReport = () => {
     maintenanceRecords: [],
     totalMaintenanceCost: 0,
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImageSerial, setSelectedImageSerial] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // State for screen overlay
 
   function cleanURL(url) {
     // Use a regex to extract the correct URL
@@ -200,40 +204,107 @@ const CostReport = () => {
     fetchMaintenanceDetails(); // Refresh maintenance records after adding a new one
   };
 
+
+
+  const confirmDelete = (serialnum) => {
+    setSelectedImageSerial(serialnum);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true); // Start fade-up effect
+      console.log(maintainanceData.maintenanceRecords);
+      const deleteUrl = maintainanceData.maintenanceRecords[selectedImageSerial].maintainanceReceipt;
+      console.log("Del : " + deleteUrl);
+
+      // Extract the uniqueID from the URL
+    
+      let regex = new RegExp(`/${id}/MaintenanceDoc/(\\d+)\\?`);
+      
+      const match = deleteUrl.match(regex);
+      let uniqueID;
+
+      if (match) {
+        uniqueID = match[1];
+        console.log(uniqueID);
+      } else {
+        console.log('No unique ID found');
+      }
+
+      
+      let path = `${id}/MaintenanceDoc/${uniqueID}`;
+      
+
+      // console.log(uniqueID);
+
+      await axios.delete(`http://localhost:8000/delete-image`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }, params: { path: path }
+      });
+
+      await axios.delete(`http://localhost:8000/maintainance/delete-maintainance`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }, params: {uniqueID:uniqueID, registernumber : id  }
+      });
+
+
+      fetchMaintenanceDetails();
+      toast.success(`Maintenance with serial number ${selectedImageSerial} deleted successfully!`);
+
+
+
+    } catch (error) {
+      console.error("Error deleting notice image:", error);
+      toast.error("Failed to delete notice image");
+    } finally {
+      setIsLoading(false); // Remove fade-up effect
+      setIsModalOpen(false);
+      setSelectedImageSerial(null);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImageSerial(null);
+  };
+
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col lg:flex-row p-5 bg-gray-100 ">
         <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-2 lg:mb-0 ">
           <h2 className="text-2xl font-bold mb-2">Vehicle Details</h2>
           {/* {console.log("efef",vehicleData.buyingPrice)} */}
-          {isAdmin === true && (
-            <div className="ml-auto mb-4 flex space-x-4">
+
+          <div className="ml-auto mb-4 flex space-x-4">
+            <button
+              onClick={() =>
+                navigate(`/dashboard/costReport/${id}/addDoc`)
+              }
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Doc
+            </button>
+            <button
+              onClick={() =>
+                navigate(`/dashboard/costReport/${id}/viewDoc`)
+              }
+              className="bg-green-500 text-white px-4 py-2 rounded"
+            >
+              View Docs
+            </button>
+            {soldStatus && (
               <button
-                onClick={() =>
-                  navigate(`/dashboard/costReport/${id}/addAdminDoc`)
-                }
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                Add Admin Doc
-              </button>
-              <button
-                onClick={() =>
-                  navigate(`/dashboard/costReport/${id}/viewAdminDoc`)
-                }
+                onClick={handleGenerateBill}
                 className="bg-green-500 text-white px-4 py-2 rounded"
               >
-                View Admin Docs
+                {loading ? "Downloading...." : "Download Bill"}
               </button>
-              {soldStatus && (
-                <button
-                  onClick={handleGenerateBill}
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                >
-                  {loading ? "Downloading...." : "Download Bill"}
-                </button>
-              )}
-            </div>
-          )}
+            )}
+          </div>
           {/* Car Details */}
           {/* Car Details and Owner Details */}
           <div className="mb-2 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
@@ -356,34 +427,45 @@ const CostReport = () => {
               <ul className="mt-2">
                 {maintainanceData.maintenanceRecords?.map((record, index) => {
                   return (
-                    <li
-                      key={index}
-                      className="mb-2 p-4 bg-yellow-200 text-yellow-800 rounded flex justify-between items-center"
-                    >
-                      <div>
-                        <p className="font-medium text-black">
-                          {index + 1}) {record.description}
-                        </p>
-                        <p>Cost: ₹{record.price}</p>
-                        <p>
-                          Date:{" "}
-                          {new Date(record.maintainanceDate).toLocaleDateString(
-                            "en-GB"
-                          )}
-                        </p>
-                        <p>Done By: {record.username}</p>
-                        <p>
-                          Receipt:{" "}
-                          <a
-                            href={record.maintainanceReceipt}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            View Receipt
-                          </a>
-                        </p>
-                      </div>
-                    </li>
+                    <>
+                      <li
+                        key={index}
+                        className="mb-2 p-4 bg-yellow-200 text-yellow-800 rounded flex justify-between items-center"
+                      >
+                        <div>
+                          <p className="font-medium text-black">
+                            {index + 1}) {record.description}
+                          </p>
+                          <p>Cost: ₹{record.price}</p>
+                          <p>
+                            Date:{" "}
+                            {new Date(record.maintainanceDate).toLocaleDateString(
+                              "en-GB"
+                            )}
+                          </p>
+                          <p>Done By: {record.username}</p>
+                          <p>
+                            Receipt:{" "}
+                            <a
+                              href={record.maintainanceReceipt}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View Receipt
+                            </a>
+                          </p>
+                        </div>
+                      {isAdmin && (<div className="flex justify-end mt-2">
+                        <button
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
+                          onClick={() => confirmDelete(index)}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>)}
+                      </li>
+
+                    </>
                   );
                 })}
               </ul>
@@ -465,6 +547,32 @@ const CostReport = () => {
             </button>
           </form> */}
         </div>
+
+        {/* Confirmation Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+              <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this image?</h3>
+              <div className="flex justify-end">
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+                >
+                  Yes, Delete
+                </button>
+                <button
+                  className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
+                  onClick={closeModal}
+                  disabled={isLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
       <ToastContainer />
     </div>

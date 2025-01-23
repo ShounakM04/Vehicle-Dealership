@@ -25,8 +25,8 @@ function ChangePassword() {
             return;
         }
 
-        if (newPassword == oldPassword) {
-            setErrorMessage("New Password is same as old Password.");
+        if (newPassword === oldPassword) {
+            setErrorMessage("New Password is the same as the Old Password.");
             return;
         }
 
@@ -45,7 +45,8 @@ function ChangePassword() {
                 }
             });
 
-            toast.success("Password changed successfully!", { position: "top-center", autoClose: 1000 });
+            // toast.success("Password changed successfully!", { position: "top-center", autoClose: 1000 });
+            alert("Password changed successfully!");
             setIsLoading(false);
             navigate("/dashboard");
         } catch (error) {
@@ -54,9 +55,7 @@ function ChangePassword() {
             if (error.response) {
                 console.error("Password change failed: ", error.response.data);
 
-                // Handle specific status codes
-                // console.log("+++++"+error.response.status);
-                if (error.response.status == 501) {
+                if (error.response.status === 501) {
                     setErrorMessage("Old password does not match.");
                 } else {
                     setErrorMessage(error.response.data.message || "An error occurred. Please try again.");
@@ -73,11 +72,10 @@ function ChangePassword() {
         }
     }
 
-
     return (
-        <div className='flex items-center justify-center h-[calc(100vh-80px)] bg-gradient-to-r from-green-400 to-blue-500 p-4'>
-            <form className='bg-white shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-md' onSubmit={changePasswordHandler}>
-                <div className='mb-6 sm:mb-8 text-center font-bold text-2xl sm:text-4xl text-gray-800'>
+        <div className='flex items-center justify-center h-[calc(100vh-80px)] bg-gray-100 p-4'>
+            <form className='bg-white shadow-md rounded-lg p-6 sm:p-8 w-full max-w-md' onSubmit={changePasswordHandler}>
+                <div className='mb-6 sm:mb-8 text-center font-bold text-2xl sm:text-3xl text-gray-800'>
                     <p>Change Password</p>
                 </div>
                 <div className='mb-4 sm:mb-6'>
@@ -86,7 +84,7 @@ function ChangePassword() {
                         type="password"
                         name="oldPassword"
                         value={oldPassword}
-                        className='w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
                         required
                         onChange={(event) => { setOldPassword(event.target.value) }}
                     />
@@ -97,7 +95,7 @@ function ChangePassword() {
                         type="password"
                         name="newPassword"
                         value={newPassword}
-                        className='w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
                         required
                         onChange={(event) => { setNewPassword(event.target.value) }}
                     />
@@ -108,7 +106,7 @@ function ChangePassword() {
                         type="password"
                         name="confirmNewPassword"
                         value={confirmNewPassword}
-                        className='w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
                         required
                         onChange={(event) => { setConfirmNewPassword(event.target.value) }}
                     />
@@ -116,7 +114,7 @@ function ChangePassword() {
                 <div className='text-center'>
                     <button
                         type='submit'
-                        className='w-full px-3 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors duration-300'
+                        className='w-full px-3 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition-colors duration-300'
                         disabled={isLoading}
                     >
                         {isLoading ? (

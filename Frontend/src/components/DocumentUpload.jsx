@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 import { toast } from "react-toastify";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const DocumentUpload = ({ isOffice }) => {
 
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [description, setDescription] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isEmployee, setIsEmployee] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -16,20 +20,41 @@ const DocumentUpload = ({ isOffice }) => {
 
     // console.log(id);
 
+    function fetchRole() {
+        const token = localStorage.getItem("authToken");
+        let decodedToken;
+        if (token) {
+            try {
+                decodedToken = jwtDecode(token);
+                // console.log(decodedToken);
+            } catch (error) {
+                console.error("Invalid token", error);
+            }
+        }
+        if (decodedToken?.isAdmin && decodedToken.isAdmin == true) {
+            setIsAdmin(true);
+        } else if (decodedToken?.isEmployee && decodedToken.isEmployee == true) {
+            setIsEmployee(true);
+        }
+    }
+
+    useEffect(() => {
+        fetchRole();
+    }, []);
+
     const handleGoBack = () => {
-        if (isOffice == true) {
-            navigate('/dashboard');
-        }
-
-        else if (!id) {
-
-            navigate('/driverdashboard');
-        }
-        else {
-            navigate(`/dashboard/costReport/${id}`);
-
+        if (isOffice) {
+            // navigate('/dashboard', { replace: true }); // Replace the current entry
+            navigate(-1);
+        } else if (!id) {
+            // navigate('/driverdashboard', { replace: true }); // Replace the current entry
+            navigate(-1);
+        } else {
+            // navigate(`/dashboard/costReport/${id}`, { replace: true }); // Replace the current entry
+            navigate(-1);
         }
     };
+
 
     const handleImageChange = (e) => {
         setImages([...e.target.files]);
@@ -45,14 +70,18 @@ const DocumentUpload = ({ isOffice }) => {
             // Upload images first
             await handleUpload();
 
-            toast.success("Documents added successfully!");
-            if (window.location.pathname.includes('/dashboard')) {
-                // If the current URL contains '/dashboard', navigate to '/dashboard'
-                navigate('/dashboard');
-            } else {
-                // Otherwise, navigate to '/driverdashboard'
-                navigate('/driverdashboard');
-            }
+            // toast.success("Documents added successfully!");
+            // if (window.location.pathname.includes('/dashboard')) {
+            //     // If the current URL contains '/dashboard', navigate to '/dashboard'
+            //     navigate('/dashboard');
+            // } else {
+            //     // Otherwise, navigate to '/driverdashboard'
+            //     navigate('/driverdashboard');
+            // }
+
+            alert("Documents added successfully!");
+
+            handleGoBack();
         } catch (error) {
 
             // Display error message in toast
@@ -64,12 +93,22 @@ const DocumentUpload = ({ isOffice }) => {
 
     const addDescription = async (uniqueID) => {
         try {
-            let docType = (isOffice == true) ? "Office" : "Admin";
+            let docType = (isOffice == true) ? "Office" : "Vehicle";
+
+            let docuploadedby;
+            if (isAdmin) {
+                docuploadedby = "Admin";
+            }
+            else if (isEmployee) {
+                docuploadedby = "Employee";
+            }
+
             await axios.post('http://localhost:8000/Description',
                 {
                     uniqueID: uniqueID,
                     description: description,
-                    docType: docType
+                    docType: docType,
+                    docuploadedby: docuploadedby
                 },
                 {
                     headers: {
@@ -112,6 +151,8 @@ const DocumentUpload = ({ isOffice }) => {
             throw error;
         }
     };
+
+
 
 
     return (

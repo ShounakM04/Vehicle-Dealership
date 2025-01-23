@@ -124,7 +124,29 @@ async function handlePostMaintainanceDetails(req, res) {
 }
 
 
+async function handleDeleteMaintainanceDetails(req, res) {
+    const { registernumber, uniqueID } = req.query;
+
+
+    try {
+
+        const qr = `DELETE FROM maintainancedetails WHERE registernumber = $1 and maintainancenumber = $2`;
+        const val = [registernumber,uniqueID];
+        const result1 = await db.query(qr, val);
+
+        
+        return res.status(200).json({ message:"Maintenance Deleted Successfully" });
+
+    } catch (error) {
+        console.log(error);
+        console.log(error.message);
+
+        return res.status(500).send(`Internal Server Error : ${error.message}`);
+    }
+}
+
 module.exports = {
     handleGetMaintainanceDetails,
-    handlePostMaintainanceDetails
+    handlePostMaintainanceDetails,
+    handleDeleteMaintainanceDetails
 }

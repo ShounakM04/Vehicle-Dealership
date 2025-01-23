@@ -250,34 +250,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/addOfficeDocuments",
-    element: (
-      <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
-
-          <Layout>
-            <DocumentUpload />
-          </Layout>
-        </ProtectedUserRoute>
-
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/dashboard/viewOfficeDocuments",
-    element: (
-      <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin", "employee"]}>
-
-          <Layout>
-            <DocumentView />
-          </Layout>
-        </ProtectedUserRoute>
-
-      </ProtectedRoute>
-    ),
-  },
-  {
     path: "/dashboard/ActiveAccounts",
     element: (
       <ProtectedRoute>
@@ -318,13 +290,13 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/costReport/:id/addAdminDoc",
+    path: "/dashboard/costReport/:id/addDoc",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin"]}>
+        <ProtectedUserRoute requiredRoles={["admin","employee"]}>
 
           <Layout>
-            <DocumentUpload />
+            <DocumentUpload isOffice={false}/>
           </Layout>
         </ProtectedUserRoute>
 
@@ -332,41 +304,13 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/costReport/:id/viewAdminDoc",
+    path: "/dashboard/costReport/:id/viewDoc",
     element: (
       <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin"]}>
+        <ProtectedUserRoute requiredRoles={["admin","employee"]}>
 
           <Layout>
-            <DocumentView />
-          </Layout>
-        </ProtectedUserRoute>
-
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/dashboard/costReport/:id/addAdminDoc",
-    element: (
-      <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin"]}>
-
-          <Layout>
-            <DocumentUpload />
-          </Layout>
-        </ProtectedUserRoute>
-
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/dashboard/costReport/:id/viewAdminDoc",
-    element: (
-      <ProtectedRoute>
-        <ProtectedUserRoute requiredRoles={["admin"]}>
-
-          <Layout>
-            <DocumentView />
+            <DocumentView isOffice={false} />
           </Layout>
         </ProtectedUserRoute>
 
