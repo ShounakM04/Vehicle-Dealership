@@ -45,7 +45,8 @@ async function  handleCarDetails(req, res) {
     const requiredFields = {
       registernumber,
       vehicleName,
-      brandName,
+      fuel,
+      vehicleType,
     };
 
 
@@ -82,7 +83,7 @@ async function  handleCarDetails(req, res) {
     // Insert car details
     const query2 = `INSERT INTO cardetails (registernumber, carname, carmake, carcompany, carcolor, vehiclebuyprice, fuel,vehiclesellprice,onhomepage,kilometers,fitness_upto_date,registration_date,description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`;
 
-    const values2 = [registernumber, vehicleName, vehicleType || "Not Provided", brandName, vehicleColor || "Not Provided", vehicleBuyPrice || 0, fuel || "Not Provided", vehicleSellPrice || 0, onhomepage,kilometers || 0,fitness_upto_date || null,registration_date || null,description || "Not Provided"];
+    const values2 = [registernumber, vehicleName || "Not Provided", vehicleType || "Not Provided", brandName || "Not Provided", vehicleColor || "Not Provided", vehicleBuyPrice || 0, fuel || "Not Provided", vehicleSellPrice || 0, onhomepage || false ,kilometers || 0,fitness_upto_date || null,registration_date || null,description || "Not Provided"];
 
 
     await db.query(query2, values2);

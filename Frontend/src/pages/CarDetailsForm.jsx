@@ -18,7 +18,7 @@ function AdminForm() {
   const [ownerEmail, setOwnerEmail] = useState("");
   const [ownerAddress, setOwnerAddress] = useState("");
   const [vehicleColor, setVehicleColor] = useState("");
-  const [vehicleSellPrice, setVehicleSellPrice] = useState("");
+  const [vehicleSellPrice, setVehicleSellPrice] = useState(0);
   const [insuranceStartDate, setInsuranceStartDate] = useState("");
   const [insuranceEndDate, setInsuranceEndDate] = useState("");
   const [showInsuranceFields, setShowInsuranceFields] = useState(false);

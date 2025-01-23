@@ -175,8 +175,15 @@ const CostReport = () => {
       });
 
       if (response.status === 201) {
+        setMaintainanceData((prevData) => ({
+          ...prevData,
+          maintenanceRecords: [],
+          totalMaintenanceCost: 0,
+        }));
         return;
       }
+
+      
 
       const { maintenanceRecords, totalmaintainance } = response.data;
 

@@ -135,7 +135,7 @@ function CarDetails() {
               </button>
             </div>
 
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-500 mt-2 font-medium text-xl">
               Registration number: {carData.car.registernumber}
             </p>
           </div>
@@ -241,6 +241,16 @@ function CarDetails() {
                     value={carData.car.kilometers}
                   />
                 )}
+                 {carData.car.registration_date &&
+                  new Date(carData.car.registration_date).getTime() !== 0 && (
+                    <DetailItem
+                      icon={<Calendar />}
+                      label="Registration Date"
+                      value={new Date(
+                        carData.car.registration_date
+                      ).toLocaleDateString("en-GB")}
+                    />
+                  )}
                 {carData.car.fitness_upto_date &&
                   new Date(carData.car.fitness_upto_date).getTime() !== 0 && (
                     <DetailItem
@@ -251,16 +261,17 @@ function CarDetails() {
                       ).toLocaleDateString("en-GB")}
                     />
                   )}
-                {carData.car.registration_date &&
-                  new Date(carData.car.registration_date).getTime() !== 0 && (
+                   {carData.insurance && carData.insurance.insuranceenddate &&
+                  new Date(carData.insurance.insuranceenddate).getTime() !== 0 && (
                     <DetailItem
                       icon={<Calendar />}
-                      label="Registration Date"
+                      label="Insurance Upto"
                       value={new Date(
-                        carData.car.registration_date
+                        carData.insurance.insuranceenddate
                       ).toLocaleDateString("en-GB")}
                     />
                   )}
+               
               </div>
 
               {/* Price Section */}

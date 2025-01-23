@@ -198,7 +198,7 @@ export default function DocumentView({ isOffice }) {
                     <div className="py-4 w-full">
                         {fetchedImages.length === 0 && (
                             <div className="flex flex-col items-center py-4">
-                                <p>No Admin Documents Exist!</p>
+                                <p>No Documents Exist!</p>
                             </div>
                         )}
 

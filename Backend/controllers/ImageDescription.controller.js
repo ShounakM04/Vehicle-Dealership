@@ -3,7 +3,7 @@ const db = require("../models/database")
 async function handleDeleteImageDescription(req, res){
     try {
         const {uniqueID} = req.body;
-        console.log(uniqueID)
+        // console.log(uniqueID)
         const query = `delete from imagedescription where uniqueid =($1)`;
         const values = [uniqueID];
         await db.query(query, values);
