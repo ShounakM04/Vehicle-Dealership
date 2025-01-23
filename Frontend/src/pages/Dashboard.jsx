@@ -417,7 +417,7 @@ const Dashboard = () => {
               </button>
               <button
                 onClick={handleChangePass}
-                className="bg-yellow-400 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-green-500 text-white px-4 py-2 rounded w-full lg:w-auto"
               >
                 Change Password
               </button>

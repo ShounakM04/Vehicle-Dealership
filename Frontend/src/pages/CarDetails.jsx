@@ -27,7 +27,7 @@ function CarDetails() {
   const [carData, setCarData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isCopied,setIsCopied] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -93,11 +93,11 @@ function CarDetails() {
     // alert("Page URL copied to clipboard!");
 
     setIsCopied(true);
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 1000); // Revert back to copy icon after 2 seconds
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000); // Revert back to copy icon after 2 seconds
   };
-  
+
   const downloadImage = async (imageUrl) => {
     try {
       // Use the original signed URL directly for download
@@ -105,11 +105,11 @@ function CarDetails() {
       link.href = imageUrl;
       link.target = '_blank';
       link.download = `car-image-${Date.now()}.jpg`;
-      
+
       // Append to body, click, and remove
       document.body.appendChild(link);
       link.click();
-      
+
       // Clean up
       document.body.removeChild(link);
     } catch (error) {
@@ -123,15 +123,15 @@ function CarDetails() {
         <div className="mb-8">
           <div className="mx-8">
             <div className="flex items-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              <Car className="w-8 h-8 text-blue-500" />
-              {carData.car.carcompany} {carData.car.carname}
-            </h1>
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <Car className="w-8 h-8 text-blue-500" />
+                {carData.car.carcompany} {carData.car.carname}
+              </h1>
               <button
                 onClick={copyToClipboard}
                 className="flex items-center gap-2 px-3 py-2 ml-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
               >
-                 {isCopied ? <CheckCheck /> : <Copy />}
+                {isCopied ? <CheckCheck /> : <Copy />}
               </button>
             </div>
 
@@ -149,7 +149,7 @@ function CarDetails() {
               showArrows={true}
               autoPlay={true}
               infiniteLoop={true}
-              showThumbs={true}
+              showThumbs={false}
               showStatus={false}
               className="custom-carousel mx-2 sm:mx-4 md:mx-8"
               renderThumbs={(children) =>
@@ -165,20 +165,23 @@ function CarDetails() {
                   key={index}
                   className="relative flex justify-center items-center overflow-hidden"
                 >
-                  <img
-                    src={image}
-                    alt={`Car ${carData.car.carname}`}
-                    className="max-h-[20rem] rounded-t-lg object-contain"
-                  />
-                  {/* Download Button */}
-                  <button
-                    onClick={() => downloadImage(image)}
-                    className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700"
-                    title="Download Image"
+                  <a
+                    href={image}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
                   >
-                    <FaDownload />
-                  </button>
+                    <img
+                      src={image}
+                      alt={`Car ${carData.car.carname}`}
+                      className="max-h-[20rem] rounded-t-lg object-contain"
+                    />
+                  </a>
+
+
                 </div>
+
               ))}
             </Carousel>
           </div>
