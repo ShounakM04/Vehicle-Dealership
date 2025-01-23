@@ -13,15 +13,21 @@ import {
   Tag,
   FileText,
   Shield,
-  Fuel
-  
+  Fuel,
+  Copy,
+  CheckCheck
+
 } from "lucide-react";
+import { FaDownload, FaCopy, FaCheck } from "react-icons/fa";
+
+
 
 function CarDetails() {
   const params = useParams();
   const [carData, setCarData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isCopied,setIsCopied] = useState(false);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -76,15 +82,59 @@ function CarDetails() {
     );
   }
 
+
+  const copyToClipboard = () => {
+
+    navigator.clipboard.writeText(window.location.href);
+    // toast.success("Page URL copied to clipboard!", {
+    //   position: "top-center",
+    //   autoClose: 1500,
+    // });
+    // alert("Page URL copied to clipboard!");
+
+    setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1000); // Revert back to copy icon after 2 seconds
+  };
+  
+  const downloadImage = async (imageUrl) => {
+    try {
+      // Use the original signed URL directly for download
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.target = '_blank';
+      link.download = `car-image-${Date.now()}.jpg`;
+      
+      // Append to body, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-80px)] bg-gray-50 pt-6 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <div className="mx-8">
+            <div className="flex items-center mb-4">
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <Car className="w-8 h-8 text-blue-500" />
               {carData.car.carcompany} {carData.car.carname}
             </h1>
+              <button
+                onClick={copyToClipboard}
+                className="flex items-center gap-2 px-3 py-2 ml-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              >
+                 {isCopied ? <CheckCheck /> : <Copy />}
+              </button>
+            </div>
+
             <p className="text-gray-500 mt-2">
               Registration number: {carData.car.registernumber}
             </p>
@@ -94,6 +144,7 @@ function CarDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Gallery Section */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden p-2 sm:p-4">
+
             <Carousel
               showArrows={true}
               autoPlay={true}
@@ -112,18 +163,25 @@ function CarDetails() {
               {carData.images?.map((image, index) => (
                 <div
                   key={index}
-                  className="flex justify-center items-center overflow-hidden"
+                  className="relative flex justify-center items-center overflow-hidden"
                 >
                   <img
-                    src={image} // Correctly use the image URL
+                    src={image}
                     alt={`Car ${carData.car.carname}`}
                     className="max-h-[20rem] rounded-t-lg object-contain"
                   />
+                  {/* Download Button */}
+                  <button
+                    onClick={() => downloadImage(image)}
+                    className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700"
+                    title="Download Image"
+                  >
+                    <FaDownload />
+                  </button>
                 </div>
               ))}
             </Carousel>
           </div>
-
           {/* Details Section */}
           <div className="space-y-6">
             {/* Vehicle Information */}

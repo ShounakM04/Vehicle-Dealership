@@ -195,31 +195,37 @@ export default function Landing() {
 
       {/* Car Cards Section */}
       <div className="flex flex-wrap gap-4 m-10 p-4">
-        {cars?.map((car) => (
-          car.status === false && car.onhomepage == true && (
-            <div
-              key={car.id}
-              className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%] md:w-[48%]"
-            >
-              <img
-                src={car.imgSrc}
-                alt={car.name}
-                className="w-full h-48 object-cover rounded-md"
-              />
-              <h3 className="text-lg font-bold mt-4">{car.name}</h3>
-              <p className="text-gray-600 mt-2">{car.number}</p>
-              <p className="text-gray-600 mt-2">{car.kilometers}</p>
-              <p className="text-green-500 font-bold mt-2">₹{car.price}</p>
-              <button
-                onClick={() => handleSelectButton(car.id)}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md mt-4"
+        {cars?.map(
+          (car) =>
+            car.status === false &&
+            car.onhomepage === true && (
+              <div
+                key={car.id}
+                className="bg-white rounded-md shadow-md p-4 w-full sm:w-1/2 lg:w-[32%] md:w-[48%]"
               >
-                View Details
-              </button>
-            </div>
-          )
-        ))}
+                <div className="relative w-full h-48">
+                  <img
+                    src={car.imgSrc}
+                    alt={car.name}
+                    className="w-full h-full object-cover rounded-md max-h-48"
+                    style={{ maxHeight: "12rem" }} // Ensures the image height does not exceed 12rem
+                  />
+                </div>
+                <h3 className="text-lg font-bold mt-4">{car.name}</h3>
+                <p className="text-gray-600 mt-2">{car.number}</p>
+                <p className="text-gray-600 mt-2">{car.kilometers}</p>
+                <p className="text-green-500 font-bold mt-2">₹{car.price}</p>
+                <button
+                  onClick={() => handleSelectButton(car.id)}
+                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-md mt-4"
+                >
+                  View Details
+                </button>
+              </div>
+            )
+        )}
       </div>
+
     </div>
   );
 }
