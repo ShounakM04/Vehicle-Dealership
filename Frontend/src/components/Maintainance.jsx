@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
 import { jwtDecode } from "jwt-decode";
+import { ArrowLeft, Car, Upload, PenTool as Tool, Calendar, DollarSign, FileText } from 'lucide-react';
 
 export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, vehicleData, onMaintenanceAdded }) {
     const [title, setTitle] = useState('');

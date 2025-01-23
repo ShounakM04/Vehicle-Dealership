@@ -46,9 +46,10 @@ async function handleDashboard(req, res) {
     // console.log(carSearch)
     try {
         let query = `
-            SELECT o.ownername, o.owneremail, o.ownerphone, c.carmake, c.carname, c.registernumber, c.status, c.onhomepage 
+            SELECT o.ownername, o.owneremail, o.ownerphone, c.carmake, c.carname, c.registernumber, c.status, c.onhomepage, f.company_name
             FROM cardetails c
             JOIN ownerdetails o ON o.registernumber = c.registernumber
+            JOIN finance f ON f.registernumber = c.registernumber
             WHERE 1=1
         `;
 
@@ -68,7 +69,8 @@ async function handleDashboard(req, res) {
             carmake: row.carmake,
             carname: row.carname,
             registernumber: row.registernumber,
-            onhomepage: row.onhomepage
+            onhomepage: row.onhomepage,
+            company_name: row.company_name,  // Adjust with the actual column names from the finance table
         }));
 
         res.send(carDetails);

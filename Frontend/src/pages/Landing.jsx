@@ -246,7 +246,9 @@ import {
   Filter as FilterIcon,
   ChevronRight,
   Gauge,
-  DollarSign
+  DollarSign,
+  PiggyBank,
+  Wallet2
 } from 'lucide-react';
 
 export default function Landing() {
@@ -512,7 +514,7 @@ export default function Landing() {
                       </div>
                     )}
                     <div className="flex items-center text-slate-600">
-                      <DollarSign className="w-4 h-4 mr-2 text-blue-500" />
+                      <Wallet2 className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-2xl font-bold text-blue-500">₹{car.price}</span>
                     </div>
                   </div>

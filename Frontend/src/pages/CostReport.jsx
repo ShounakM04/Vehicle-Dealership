@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // For getting the params from the URL
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaTrashAlt } from 'react-icons/fa';
 import { Maintainance } from "../components/Maintainance";
 import Installment from "../components/Installment";
 import { jwtDecode } from "jwt-decode";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-
+import {
+  FileText,
+  Car,
+  PenTool as Tool,
+  DollarSign,
+  Download,
+  Plus,
+  Eye,
+} from "lucide-react";
+import { FaTrashAlt } from "react-icons/fa";
 const CostReport = () => {
-  const { id } = useParams(); // Get the car ID from the URL
-  const [soldStatus, setSoldStatus] = useState();
+  const { id } = useParams();
   const navigate = useNavigate();
-  // const [buying]
+  const [soldStatus, setSoldStatus] = useState();
   const [vehicleData, setvehicleData] = useState({
     insuranceCommission: 0,
     maintenanceRecords: [],
@@ -33,7 +40,6 @@ const CostReport = () => {
     totalAmountToBePaid: 0,
     remainingAmount: 0,
   });
-  // Form state for installments
   const [installmentAmount, setInstallmentAmount] = useState("");
   const [installmentDate, setInstallmentDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,24 +47,19 @@ const CostReport = () => {
   const [fetchedVehicleData, setFetchedVehicleData] = useState(null);
   const [vehicleImages, setvehicleImages] = useState([]);
   const [onsiteVehicleImages, setOnsiteVehicleImages] = useState([]);
-
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEmployee, setIsEmployee] = useState(false);
-
   const [maintainanceData, setMaintainanceData] = useState({
     carDetails: { carNo: "" },
     maintenanceRecords: [],
     totalMaintenanceCost: 0,
   });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageSerial, setSelectedImageSerial] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // State for screen overlay
-
   function cleanURL(url) {
-    // Use a regex to extract the correct URL
     const match = url.match(/https?:\/\/[^\s"']+/);
-    return match ? match[0] : ""; // Return the first matched URL or an empty string
+    return match ? match[0] : "";
   }
 
   useEffect(() => {
@@ -75,7 +76,6 @@ const CostReport = () => {
         setvehicleImages(images);
         setOnsiteVehicleImages(onsiteImages);
         setFinanceData(response.data.finance);
-        console.log(response.data);
 
         setvehicleData((prevData) => ({
           ...prevData,
@@ -109,7 +109,6 @@ const CostReport = () => {
       if (token) {
         try {
           decodedToken = jwtDecode(token);
-          // console.log(decodedToken);
         } catch (error) {
           console.error("Invalid token", error);
         }
@@ -138,24 +137,17 @@ const CostReport = () => {
 
       if (response.data && response.data.fileUrl) {
         toast.success("Bill generated successfully!");
-
-        // Open the URL in a new tab
         const newTab = window.open(response.data.fileUrl, "_blank");
         if (newTab) {
-          newTab.focus(); // Focus on the new tab
+          newTab.focus();
         } else {
           toast.error("Failed to open the bill in a new tab.");
         }
       }
       setLoading(false);
     } catch (error) {
-      // Handle the case when the bill already exists (or any error occurs)
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        toast.error(error.response.data.message); // Error message from the backend
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
       } else {
         toast.error("Failed to generate bill.");
       }
@@ -166,7 +158,6 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
-      // console.log("hi+" + id);
       const response = await axios.get("http://localhost:8000/maintainance", {
         params: { registernumber: id },
         headers: {
@@ -183,11 +174,8 @@ const CostReport = () => {
         return;
       }
 
-      
-
       const { maintenanceRecords, totalmaintainance } = response.data;
 
-      // Check if maintenanceRecords is an array before setting the state
       if (Array.isArray(maintenanceRecords)) {
         setMaintainanceData((prevData) => ({
           ...prevData,
@@ -199,7 +187,6 @@ const CostReport = () => {
       }
     } catch (error) {
       console.error("Error fetching maintenance details:", error);
-      // toast.error("Failed to fetch maintenance details.");
     }
   };
 
@@ -208,10 +195,8 @@ const CostReport = () => {
   }, [id]);
 
   const handleMaintenanceAdded = () => {
-    fetchMaintenanceDetails(); // Refresh maintenance records after adding a new one
+    fetchMaintenanceDetails();
   };
-
-
 
   const confirmDelete = (serialnum) => {
     setSelectedImageSerial(serialnum);
@@ -222,13 +207,15 @@ const CostReport = () => {
     try {
       setIsLoading(true); // Start fade-up effect
       console.log(maintainanceData.maintenanceRecords);
-      const deleteUrl = maintainanceData.maintenanceRecords[selectedImageSerial].maintainanceReceipt;
+      const deleteUrl =
+        maintainanceData.maintenanceRecords[selectedImageSerial]
+          .maintainanceReceipt;
       console.log("Del : " + deleteUrl);
 
       // Extract the uniqueID from the URL
-    
+
       let regex = new RegExp(`/${id}/MaintenanceDoc/(\\d+)\\?`);
-      
+
       const match = deleteUrl.match(regex);
       let uniqueID;
 
@@ -236,33 +223,34 @@ const CostReport = () => {
         uniqueID = match[1];
         console.log(uniqueID);
       } else {
-        console.log('No unique ID found');
+        console.log("No unique ID found");
       }
 
-      
       let path = `${id}/MaintenanceDoc/${uniqueID}`;
-      
 
       // console.log(uniqueID);
 
       await axios.delete(`http://localhost:8000/delete-image`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`
-        }, params: { path: path }
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+        params: { path: path },
       });
 
-      await axios.delete(`http://localhost:8000/maintainance/delete-maintainance`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`
-        }, params: {uniqueID:uniqueID, registernumber : id  }
-      });
-
+      await axios.delete(
+        `http://localhost:8000/maintainance/delete-maintainance`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          params: { uniqueID: uniqueID, registernumber: id },
+        }
+      );
 
       fetchMaintenanceDetails();
-      toast.success(`Maintenance with serial number ${selectedImageSerial} deleted successfully!`);
-
-
-
+      toast.success(
+        `Maintenance with serial number ${selectedImageSerial} deleted successfully!`
+      );
     } catch (error) {
       console.error("Error deleting notice image:", error);
       toast.error("Failed to delete notice image");
@@ -278,288 +266,353 @@ const CostReport = () => {
     setSelectedImageSerial(null);
   };
 
-
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col lg:flex-row p-5 bg-gray-100 ">
-        <div className="flex-1 p-5 bg-white shadow-lg rounded-lg mr-0 lg:mr-2 mb-2 lg:mb-0 ">
-          <h2 className="text-2xl font-bold mb-2">Vehicle Details</h2>
-          {/* {console.log("efef",vehicleData.buyingPrice)} */}
-
-          <div className="ml-auto mb-4 flex space-x-4">
-            <button
-              onClick={() =>
-                navigate(`/dashboard/costReport/${id}/addDoc`)
-              }
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Add Doc
-            </button>
-            <button
-              onClick={() =>
-                navigate(`/dashboard/costReport/${id}/viewDoc`)
-              }
-              className="bg-green-500 text-white px-4 py-2 rounded"
-            >
-              View Docs
-            </button>
-            {soldStatus && (
-              <button
-                onClick={handleGenerateBill}
-                className="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                {loading ? "Downloading...." : "Download Bill"}
-              </button>
-            )}
-          </div>
-          {/* Car Details */}
-          {/* Car Details and Owner Details */}
-          <div className="mb-2 p-4 bg-blue-200 text-blue-800 font-semibold rounded">
-            <div className="flex justify-between">
-              <div className="w-1/2 pr-2">
-                <h2 className="font-bold text-xl">Vehicle Details</h2>
-                <p className="break-words">
-                  Registration Number:{" "}
-                  {vehicleData.carDetails.carNo || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Vehicle Company:{" "}
-                  {vehicleData.carDetails.carCompany || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Model: {vehicleData.carDetails.model || "Not Provided"}
-                </p>
-              </div>
-              <div className="w-1/2 pl-2">
-                <h4 className="font-bold text-xl">Owner Details</h4>
-                <p className="break-words">
-                  Owner: {vehicleData.carDetails.ownerName || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Phone: {vehicleData.carDetails.ownerPhone || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Email: {vehicleData.carDetails.ownerEmail || "Not Provided"}
-                </p>
-              </div>
-            </div>
-            {console.log(financeData)}
-            <div className="flex justify-between mt-4">
-              <div className="w-1/2 pr-2">
-                <h2 className="font-bold text-xl">Finance Details</h2>
-                <p className="break-words">
-                  Finance Company: {financeData?.company_name || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Manager 1: {financeData?.manager_name1 || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Manager 1 Contact: {financeData?.contact1 || "Not Provided"}
-                </p>
-              </div>
-              <div className="w-1/2 pl-2">
-                <h2 className="font-bold text-xl">&nbsp;</h2>
-                <p className="break-words">
-                  Finance Company Branch:{" "}
-                  {financeData?.branch_name || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Manager 2: {financeData?.manager_name2 || "Not Provided"}
-                </p>
-                <p className="break-words">
-                  Manager 2 Contact: {financeData?.contact2 || "Not Provided"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full flex flex-col md:flex-row justify-center mx-auto gap-6">
-            {/* First Carousel - Inventory Images */}
-            <div className="w-full md:w-1/2">
-              {vehicleImages.length !== 0 ? (
-                <p className="mb-2">Inventory Images</p>
-              ) : (
-                <p className="mb-2">Inventory Images Not Available</p>
-              )}
-              <Carousel
-                showArrows={true}
-                autoPlay={true}
-                infiniteLoop={true}
-                showThumbs={false}
-                className="rounded-t-lg"
-              >
-                {vehicleImages?.map((image, index) => (
-                  <div key={index}>
-                    <img
-                      src={image}
-                      alt={`Carousel 1 Image ${index + 1}`}
-                      className="w-full h-auto rounded-t-lg max-h-[16vh] object-contain"
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            </div>
-
-            {/* Second Carousel - OnSite Vehicle Images */}
-            <div className="w-full md:w-1/2">
-              {onsiteVehicleImages.length !== 0 ? (
-                <p className="mb-2">OnSite Vehicle Images</p>
-              ) : (
-                <p className="mb-2">OnSite Vehicle Images Not Available</p>
-              )}
-              <Carousel
-                showArrows={true}
-                autoPlay={true}
-                infiniteLoop={true}
-                showThumbs={false}
-                className="rounded-t-lg"
-              >
-                {onsiteVehicleImages?.map((image, index) => (
-                  <div key={index}>
-                    <img
-                      src={image}
-                      alt={`OnSite Vehicle Image ${index + 1}`}
-                      className="w-full h-auto rounded-t-lg max-h-[16vh] object-contain"
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            </div>
-          </div>
-
-          {/* Maintenance Records */}
-          <h3 className="text-lg font-semibold mt-2 ">Maintenance Records:</h3>
-          <div className="overflow-y-auto max-h-40">
-            {maintainanceData.maintenanceRecords.length > 0 ? (
-              <ul className="mt-2">
-                {maintainanceData.maintenanceRecords?.map((record, index) => {
-                  return (
-                    <>
-                      <li
-                        key={index}
-                        className="mb-2 p-4 bg-yellow-200 text-yellow-800 rounded flex justify-between items-center"
+    <div className="min-h-screen bg-gray-50 py-2 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Column */}
+          <div className="space-y-8">
+            {/* Vehicle Details Card */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                    <Car className="w-6 h-6 mr-2 text-blue-600" />
+                    Vehicle Details
+                  </h2>
+                  {isAdmin && (
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={() =>
+                          navigate(`/dashboard/costReport/${id}/addAdminDoc`)
+                        }
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       >
-                        <div>
-                          <p className="font-medium text-black">
-                            {index + 1}) {record.description}
-                          </p>
-                          <p>Cost: ₹{record.price}</p>
-                          <p>
-                            Date:{" "}
-                            {new Date(record.maintainanceDate).toLocaleDateString(
-                              "en-GB"
-                            )}
-                          </p>
-                          <p>Done By: {record.username}</p>
-                          <p>
-                            Receipt:{" "}
-                            <a
-                              href={record.maintainanceReceipt}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Doc
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/dashboard/costReport/${id}/viewAdminDoc`)
+                        }
+                        className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Docs
+                      </button>
+                      {soldStatus && (
+                        <button
+                          onClick={handleGenerateBill}
+                          className="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+                          disabled={loading}
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          {loading ? "Downloading..." : "Download Bill"}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Vehicle and Owner Details Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-3">
+                      Vehicle Information
+                    </h3>
+                    <div className="space-y-2">
+                      <p className="text-blue-800">
+                        <span className="font-medium">Registration:</span>{" "}
+                        {vehicleData.carDetails.carNo || "Not Provided"}
+                      </p>
+                      <p className="text-blue-800">
+                        <span className="font-medium">Company:</span>{" "}
+                        {vehicleData.carDetails.carCompany || "Not Provided"}
+                      </p>
+                      <p className="text-blue-800">
+                        <span className="font-medium">Model:</span>{" "}
+                        {vehicleData.carDetails.model || "Not Provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold text-green-900 mb-3">
+                      Owner Information
+                    </h3>
+                    <div className="space-y-2">
+                      <p className="text-green-800">
+                        <span className="font-medium">Name:</span>{" "}
+                        {vehicleData.carDetails.ownerName || "Not Provided"}
+                      </p>
+                      <p className="text-green-800">
+                        <span className="font-medium">Phone:</span>{" "}
+                        {vehicleData.carDetails.ownerPhone || "Not Provided"}
+                      </p>
+                      <p className="text-green-800">
+                        <span className="font-medium">Email:</span>{" "}
+                        {vehicleData.carDetails.ownerEmail || "Not Provided"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Finance Details */}
+                <div className="bg-purple-50 p-4 rounded-lg mb-6">
+                  <h3 className="text-lg font-semibold text-purple-900 mb-3">
+                    Finance Details
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <p className="text-purple-800">
+                        <span className="font-medium">Company:</span>{" "}
+                        {financeData?.company_name || "Not Provided"}
+                      </p>
+                      <p className="text-purple-800">
+                        <span className="font-medium">Manager 1:</span>{" "}
+                        {financeData?.manager_name1 || "Not Provided"}
+                        {financeData?.contact1 && ` (${financeData.contact1})`}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-purple-800">
+                        <span className="font-medium">Branch:</span>{" "}
+                        {financeData?.branch_name || "Not Provided"}
+                      </p>
+                      <p className="text-purple-800">
+                        <span className="font-medium">Manager 2:</span>{" "}
+                        {financeData?.manager_name2 || "Not Provided"}
+                        {financeData?.contact2 && ` (${financeData.contact2})`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image Galleries */}
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Vehicle Images
+                  </h2>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Inventory Images */}
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">
+                        Inventory Images
+                      </h3>
+                      {vehicleImages.length > 0 ? (
+                        <Carousel
+                          showArrows={true}
+                          autoPlay={true}
+                          infiniteLoop={true}
+                          showThumbs={false}
+                          className="rounded-lg overflow-hidden"
+                        >
+                          {vehicleImages?.map((image, index) => (
+                            <div
+                              key={index}
+                              className="aspect-video bg-gray-100"
                             >
-                              View Receipt
-                            </a>
+                              <img
+                                src={image}
+                                alt={`Inventory ${index + 1}`}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          ))}
+                        </Carousel>
+                      ) : (
+                        <div className="flex items-center justify-center h-40 bg-gray-50 rounded-lg">
+                          <p className="text-gray-500">
+                            No inventory images available
                           </p>
                         </div>
-                      {isAdmin && (<div className="flex justify-end mt-2">
-                        <button
-                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring focus:ring-blue-300 transition"
-                          onClick={() => confirmDelete(index)}
+                      )}
+                    </div>
+
+                    {/* Onsite Images */}
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">
+                        Onsite Images
+                      </h3>
+                      {onsiteVehicleImages.length > 0 ? (
+                        <Carousel
+                          showArrows={true}
+                          autoPlay={true}
+                          infiniteLoop={true}
+                          showThumbs={false}
+                          className="rounded-lg overflow-hidden"
                         >
-                          <FaTrashAlt />
-                        </button>
-                      </div>)}
-                      </li>
-
-                    </>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p>No maintenance records available.</p>
-            )}
-          </div>
-
-          {/* Total Maintenance Cost */}
-
-          <div className="mt-4 p-6 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2">
-              Total Maintenance Cost:{" "}
-              <span className="font-semibold">
-                ₹{maintainanceData.totalMaintenanceCost}
-              </span>
-            </h3>
-
-            {isAdmin && (
-              <>
-                <h3 className="text-xl font-bold mb-2">
-                  Buying Price: {/* {console.log(vehicleData.carDetails)} */}
-                  <span className="font-semibold">
-                    ₹{vehicleData.carDetails.buyingprice}
-                  </span>
-                </h3>
-                <h3 className="text-xl font-bold">
-                  Total:{" "}
-                  <span className="font-semibold">
-                    ₹
-                    {Number(vehicleData.carDetails.buyingprice) +
-                      maintainanceData.totalMaintenanceCost}
-                  </span>
-                </h3>
-              </>
-            )}
-          </div>
-
-          {/* Insurance Commission */}
-          {/* <div className="mt-4 p-4 bg-orange-200 text-orange-800 font-semibold rounded">
-            <h3 className="text-lg">Insurance Commission: ₹{vehicleData.insuranceCommission}</h3>
-          </div> */}
-
-          {/* Net Profit */}
-          {/* <div className="mt-4 p-4 bg-green-200 text-green-800 font-semibold rounded">
-            <h3 className="text-lg">Net Profit: ₹{netProfit}</h3>
-          </div> */}
-        </div>
-
-        {/* Form Section */}
-        <div className="flex-1 p-5 bg-white shadow-lg rounded-lg">
-          {soldStatus === false ? (
-            <Maintainance
-              registernumber={id}
-              isDriver={false}
-              isEmployee={isEmployee}
-              isAdmin={isAdmin}
-              vehicleData={fetchedVehicleData}
-              onMaintenanceAdded={handleMaintenanceAdded}
-            />
-          ) : (
-            <Installment carID={id} isAdmin={isAdmin} soldStatus={soldStatus} />
-          )}
-
-          {/* <h2 className="text-2xl font-bold mt-6 mb-4">Set Total Amount to be Paid</h2>
-          <form onSubmit={handleTotalAmountSubmit}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Total Amount</label>
-              <input
-                type="number"
-                value={totalAmountToBePaid} 
-                onChange={(e) => setTotalAmountToBePaid(e.target.value)}
-                required
-                className="border border-gray-300 rounded p-2 w-full"
-              />
+                          {onsiteVehicleImages?.map((image, index) => (
+                            <div
+                              key={index}
+                              className="aspect-video bg-gray-100"
+                            >
+                              <img
+                                src={image}
+                                alt={`Onsite ${index + 1}`}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          ))}
+                        </Carousel>
+                      ) : (
+                        <div className="flex items-center justify-center h-40 bg-gray-50 rounded-lg">
+                          <p className="text-gray-500">
+                            No onsite images available
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button type="submit" className="bg-purple-500 text-white p-2 rounded">
-              Set Total Amount
-            </button>
-          </form> */}
-        </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center mb-4">
+                  <FileText className="w-6 h-6 mr-2 text-indigo-600" />
+                  Maintenance Records
+                </h3>
+                <div className="overflow-y-auto max-h-48">
+                  {maintainanceData.maintenanceRecords.length > 0 ? (
+                    <div className="space-y-4">
+                      {maintainanceData.maintenanceRecords.map(
+                        (record, index) => (
+                          <div
+                            key={index}
+                            className="bg-indigo-50 rounded-lg p-4 transition-transform"
+                          >
+                            <div className="flex justify-between items-start">
+                              <div className="space-y-2">
+                                <p className="font-medium text-indigo-900">
+                                  {index + 1}. {record.description}
+                                </p>
+                                <p className="text-indigo-700">
+                                  <span className="font-semibold">Cost:</span> ₹
+                                  {record.price}
+                                </p>
+                                <p className="text-indigo-700">
+                                  <span className="font-semibold">Date:</span>{" "}
+                                  {new Date(
+                                    record.maintainanceDate
+                                  ).toLocaleDateString("en-GB")}
+                                </p>
+                                <p className="text-indigo-700">
+                                  <span className="font-semibold">
+                                    Done By:
+                                  </span>{" "}
+                                  {record.username}
+                                </p>
+                                <a
+                                  href={record.maintainanceReceipt}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium"
+                                >
+                                  <FileText className="w-4 h-4 mr-1" />
+                                  View Receipt
+                                </a>
+                              </div>
+                              {isAdmin && (
+                                <div className="ml-4">
+                                  <button
+                                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg focus:outline-none focus:ring focus:ring-red-300 transition"
+                                    onClick={() => confirmDelete(index)}
+                                    title="Delete Record"
+                                  >
+                                    <FaTrashAlt className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-center py-4">
+                      No maintenance records available.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
 
-        {/* Confirmation Modal */}
+            {/* Maintenance Summary Card */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center mb-4">
+                  <Tool className="w-6 h-6 mr-2 text-orange-600" />
+                  Maintenance Summary
+                </h3>
+                <div className="bg-orange-50 rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-orange-900 font-medium">
+                      Total Maintenance Cost:
+                    </span>
+                    <span className="text-orange-900 font-bold">
+                      ₹{maintainanceData.totalMaintenanceCost}
+                    </span>
+                  </div>
+                  {isAdmin && (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-orange-900 font-medium">
+                          Buying Price:
+                        </span>
+                        <span className="text-orange-900 font-bold">
+                          ₹{vehicleData.carDetails.buyingprice}
+                        </span>
+                      </div>
+                      <div className="border-t border-orange-200 pt-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-orange-900 font-medium">
+                            Total Investment:
+                          </span>
+                          <span className="text-orange-900 font-bold">
+                            ₹
+                            {Number(vehicleData.carDetails.buyingprice) +
+                              maintainanceData.totalMaintenanceCost}
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Maintenance Records */}
+          </div>
+
+          {/* Right Column */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6">
+              {soldStatus === false ? (
+                <Maintainance
+                  registernumber={id}
+                  isDriver={false}
+                  isEmployee={isEmployee}
+                  isAdmin={isAdmin}
+                  vehicleData={fetchedVehicleData}
+                  onMaintenanceAdded={handleMaintenanceAdded}
+                />
+              ) : (
+                <Installment
+                  carID={id}
+                  isAdmin={isAdmin}
+                  soldStatus={soldStatus}
+                />
+              )}
+            </div>
+          </div>
+        </div>
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-              <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this image?</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Are you sure you want to delete this image?
+              </h3>
               <div className="flex justify-end">
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
@@ -579,7 +632,6 @@ const CostReport = () => {
             </div>
           </div>
         )}
-
       </div>
       <ToastContainer />
     </div>

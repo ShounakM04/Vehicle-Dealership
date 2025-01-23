@@ -150,7 +150,7 @@ const Dashboard = () => {
         params,
       });
       setCarDetails(response.data);
-      // console.log(response.data);
+      console.log(response.data);
     } catch (error) {
       if (error.response?.status === 400) {
         navigate("/admin");
@@ -533,7 +533,7 @@ const Dashboard = () => {
                   <tr key={index} className="border-b">
                     <td className="p-2">{car.ownername}</td>
                     <td className="p-2">{car.registernumber}</td>
-                    <td className="p-2">{car.owneremail}</td>
+                    <td className="p-2">{car.company_name}</td>
                     <td className="p-2">{car.ownerphone}</td>
                     <td className="p-2">{car.carmake}</td>
                     <td className="p-2">{car.carname}</td>
