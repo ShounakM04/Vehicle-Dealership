@@ -217,6 +217,8 @@
 // }
 
 // export default DocumentUpload;
+
+
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUploadURL, uploadToS3 } from '../../utils/s3UploadFunctions.jsx';
@@ -353,30 +355,45 @@ const DocumentUpload = ({ isOffice }) => {
 
             {id && <h2 className="text-xl font-bold mb-2 mt-2">Register Number : {id}</h2>}
 
-            <div className='mt-6'>
+            <div className="mt-6">
                 <h2 className="text-xl font-bold mb-4">Upload Documents</h2>
 
-                {/* Mobile-friendly camera input */}
+                {/* Camera Capture Input */}
                 <input
                     type="file"
                     ref={cameraInputRef}
                     multiple
-                    // accept="image/*"
+                    accept="image/*"
                     capture="environment"
                     onChange={handleImageChange}
                     className="hidden"
                 />
 
-                {/* Camera Capture Button */}
-                <div className="flex space-x-4 mb-4">
+                {/* File Selection Input */}
+                <div className="flex flex-col md:flex-row md:space-x-4 mb-4">
                     <button
                         type="button"
                         onClick={triggerCameraInput}
-                        className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                        className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-2 md:mb-0"
                     >
                         <Camera className="mr-2" size={20} />
-                        Continue Capturing
+                        Camera
                     </button>
+
+                    <label
+                        htmlFor="fileInput"
+                        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
+                    >
+                        <input
+                            id="fileInput"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="hidden"
+                        />
+                        Choose Files
+                    </label>
                 </div>
 
                 {/* Image Preview Grid */}
@@ -405,7 +422,9 @@ const DocumentUpload = ({ isOffice }) => {
                 )}
 
                 <div className="mb-4">
-                    <label htmlFor="description" className="block text-gray-700 text-sm font-semibold mb-2">Description</label>
+                    <label htmlFor="description" className="block text-gray-700 text-sm font-semibold mb-2">
+                        Description
+                    </label>
                     <textarea
                         id="description"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:ring-teal-300"
@@ -415,6 +434,7 @@ const DocumentUpload = ({ isOffice }) => {
                     />
                 </div>
             </div>
+
 
             <button
                 onClick={handleSubmit}
