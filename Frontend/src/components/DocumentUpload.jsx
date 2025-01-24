@@ -388,7 +388,7 @@ const DocumentUpload = ({ isOffice }) => {
                             id="fileInput"
                             type="file"
                             multiple
-                            accept="image/*"
+                            // accept="image/*
                             onChange={handleImageChange}
                             className="hidden"
                         />
