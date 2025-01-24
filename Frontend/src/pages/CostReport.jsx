@@ -284,7 +284,7 @@ const CostReport = () => {
                     <div className="flex space-x-3">
                       <button
                         onClick={() =>
-                          navigate(`/dashboard/costReport/${id}/addAdminDoc`)
+                          navigate(`/dashboard/costReport/${id}/addDoc`)
                         }
                         className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       >
@@ -293,7 +293,7 @@ const CostReport = () => {
                       </button>
                       <button
                         onClick={() =>
-                          navigate(`/dashboard/costReport/${id}/viewAdminDoc`)
+                          navigate(`/dashboard/costReport/${id}/viewDoc`)
                         }
                         className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
                       >

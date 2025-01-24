@@ -220,7 +220,13 @@ function AdminForm() {
           Back to Dashboard
         </button>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault(); // Prevent default form submission on Enter
+          }
+        }}
+      >
         <h2 className="text-xl font-bold mb-2">Vehicle Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
@@ -342,7 +348,7 @@ function AdminForm() {
                 htmlFor="sellPrice"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Vehicle Selling Price
+                Vehicle Display Price
               </label>
               <input
                 type="number"

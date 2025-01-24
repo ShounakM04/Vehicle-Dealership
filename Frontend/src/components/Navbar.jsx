@@ -234,11 +234,16 @@ function Navbar() {
           {/* Left Section */}
           <div>
             <div className="flex items-center">
-              <img src="/Assets/Images/call.svg" className="h-6" alt="" />
-              <p className="font-medium ml-2">General: +91 7058600679</p>
+              <img src="/Assets/Images/call.svg" className="h-6" alt="Call Icon" />
+              <a href="tel:+917058600679" className="font-medium ml-2 hover:underline text-blue-600">
+                General: +91 7058600679
+              </a>
             </div>
-            <p className="font-medium mt-1">Office: +91 9272111777</p>
+            <a href="tel:+919272111777" className="font-medium mt-1 block hover:underline text-blue-600">
+              Office: +91 9272111777
+            </a>
           </div>
+
 
           {/* Right Section */}
           <div className="ml-auto">

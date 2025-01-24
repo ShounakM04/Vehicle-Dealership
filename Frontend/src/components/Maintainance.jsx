@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -30,6 +30,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
 
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     if (isEmployee == true || isAdmin == true) {
         useEffect(() => {
@@ -97,6 +98,11 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
             setFiles([]);
             setMaintainanceDate('');
             setRole('');
+
+            // Clear the file input using ref
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
 
             toast.success('Maintenance record added successfully!');
             // console.log(response.data);
@@ -347,6 +353,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
                             <input
                                 type="file"
                                 required
+                                ref={fileInputRef}
                                 onChange={(e) => setFiles([...e.target.files])}
                                 className="border border-gray-300 rounded p-2 w-full"
                             />
