@@ -34,7 +34,7 @@ function CarDetails() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8000/landingcar/${params.id}`,
+          `https://www.nikhilmotors.com/api/landingcar/${params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -241,7 +241,7 @@ function CarDetails() {
                     value={carData.car.kilometers}
                   />
                 )}
-                 {carData.car.registration_date &&
+                {carData.car.registration_date &&
                   new Date(carData.car.registration_date).getTime() !== 0 && (
                     <DetailItem
                       icon={<Calendar />}
@@ -261,7 +261,7 @@ function CarDetails() {
                       ).toLocaleDateString("en-GB")}
                     />
                   )}
-                   {carData.insurance && carData.insurance.insuranceenddate &&
+                {carData.insurance && carData.insurance.insuranceenddate &&
                   new Date(carData.insurance.insuranceenddate).getTime() !== 0 && (
                     <DetailItem
                       icon={<Calendar />}
@@ -271,7 +271,7 @@ function CarDetails() {
                       ).toLocaleDateString("en-GB")}
                     />
                   )}
-               
+
               </div>
 
               {/* Price Section */}

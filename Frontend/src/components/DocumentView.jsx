@@ -61,7 +61,7 @@ export default function DocumentView({ isOffice }) {
             if (id) {
                 folderPath = `${id}/AdminDocuments`;
             }
-            const response1 = await axios.get('http://localhost:8000/get-images', {
+            const response1 = await axios.get('https://www.nikhilmotors.com/api/get-images', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 },
@@ -71,7 +71,7 @@ export default function DocumentView({ isOffice }) {
             });
             setFetchedImages(response1.data);
 
-            const response2 = await axios.get('http://localhost:8000/Description', {
+            const response2 = await axios.get('https://www.nikhilmotors.com/api/Description', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -142,16 +142,16 @@ export default function DocumentView({ isOffice }) {
 
             // console.log(uniqueID);
 
-            await axios.delete(`http://localhost:8000/delete-image`, {
+            await axios.delete(`https://www.nikhilmotors.com/api/delete-image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }, params: { path: path }
             });
 
-            await axios.delete(`http://localhost:8000/delete-imagedescription`, {
+            await axios.delete(`https://www.nikhilmotors.com/api/delete-imagedescription`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
-                }, params: { uniqueID:uniqueID}
+                }, params: { uniqueID: uniqueID }
             });
 
 
@@ -245,8 +245,7 @@ export default function DocumentView({ isOffice }) {
                                 const uploadedBy = entry?.uploadedBy || "Unknown";
                                 // console.log(uploadedBy);
 
-                                if(isAdmin || isOffice)
-                                {  
+                                if (isAdmin || isOffice) {
                                     return (
                                         <div
                                             key={index}
@@ -301,8 +300,7 @@ export default function DocumentView({ isOffice }) {
                                         </div>
                                     );
                                 }
-                                else if(isEmployee &&  uploadedBy == "Employee")
-                                {
+                                else if (isEmployee && uploadedBy == "Employee") {
                                     return (
                                         <div
                                             key={index}
@@ -357,7 +355,7 @@ export default function DocumentView({ isOffice }) {
                                         </div>
                                     );
                                 }
-                                else{
+                                else {
                                     return null;
                                 }
                             })}

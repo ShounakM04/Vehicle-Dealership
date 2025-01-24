@@ -42,7 +42,7 @@ const Dashboard = () => {
 
       const tablename = "cardetails";
       const fieldToEdit = "onhomepage"
-      const response = await axios.post("http://localhost:8000/edit-fields", {
+      const response = await axios.post("https://www.nikhilmotors.com/api/edit-fields", {
         tablename: tablename,
         fieldToEdit: fieldToEdit,
         newValue: newValue,
@@ -97,13 +97,16 @@ const Dashboard = () => {
   const fetchTotalSellingPrice = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/dashboard/total-selling-price",
+        "https://www.nikhilmotors.com/api/dashboard/total-selling-price",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         }
       );
+      if (!response) {
+        return;
+      }
       setTotalSellingPrice(response.data.totalSellingPrice);
     } catch (error) {
       console.error("Error fetching total selling price:", error);
@@ -112,7 +115,7 @@ const Dashboard = () => {
 
   const downloadLogFile = async () => {
     try {
-      const response = await fetch("http://localhost:8000/logs/download", {
+      const response = await fetch("https://www.nikhilmotors.com/api/logs/download", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
@@ -143,7 +146,7 @@ const Dashboard = () => {
       if (query) params.carSearch = query;
 
       // console.log("Query : " + query);
-      const response = await axios.get("http://localhost:8000/dashboard", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -182,7 +185,7 @@ const Dashboard = () => {
   const fetchMonthlyCosts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/miscellaneous-costs/current-month",
+        "https://www.nikhilmotors.com/api/miscellaneous-costs/current-month",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -216,7 +219,7 @@ const Dashboard = () => {
 
   const fetchAccountDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/accountDetails", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/accountDetails", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -231,7 +234,7 @@ const Dashboard = () => {
   const fetchProfit = async () => {
 
     try {
-      const response = await axios.get(`http://localhost:8000/profits/monthly`, {
+      const response = await axios.get(`https://www.nikhilmotors.com/api/profits/monthly`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         }

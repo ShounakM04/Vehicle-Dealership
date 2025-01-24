@@ -48,7 +48,7 @@
 //         if (fuelType) params.fuelType = fuelType;
 //         if (carType) params.carMake = carType;
 //         if (query) params.carSearch = query;
-//         const response = await axios.get(`http://localhost:8000/`, { params });
+//         const response = await axios.get(`https://www.nikhilmotors.com/api/`, { params });
 //         // console.log(response.data);
 //         const data = response.data.carsWithImages;
 //         const carsData = data?.map((car) => {
@@ -80,7 +80,7 @@
 //       try {
 //         let folderPath;
 //         folderPath = 'Notices/'
-//         const response = await axios.get('http://localhost:8000/get-images', {
+//         const response = await axios.get('https://www.nikhilmotors.com/api/get-images', {
 //           params: {
 //             folderPath: folderPath
 //           }
@@ -237,11 +237,11 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { SearchContext } from "../context/SearchContext";
 import { useContext } from "react";
-import { 
-  Fuel, 
-  Car, 
-  Truck, 
-  Bike, 
+import {
+  Fuel,
+  Car,
+  Truck,
+  Bike,
   Tag,
   Filter as FilterIcon,
   ChevronRight,
@@ -290,7 +290,7 @@ export default function Landing() {
         if (fuelType) params.fuelType = fuelType;
         if (carType) params.carMake = carType;
         if (query) params.carSearch = query;
-        const response = await axios.get(`http://localhost:8000/`, { params });
+        const response = await axios.get(`https://www.nikhilmotors.com/api/`, { params });
         const data = response.data.carsWithImages;
         const carsData = data?.map((car) => {
           const firstImage = car.displayImage;
@@ -318,7 +318,7 @@ export default function Landing() {
     const fetchNoticeImages = async () => {
       try {
         let folderPath = 'Notices/';
-        const response = await axios.get('http://localhost:8000/get-images', {
+        const response = await axios.get('https://www.nikhilmotors.com/api/get-images', {
           params: { folderPath }
         });
         const imageUrls = response.data;
@@ -365,8 +365,8 @@ export default function Landing() {
             </h2>
             <div className="space-y-3">
               {["petrol", "diesel", "cng"]?.map((type) => (
-                <label 
-                  key={type} 
+                <label
+                  key={type}
                   className="flex items-center p-1 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                 >
                   <input
@@ -393,7 +393,7 @@ export default function Landing() {
             </h2>
             <div className="space-y-3">
               {["car", "truck", "bike", "tempo"]?.map((type) => (
-                <label 
+                <label
                   key={type}
                   className="flex items-center p-1 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                 >

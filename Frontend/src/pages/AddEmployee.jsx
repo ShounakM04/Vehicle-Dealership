@@ -21,7 +21,7 @@ function AddEmployee() {
             return;
         }
 
-        const endpoint = "http://localhost:8000/register?isEmployee=true";
+        const endpoint = "https://www.nikhilmotors.com/api/register?isEmployee=true";
 
         try {
             setIsLoading(true);

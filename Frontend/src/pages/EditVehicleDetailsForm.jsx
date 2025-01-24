@@ -32,12 +32,12 @@ const EditVehicleDetailsForm = () => {
       registration_date: "",
       description: "",
       kilometers: "",
-      company_name:"",
-      branch_name:"",
-      manager_name1:"",
-      contact1:"",
-      manager_name2:"",
-      contact2:"",
+      company_name: "",
+      branch_name: "",
+      manager_name1: "",
+      contact1: "",
+      manager_name2: "",
+      contact2: "",
     },
   });
 
@@ -64,12 +64,12 @@ const EditVehicleDetailsForm = () => {
     registration_date: false,
     description: false,
     kilometers: false,
-    company_name:false,
-    branch_name:false,
-    manager_name1:false,
-    contact1:false,
-    manager_name2:false,
-    contact2:false,
+    company_name: false,
+    branch_name: false,
+    manager_name1: false,
+    contact1: false,
+    manager_name2: false,
+    contact2: false,
   });
 
   const [inputValue, setInputValue] = useState("");
@@ -77,7 +77,7 @@ const EditVehicleDetailsForm = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`, {
+        const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -111,12 +111,12 @@ const EditVehicleDetailsForm = () => {
             owneremail: owner?.owneremail,
             owneraddress: owner?.owneraddress,
 
-            company_name:finance?.company_name,
-            branch_name:finance?.branch_name,
-            manager_name1:finance?.manager_name1,
-            contact1:finance?.contact1,
-            manager_name2:finance?.manager_name2,
-            contact2:finance?.contact2,
+            company_name: finance?.company_name,
+            branch_name: finance?.branch_name,
+            manager_name1: finance?.manager_name1,
+            contact1: finance?.contact1,
+            manager_name2: finance?.manager_name2,
+            contact2: finance?.contact2,
           },
         }));
       } catch (error) {
@@ -147,7 +147,7 @@ const EditVehicleDetailsForm = () => {
       fieldToEdit == "owneraddress"
     ) {
       tablename = "ownerdetails";
-    } 
+    }
     if (
       fieldToEdit == "company_name" ||
       fieldToEdit == "branch_name" ||
@@ -161,7 +161,7 @@ const EditVehicleDetailsForm = () => {
     try {
       setWait(true);
       const response = await axios.post(
-        "http://localhost:8000/edit-fields",
+        "https://www.nikhilmotors.com/api/edit-fields",
         {
           tablename: tablename,
           fieldToEdit: fieldToEdit,

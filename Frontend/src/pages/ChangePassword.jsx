@@ -30,7 +30,7 @@ function ChangePassword() {
             return;
         }
 
-        const endpoint = "http://localhost:8000/dashboard/change-password"; // Update with your actual endpoint
+        const endpoint = "https://www.nikhilmotors.com/api/dashboard/change-password"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);

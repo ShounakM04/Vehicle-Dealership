@@ -67,7 +67,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
 
             // console.log(globalRegisterNumber, description, price, username, userdesignation, maintainanceDate)
-            const response = await axios.post('http://localhost:8000/maintainance',
+            const response = await axios.post('https://www.nikhilmotors.com/api/maintainance',
                 { registernumber: globalRegisterNumber, description, price, username, maintainanceDate },
                 {
                     headers: {
@@ -77,12 +77,14 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
 
             if (files.length != 0) {
                 const nextIndex = response.data.nextIndex;
-                // console.log("nextIndex : " + nextIndex);;
+                console.log("nextIndex : " + nextIndex);;
                 // Handle other image uploads if necessary (similar to DisplayImage)
 
                 const file = files[0];
                 const maintainanceDocPath = `${globalRegisterNumber}/MaintenanceDoc/${nextIndex}`;
                 const maintainanceDocUrl = await getUploadURL(file, maintainanceDocPath);
+                console.log("Url : " + maintainanceDocUrl);
+
                 await uploadToS3(maintainanceDocUrl, file);
             }
             // Call the parent callback to refresh maintenance records
@@ -115,7 +117,7 @@ export function Maintainance({ registernumber, isDriver, isEmployee, isAdmin, ve
         setError(null); // Reset error before fetch
         try {
             const response = await axios.get(
-                `http://localhost:8000/car/${currId}`, {
+                `https://www.nikhilmotors.com/api/car/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }

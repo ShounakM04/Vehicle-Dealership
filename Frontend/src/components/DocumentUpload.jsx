@@ -103,7 +103,7 @@
 //                 docuploadedby = "Employee";
 //             }
 
-//             await axios.post('http://localhost:8000/Description',
+//             await axios.post('https://www.nikhilmotors.com/api/Description',
 //                 {
 //                     uniqueID: uniqueID,
 //                     description: description,
@@ -260,7 +260,7 @@ const DocumentUpload = ({ isOffice }) => {
     const handleImageChange = (e) => {
         const newFiles = Array.from(e.target.files);
         setImages(prevImages => [...prevImages, ...newFiles]);
-        
+
         // Reset the input to allow re-selection of the same files
         if (e.target.type === 'file') {
             e.target.value = '';
@@ -268,7 +268,7 @@ const DocumentUpload = ({ isOffice }) => {
     };
 
     const removeImage = (indexToRemove) => {
-        setImages(prevImages => 
+        setImages(prevImages =>
             prevImages.filter((_, index) => index !== indexToRemove)
         );
     };
@@ -322,7 +322,7 @@ const DocumentUpload = ({ isOffice }) => {
             let docType = (isOffice == true) ? "Office" : "Vehicle";
             let docuploadedby = isAdmin ? "Admin" : (isEmployee ? "Employee" : "");
 
-            await axios.post('http://localhost:8000/Description',
+            await axios.post('https://www.nikhilmotors.com/api/Description',
                 {
                     uniqueID: uniqueID,
                     description: description,
@@ -352,7 +352,7 @@ const DocumentUpload = ({ isOffice }) => {
             </div>
 
             {id && <h2 className="text-xl font-bold mb-2 mt-2">Register Number : {id}</h2>}
-            
+
             <div className='mt-6'>
                 <h2 className="text-xl font-bold mb-4">Upload Documents</h2>
 
@@ -369,12 +369,12 @@ const DocumentUpload = ({ isOffice }) => {
 
                 {/* Camera Capture Button */}
                 <div className="flex space-x-4 mb-4">
-                    <button 
-                        type="button" 
-                        onClick={triggerCameraInput} 
+                    <button
+                        type="button"
+                        onClick={triggerCameraInput}
                         className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                     >
-                        <Camera className="mr-2" size={20} /> 
+                        <Camera className="mr-2" size={20} />
                         Continue Capturing
                     </button>
                 </div>
@@ -415,7 +415,7 @@ const DocumentUpload = ({ isOffice }) => {
                     />
                 </div>
             </div>
-            
+
             <button
                 onClick={handleSubmit}
                 className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}

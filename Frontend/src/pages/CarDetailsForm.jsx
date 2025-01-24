@@ -155,7 +155,7 @@ function AdminForm() {
 
       // Submit form data after images are uploaded
       await axios.post(
-        "http://localhost:8000/details",
+        "https://www.nikhilmotors.com/api/details",
         {
           vehicleName,
           brandName,
@@ -182,13 +182,13 @@ function AdminForm() {
           registration_date,
           description,
           kilometers,
-          company_name:companyName,
-          branch_name:branchName,
-          manager_name1:managerName1,
-          contact1:contact1,
-          manager_name2:managerName2,
-          contact2:contact2,
-          
+          company_name: companyName,
+          branch_name: branchName,
+          manager_name1: managerName1,
+          contact1: contact1,
+          manager_name2: managerName2,
+          contact2: contact2,
+
         },
         {
           headers: {
@@ -551,7 +551,7 @@ function AdminForm() {
               htmlFor="manager_name2"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-             Second Manager Name
+              Second Manager Name
             </label>
             <input
               type="text"
@@ -591,7 +591,7 @@ function AdminForm() {
               Add Insurance Details
             </label>
           </div>
-          
+
           {showInsuranceFields && (
             <div>
               {/* Insurance Details */}

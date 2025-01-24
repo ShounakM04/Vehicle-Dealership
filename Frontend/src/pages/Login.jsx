@@ -20,7 +20,7 @@ function Login() {
             return;
         }
 
-        const endpoint = "http://localhost:8000/login"; // Update with your actual endpoint
+        const endpoint = "https://www.nikhilmotors.com/api/login"; // Update with your actual endpoint
 
         try {
             setIsLoading(true);
@@ -46,7 +46,7 @@ function Login() {
             }
 
             if (decodedToken.isAdmin === true || decodedToken.isEmployee === true) {
-                navigate("/dashboard"); 
+                navigate("/dashboard");
             } else if (decodedToken.isDriver === true) {
                 navigate("/driverdashboard");
             }

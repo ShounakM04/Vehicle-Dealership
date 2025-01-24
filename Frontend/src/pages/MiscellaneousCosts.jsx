@@ -75,7 +75,7 @@ const MiscellaneousCosts = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "http://localhost:8000/miscellaneous-costs/filter",
+        "https://www.nikhilmotors.com/api/miscellaneous-costs/filter",
         {
           params: {
             month: filterMonth + 1,
@@ -103,7 +103,7 @@ const MiscellaneousCosts = () => {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:8000/miscellaneous-costs/add",
+        "https://www.nikhilmotors.com/api/miscellaneous-costs/add",
         {
           description,
           cost,
@@ -154,7 +154,7 @@ const MiscellaneousCosts = () => {
         if (editedItem[field] !== comparison) {
           updates.push(
             axios.post(
-              "http://localhost:8000/editMiscellaneous",
+              "https://www.nikhilmotors.com/api/editMiscellaneous",
               {
                 tablename: "miscellaneous_costs",
                 fieldToEdit: field,

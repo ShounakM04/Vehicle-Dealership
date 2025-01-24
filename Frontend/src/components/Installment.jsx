@@ -35,7 +35,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const fetchCarDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/dashboard/sold-cars`,
+        `https://www.nikhilmotors.com/api/dashboard/sold-cars`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -56,7 +56,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const fetchInstallments = async () => {
     if (!carID) return;
     try {
-      const response = await axios.get(`http://localhost:8000/installments`, {
+      const response = await axios.get(`https://www.nikhilmotors.com/api/installments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -76,7 +76,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
     setUploading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/installments",
+        "https://www.nikhilmotors.com/api/installments",
         {
           registernumber: carID,
           amount: installmentAmount,
@@ -111,7 +111,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
   const fetchProfit = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/profits", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/profits", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -246,7 +246,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                             <span>
                               {formatCurrency(
                                 parseFloat(car.down_payment || 0) +
-                                  parseFloat(totalInstallmentAmount || 0)
+                                parseFloat(totalInstallmentAmount || 0)
                               )}
                             </span>
                           </p>
@@ -359,22 +359,20 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
             <div className="flex space-x-4">
               <button
                 onClick={() => setViewOption("view")}
-                className={`px-4 py-2 rounded-md transition-colors ${
-                  viewOption === "view"
+                className={`px-4 py-2 rounded-md transition-colors ${viewOption === "view"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <Eye className="w-4 h-4 inline-block mr-2" />
                 View
               </button>
               <button
                 onClick={() => setViewOption("add")}
-                className={`px-4 py-2 rounded-md transition-colors ${
-                  viewOption === "add"
+                className={`px-4 py-2 rounded-md transition-colors ${viewOption === "add"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <Plus className="w-4 h-4 inline-block mr-2" />
                 Add New

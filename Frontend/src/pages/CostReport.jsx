@@ -65,7 +65,7 @@ const CostReport = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/car/${id}`, {
+        const response = await axios.get(`https://www.nikhilmotors.com/api/car/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -126,7 +126,7 @@ const CostReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:8000/bill/generate-bill`,
+        `https://www.nikhilmotors.com/api/bill/generate-bill`,
         { registerNumber: id },
         {
           headers: {
@@ -158,7 +158,7 @@ const CostReport = () => {
 
   const fetchMaintenanceDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/maintainance", {
+      const response = await axios.get("https://www.nikhilmotors.com/api/maintainance", {
         params: { registernumber: id },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -230,7 +230,7 @@ const CostReport = () => {
 
       // console.log(uniqueID);
 
-      await axios.delete(`http://localhost:8000/delete-image`, {
+      await axios.delete(`https://www.nikhilmotors.com/api/delete-image`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -238,7 +238,7 @@ const CostReport = () => {
       });
 
       await axios.delete(
-        `http://localhost:8000/maintainance/delete-maintainance`,
+        `https://www.nikhilmotors.com/api/maintainance/delete-maintainance`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
