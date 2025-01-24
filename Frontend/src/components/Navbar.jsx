@@ -235,11 +235,11 @@ function Navbar() {
           <div>
             <div className="flex items-center">
               <img src="/Assets/Images/call.svg" className="h-6" alt="Call Icon" />
-              <a href="tel:+917058600679" className="font-medium ml-2 hover:underline text-blue-600">
+              <a href="tel:+917058600679" className="font-medium ml-2 hover:underline text-black-600">
                 General: +91 7058600679
               </a>
             </div>
-            <a href="tel:+919272111777" className="font-medium mt-1 block hover:underline text-blue-600">
+            <a href="tel:+919272111777" className="font-medium mt-1 block hover:underline text-black-600">
               Office: +91 9272111777
             </a>
           </div>
