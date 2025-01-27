@@ -275,26 +275,22 @@ const CostReport = () => {
             {/* Vehicle Details Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                <div className="flex flex-col sm:flex-row sm:justify-between items-start mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900 flex items-center mb-4 sm:mb-0">
                     <Car className="w-6 h-6 mr-2 text-blue-600" />
                     Vehicle Details
                   </h2>
-                  {isAdmin && (
-                    <div className="flex space-x-3">
+                  {(isAdmin || isEmployee) && (
+                    <div className="flex flex-wrap gap-3">
                       <button
-                        onClick={() =>
-                          navigate(`/dashboard/costReport/${id}/addDoc`)
-                        }
+                        onClick={() => navigate(`/dashboard/costReport/${id}/addDoc`)}
                         className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         Add Doc
                       </button>
                       <button
-                        onClick={() =>
-                          navigate(`/dashboard/costReport/${id}/viewDoc`)
-                        }
+                        onClick={() => navigate(`/dashboard/costReport/${id}/viewDoc`)}
                         className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
                       >
                         <Eye className="w-4 h-4 mr-2" />
@@ -313,6 +309,7 @@ const CostReport = () => {
                     </div>
                   )}
                 </div>
+
 
                 {/* Vehicle and Owner Details Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

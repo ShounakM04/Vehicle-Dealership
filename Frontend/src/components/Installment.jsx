@@ -351,9 +351,9 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold flex items-center">
-              <Calendar className="w-6 h-6 mr-2 text-blue-600" />
+          <div className="lg:flex lg:justify-between lg:items-center lg:mb-6 ">
+            <h2 className="text-2xl font-bold flex items-center mb-4">
+              <Calendar className="w-6 h-6 mr-2 text-blue-600 " />
               Installments
             </h2>
             <div className="flex space-x-4">
