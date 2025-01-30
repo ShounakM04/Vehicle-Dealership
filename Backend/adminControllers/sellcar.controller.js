@@ -24,9 +24,7 @@ async function handleSellCar(req, res) {
 
         //console.log("In controller: CarID - " + carID);
 
-        // Update car status to sold in the cardetails table
-        const updateQuery = `UPDATE cardetails SET status = true WHERE registernumber = $1`;
-        await db.query(updateQuery, [carID]);
+        
 
         const temp = "";
 
@@ -52,6 +50,10 @@ async function handleSellCar(req, res) {
                 accountPaidTo
             ]
         );
+
+        // Update car status to sold in the cardetails table
+        const updateQuery = `UPDATE cardetails SET status = true WHERE registernumber = $1`;
+        await db.query(updateQuery, [carID]);
 
         res.status(200).json({ message: 'Car sold successfully!' });
     } catch (error) {
