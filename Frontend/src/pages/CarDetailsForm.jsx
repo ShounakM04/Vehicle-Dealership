@@ -197,9 +197,10 @@ function AdminForm() {
         }
       );
 
-      toast.success("Vehicle details added successfully!");
+      // toast.success("Vehicle details added successfully!");
+      alert("Vehicle details added successfully!");
       resetState();
-      // navigate("/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.status == 400) {
         // Display error message in toast

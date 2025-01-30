@@ -16,19 +16,19 @@ function SellCarDetails() {
   const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState({
-    sellingPrice: "",
+    sellingPrice: 0,
     ownerName: "",
     contactNo: "",
-    downPayment: "",
-    totalInstallments: "",
-    installmentAmount: "",
-    commission: "",
+    downPayment: 0,
+    totalInstallments: 0,
+    installmentAmount: 0,
+    commission: 0,
     insuranceDocument: [],
     carPhotos: [], // Change to array for multiple photos
     carID: "",
     description: "", // New field for description
     paymentMode: "", // New field for payment mode
-    accountPaidTo: "", // New field for account paid to
+    accountPaidTo: "Nikhil Motors", // New field for account paid to
   });
 
   const [submittedID, setSubmittedID] = useState("");
@@ -61,7 +61,13 @@ function SellCarDetails() {
     }
   };
 
-  const handleSellConfirmation = () => {
+  const handleSellConfirmation = (e) => {
+    const { sellingPrice, ownerName, contactNo,paymentMode } = formData;
+
+    if (!sellingPrice || !ownerName || !contactNo || !paymentMode) {
+      alert("Please fill all required fields.");
+      return;
+    }
     setModalOpen(true);
   };
 
@@ -94,11 +100,13 @@ function SellCarDetails() {
     setFormData({ ...formData, [name]: Array.from(files) }); // Convert FileList to array
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     try {
+      e.preventDefault();
       setLoading(true);
 
       const registernumber = carData.car.registernumber;
+      
       // console.log(registernumber);
       // Handle other image uploads if necessary (similar to DisplayImage)
       // console.log(formData.carPhotos);
@@ -298,7 +306,7 @@ function SellCarDetails() {
                 htmlFor="sellingPrice"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Selling Price
+                Selling Price <span className="text-red-400 text-lg">*</span>
               </label>
               <input
                 type="number"
@@ -318,7 +326,7 @@ function SellCarDetails() {
                 htmlFor="ownerName"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Owner Name
+                Owner Name <span className="text-red-400 text-lg">*</span>
               </label>
               <input
                 type="text"
@@ -336,7 +344,7 @@ function SellCarDetails() {
                 htmlFor="contactNo"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Contact No
+                Contact No <span className="text-red-400 text-lg">*</span>
               </label>
               <input
                 type="tel"
@@ -360,7 +368,6 @@ function SellCarDetails() {
                 type="number"
                 id="downPayment"
                 name="downPayment"
-                required
                 value={formData.downPayment}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -380,7 +387,6 @@ function SellCarDetails() {
                 type="number"
                 id="totalInstallments"
                 name="totalInstallments"
-                required
                 value={formData.totalInstallments}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -400,7 +406,6 @@ function SellCarDetails() {
                 type="number"
                 id="installmentAmount"
                 name="installmentAmount"
-                required
                 value={formData.installmentAmount}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -420,7 +425,6 @@ function SellCarDetails() {
                 type="number"
                 id="commission"
                 name="commission"
-                required
                 value={formData.commission}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -439,7 +443,6 @@ function SellCarDetails() {
               <textarea
                 id="description"
                 name="description"
-                required
                 value={formData.description}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -453,7 +456,7 @@ function SellCarDetails() {
                 htmlFor="paymentMode"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Payment Mode
+                Payment Mode <span className="text-red-400 text-lg">*</span>
               </label>
               <input
                 type="text"
@@ -477,7 +480,6 @@ function SellCarDetails() {
                 type="text"
                 id="accountPaidTo"
                 name="accountPaidTo"
-                required
                 value={formData.accountPaidTo}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
