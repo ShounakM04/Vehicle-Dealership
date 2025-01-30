@@ -62,7 +62,7 @@ function SellCarDetails() {
   };
 
   const handleSellConfirmation = (e) => {
-    const { sellingPrice, ownerName, contactNo,paymentMode } = formData;
+    const { sellingPrice, ownerName, contactNo, paymentMode } = formData;
 
     if (!sellingPrice || !ownerName || !contactNo || !paymentMode) {
       alert("Please fill all required fields.");
@@ -106,7 +106,7 @@ function SellCarDetails() {
       setLoading(true);
 
       const registernumber = carData.car.registernumber;
-      
+
       // console.log(registernumber);
       // Handle other image uploads if necessary (similar to DisplayImage)
       // console.log(formData.carPhotos);

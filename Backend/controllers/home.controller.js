@@ -6,7 +6,7 @@ async function handleHomePage(req, res) {
     const { fuelType, carMake, carSearch } = req.query; // Extract parameters from query
     try {
         let query1 = `
-        SELECT c.carname, c.registernumber, c.carcolor, c.vehiclebuyprice,c.vehiclesellprice, c.status, c.onhomepage
+        SELECT c.carname, c.registernumber, c.carcolor, c.vehiclebuyprice,c.vehiclesellprice, c.status, c.onhomepage, c.kilometers, c.fuel, c.carmake,c.carcompany
         FROM cardetails c 
         WHERE 1=1
         `;
@@ -46,7 +46,11 @@ async function handleHomePage(req, res) {
                 carprice: row.vehiclesellprice,
                 status: row.status,
                 displayImage: displayImageUrl,
-                onhomepage:row.onhomepage
+                onhomepage:row.onhomepage,
+                kilometers:row.kilometers,
+                fuel:row.fuel,
+                carmake:row.carmake,
+                carcompany:row.carcompany
 
             };
         });

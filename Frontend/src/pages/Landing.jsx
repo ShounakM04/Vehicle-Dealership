@@ -299,12 +299,16 @@ export default function Landing() {
             imgSrc: firstImage,
             name: car.carname,
             number: car.registernumber,
-            kilometers: 0,
+            kilometers: car.kilometers,
             price: car.carprice,
             status: car.status,
             onhomepage: car.onhomepage,
+            fuel: car.fuel,
+            carmake: car.carmake,
+            carcompany: car.carcompany
           };
         });
+        console.log(carsData);
         setCars(carsData);
       } catch (error) {
         console.error(error);
@@ -504,15 +508,36 @@ export default function Landing() {
                   <h3 className="text-xl font-bold text-slate-800 mb-4">{car.name}</h3>
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center text-slate-600">
-                      <Tag className="w-4 h-4 mr-2 text-blue-500" />
-                      <span>{car.number}</span>
+                      <Tag className="w-5 h-5 mr-2 text-blue-500 font-bold" />
+                      <span className="font-bold text-base">{car.number}</span>
                     </div>
-                    {car.kilometers && (
-                      <div className="flex items-center text-slate-600">
-                        <Gauge className="w-4 h-4 mr-2 text-blue-500" />
-                        <span>{car.kilometers}</span>
-                      </div>
-                    )}
+                    <div className="grid grid-cols-2 gap-4 text-slate-600">
+                      {car.carmake && (
+                        <div className="flex items-center">
+                          <Car className="w-5 h-5 mr-2 text-blue-500" />
+                          <span className="text-xl">{car.carmake}</span>
+                        </div>
+                      )}
+                      {car.fuel && (
+                        <div className="flex items-center">
+                          <Fuel className="w-5 h-5 mr-2 text-blue-500" />
+                          <span className="text-xl">{car.fuel}</span>
+                        </div>
+                      )}
+                      {car.carcompany && (
+                        <div className="flex items-center">
+                          <Car className="w-5 h-5 mr-2 text-blue-500" />
+                          <span className="text-xl">{car.carcompany}</span>
+                        </div>
+                      )}
+                      {car.kilometers && (
+                        <div className="flex items-center">
+                          <Gauge className="w-5 h-5 mr-2 text-blue-500" />
+                          <span className="text-xl">{car.kilometers}</span>
+                        </div>
+                      )}
+                    </div>
+
                     <div className="flex items-center text-slate-600">
                       <Wallet2 className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-2xl font-bold text-blue-500">₹{car.price}</span>

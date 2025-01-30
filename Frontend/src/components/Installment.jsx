@@ -360,8 +360,8 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
               <button
                 onClick={() => setViewOption("view")}
                 className={`px-4 py-2 rounded-md transition-colors ${viewOption === "view"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 <Eye className="w-4 h-4 inline-block mr-2" />
@@ -370,8 +370,8 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
               <button
                 onClick={() => setViewOption("add")}
                 className={`px-4 py-2 rounded-md transition-colors ${viewOption === "add"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 <Plus className="w-4 h-4 inline-block mr-2" />
