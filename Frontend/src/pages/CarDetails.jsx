@@ -15,7 +15,9 @@ import {
   Shield,
   Fuel,
   Copy,
-  CheckCheck
+  CheckCheck,
+  ChevronRight,
+  Building2
 
 } from "lucide-react";
 import { FaDownload, FaCopy, FaCheck } from "react-icons/fa";
@@ -143,7 +145,7 @@ function CarDetails() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Gallery Section */}
-          <div className="bg-white rounded-xl shadow-md overflow-hidden p-2 sm:p-4">
+          <div className="bg-[#FFFFFF] rounded-xl shadow-md overflow-hidden p-2 sm:p-4 border ">
 
             <Carousel
               showArrows={true}
@@ -151,14 +153,28 @@ function CarDetails() {
               infiniteLoop={true}
               showThumbs={false}
               showStatus={false}
-              className="custom-carousel mx-2 sm:mx-4 md:mx-8"
-              renderThumbs={(children) =>
-                children.map((item, index) => (
-                  <div key={index} className="h-14 w-full">
-                    {item}
-                  </div>
-                ))
-              }
+              className="custom-carousel mx-2 sm:mx-4 md:mx-8 border border-gray-600 rounded-lg bg-[#FFFAF0]"
+              renderArrowPrev={(clickHandler, hasPrev) => (
+                hasPrev && (
+                  <button
+                    onClick={clickHandler}
+                    className="absolute left-4 z-10 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                  >
+                    <ChevronRight className="w-6 h-6 rotate-180 text-slate-700" />
+                  </button>
+                )
+              )}
+
+              renderArrowNext={(clickHandler, hasNext) => (
+                hasNext && (
+                  <button
+                    onClick={clickHandler}
+                    className="absolute right-4 z-10 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                  >
+                    <ChevronRight className="w-6 h-6 text-slate-700" />
+                  </button>
+                )
+              )}
             >
               {carData.images?.map((image, index) => (
                 <div
@@ -216,7 +232,7 @@ function CarDetails() {
                 )}
                 {carData.car.carcompany && (
                   <DetailItem
-                    icon={<Tag />}
+                    icon={<Building2 />}
                     label="Company"
                     value={
                       carData.car.carcompany.charAt(0).toUpperCase() +

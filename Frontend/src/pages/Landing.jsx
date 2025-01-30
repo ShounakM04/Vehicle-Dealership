@@ -248,7 +248,8 @@ import {
   Gauge,
   DollarSign,
   PiggyBank,
-  Wallet2
+  Wallet2,
+  Building2
 } from 'lucide-react';
 
 export default function Landing() {
@@ -436,7 +437,7 @@ export default function Landing() {
         </button>
 
         {/* Carousel Section */}
-        <div className="w-full lg:w-3/4 mt-2 sm:m-10 md:w-10">
+        <div className="w-full lg:w-3/4 mt-2 sm:m-10 md:w-10 ">
           {noticeImages.length > 0 ? (
             <div className="rounded-2xl shadow-xl">
               <Carousel
@@ -526,11 +527,11 @@ export default function Landing() {
                       )}
                       {car.carcompany && (
                         <div className="flex items-center">
-                          <Car className="w-5 h-5 mr-2 text-blue-500" />
+                          <Building2 className="w-5 h-5 mr-2 text-blue-500" />
                           <span className="text-xl">{car.carcompany}</span>
                         </div>
                       )}
-                      {car.kilometers && (
+                      {car.kilometers != 0 && (
                         <div className="flex items-center">
                           <Gauge className="w-5 h-5 mr-2 text-blue-500" />
                           <span className="text-xl">{car.kilometers}</span>
