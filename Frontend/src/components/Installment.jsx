@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 
 export default function Installment({ carID, isAdmin, soldStatus }) {
-  const [installmentAmount, setInstallmentAmount] = useState("");
-  const [installmentDate, setInstallmentDate] = useState("");
+  const [installmentAmount, setInstallmentAmount] = useState(0);
+  const [installmentDate, setInstallmentDate] = useState(null);
   const [carDetails, setCarDetails] = useState([]);
   const [installments, setInstallments] = useState([]);
   const [error, setError] = useState(null);
@@ -29,7 +29,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
   const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  const [accountPaidTo, setAccountPaidTo] = useState("");
+  const [accountPaidTo, setAccountPaidTo] = useState("Nikhil Motors");
   const [totalInstallmentsAmount, setTotalInstallmentsAmount] = useState(0);
 
   const fetchCarDetails = async () => {
@@ -94,8 +94,8 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
 
       if (response.status === 200) {
         toast.success("Installment added successfully");
-        setInstallmentAmount("");
-        setInstallmentDate("");
+        setInstallmentAmount(0);
+        setInstallmentDate(null);
         setDescription("");
         setPaymentMode("");
         setAccountPaidTo("");
@@ -486,7 +486,6 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  required
                   rows={3}
                   className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
                 />
@@ -519,7 +518,6 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                       type="text"
                       value={accountPaidTo}
                       onChange={(e) => setAccountPaidTo(e.target.value)}
-                      required
                       className="pl-10 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
                     />
                   </div>

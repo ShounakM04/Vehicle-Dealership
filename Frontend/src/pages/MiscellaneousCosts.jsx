@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const MiscellaneousCosts = () => {
   const [costs, setCosts] = useState([]);
   const [description, setDescription] = useState("");
-  const [cost, setCost] = useState("");
+  const [cost, setCost] = useState(0);
   const [filterYear, setFilterYear] = useState(new Date().getFullYear());
   const [filterMonth, setFilterMonth] = useState(new Date().getMonth());
   const [totalCost, setTotalCost] = useState(0);
@@ -116,7 +116,7 @@ const MiscellaneousCosts = () => {
         }
       );
       setDescription("");
-      setCost("");
+      setCost(0);
       fetchCosts();
       toast.success("Cost added successfully");
     } catch (error) {

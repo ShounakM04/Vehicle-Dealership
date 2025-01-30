@@ -9,9 +9,9 @@ const AccountDetails = () => {
   const [costs, setCosts] = useState([]); // Initialize as an empty array
   const [description, setDescription] = useState("");
   const [editDescription, setEditDescription] = useState("");
-  const [editAmount, setEditAmount] = useState("");
+  const [editAmount, setEditAmount] = useState(0);
   const [editDate, setEditDate] = useState("");
-  const [amount, setCost] = useState("");
+  const [amount, setCost] = useState(0);
   const [filterYear, setFilterYear] = useState(new Date().getFullYear());
   const [filterMonth, setFilterMonth] = useState(new Date().getMonth());
   const [totalCost, setTotalCost] = useState(0); // State to store the total amount
@@ -148,7 +148,7 @@ const AccountDetails = () => {
         setEditMode(false);
         setEditableItem(null);
         setEditDescription("");
-        setEditAmount("");
+        setEditAmount(0);
         setEditDate("");
       }
     } catch (error) {
@@ -161,7 +161,7 @@ const AccountDetails = () => {
     setEditMode(false);
     setEditableItem(null);
     setEditDescription("");
-    setEditAmount("");
+    setEditAmount(0);
     setEditDate("");
   };
 
@@ -183,7 +183,7 @@ const AccountDetails = () => {
         }
       );
       setDescription("");
-      setCost("");
+      setCost(0);
       fetchCosts(); // Refresh the list after adding
       toast.success("Investment added successfully"); // Show success toast
     } catch (error) {

@@ -40,7 +40,7 @@ const CostReport = () => {
     totalAmountToBePaid: 0,
     remainingAmount: 0,
   });
-  const [installmentAmount, setInstallmentAmount] = useState("");
+  const [installmentAmount, setInstallmentAmount] = useState(0);
   const [installmentDate, setInstallmentDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [financeData, setFinanceData] = useState(null);

@@ -12,7 +12,7 @@ function AdminForm() {
   const [registernumber, setregisternumber] = useState("");
   const [insuranceCompany, setInsuranceCompany] = useState("");
   const [policyNumber, setPolicyNumber] = useState("");
-  const [policyTenure, setPolicyTenure] = useState("");
+  const [policyTenure, setPolicyTenure] = useState(0);
   const [ownerName, setOwnerName] = useState("");
   const [ownerPhone, setOwnerPhone] = useState("");
   const [ownerEmail, setOwnerEmail] = useState("");
@@ -109,13 +109,13 @@ function AdminForm() {
     setregisternumber("");
     setInsuranceCompany("");
     setPolicyNumber("");
-    setPolicyTenure("");
+    setPolicyTenure(0);
     setOwnerName("");
     setOwnerPhone("");
     setOwnerEmail("");
     setOwnerAddress("");
     setVehicleColor("");
-    setVehicleSellPrice("");
+    setVehicleSellPrice(0);
     setInsuranceStartDate("");
     setInsuranceEndDate("");
     setShowInsuranceFields(false);

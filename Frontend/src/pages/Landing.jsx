@@ -299,7 +299,7 @@ export default function Landing() {
             imgSrc: firstImage,
             name: car.carname,
             number: car.registernumber,
-            kilometers: "",
+            kilometers: 0,
             price: car.carprice,
             status: car.status,
             onhomepage: car.onhomepage,
