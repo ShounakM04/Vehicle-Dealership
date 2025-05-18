@@ -5,7 +5,7 @@ const logResReq = require('../log.js')
 
 const router = express.Router();
 
-router.get("/",authenticateToken, authorizeEmployeeOrAdmin,handleGetMaintainanceDetails);
+router.get("/",authenticateToken, authorizeDriverOrEmployeeOrAdmin,handleGetMaintainanceDetails);
 
 router.post("/",authenticateToken, authorizeDriverOrEmployeeOrAdmin, handlePostMaintainanceDetails);
 

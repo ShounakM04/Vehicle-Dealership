@@ -235,12 +235,20 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                           </span>
                         </p>
                         <p className="flex justify-between">
+                          <span className="text-gray-600">
+                            Total Installments:
+                          </span>
+                          <span className="font-medium">
+                            {formatCurrency(totalInstallmentsAmount)}
+                          </span>
+                        </p>
+                        <p className="flex justify-between">
                           <span className="text-gray-600">Commission:</span>
                           <span className="font-medium">
                             {formatCurrency(car.commission)}
                           </span>
                         </p>
-                        <div className="pt-2 border-t border-blue-100">
+                        {/* <div className="pt-2 border-t border-blue-100">
                           <p className="flex justify-between font-semibold">
                             <span>Total Received:</span>
                             <span>
@@ -250,7 +258,7 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                               )}
                             </span>
                           </p>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -435,11 +443,29 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                 )}
               </div>
               <div className="pt-4 border-t">
-                <p className="text-xl font-semibold flex items-center">
+                <p className="text-xl font-semibold flex items-center text-green-600">
                   <IndianRupee className="w-5 h-5 mr-2 text-green-600" />
                   Total Installments: {formatCurrency(totalInstallmentAmount)}
                 </p>
               </div>
+
+
+
+              <div className="pt-4 border-t">
+                <p className="text-xl font-semibold flex items-center text-green-600">
+                  <IndianRupee className="w-5 h-5 mr-2 text-green-600" />
+                  Total DownPayment: {formatCurrency(parseFloat(carDetails[0]?.down_payment || 0))}
+                  {/* {console.log(carDetails)} */}
+                </p>
+              </div>
+
+              <div className="pt-4 border-t">
+                <p className="text-xl font-semibold flex items-center text-red-600">
+                  <IndianRupee className="w-5 h-5 mr-2 text-red-600" />
+                  Remaining Cost: {formatCurrency(parseFloat(carDetails[0]?.selling_price) - (parseFloat(totalInstallmentAmount) + (parseFloat(carDetails[0]?.down_payment) || 0)))}
+                </p>
+              </div>
+
             </div>
           ) : (
             <form onSubmit={handleInstallmentSubmit} className="space-y-6">

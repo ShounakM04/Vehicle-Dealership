@@ -31,6 +31,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false);
+  const [filter, setFilter] = useState("all"); // Filter state with new options
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -39,20 +40,22 @@ const Dashboard = () => {
   const handleToggle = async (carId, newValue) => {
     try {
       setWait(true);
-
       const tablename = "cardetails";
-      const fieldToEdit = "onhomepage"
-      const response = await axios.post("https://www.nikhilmotors.com/api/edit-fields", {
-        tablename: tablename,
-        fieldToEdit: fieldToEdit,
-        newValue: newValue,
-        registernumber: carId
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+      const fieldToEdit = "onhomepage";
+      const response = await axios.post(
+        "https://www.nikhilmotors.com/api/edit-fields",
+        {
+          tablename: tablename,
+          fieldToEdit: fieldToEdit,
+          newValue: newValue,
+          registernumber: carId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
-      });
-
+      );
     } catch (error) {
       console.log(error);
     }
@@ -83,16 +86,13 @@ const Dashboard = () => {
 
   const activeIds = (e) => {
     e.preventDefault();
-    navigate('/dashboard/ActiveAccounts')
-  }
-
-
+    navigate("/dashboard/ActiveAccounts");
+  };
 
   const handleChangePass = (e) => {
     e.preventDefault();
-    navigate('/dashboard/ChangePassword')
-  }
-
+    navigate("/dashboard/ChangePassword");
+  };
 
   const fetchTotalSellingPrice = async () => {
     try {
@@ -118,7 +118,7 @@ const Dashboard = () => {
       const response = await fetch("https://www.nikhilmotors.com/api/logs/download", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Ensure the user is authenticated
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
 
@@ -126,12 +126,11 @@ const Dashboard = () => {
         throw new Error("File not found or failed to download.");
       }
 
-      // Create a Blob from the response and trigger a download
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `user_activity_log_${new Date().toISOString().split("T")[0]
-        }.csv`; // File name with today's date
+        }.csv`;
       link.click();
     } catch (error) {
       console.error("Error downloading log file:", error);
@@ -139,13 +138,11 @@ const Dashboard = () => {
     }
   };
 
-
   const fetchCarDetails = async () => {
     try {
       let params = {};
       if (query) params.carSearch = query;
 
-      // console.log("Query : " + query);
       const response = await axios.get("https://www.nikhilmotors.com/api/dashboard", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -216,7 +213,6 @@ const Dashboard = () => {
     }
   };
 
-
   const fetchAccountDetails = async () => {
     try {
       const response = await axios.get("https://www.nikhilmotors.com/api/accountDetails", {
@@ -230,28 +226,22 @@ const Dashboard = () => {
     }
   };
 
-
   const fetchProfit = async () => {
-
     try {
       const response = await axios.get(`https://www.nikhilmotors.com/api/profits/monthly`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        }
-      })
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
       setProfits(response.data.totalProfit);
-      // console.log(response.data.totalProfit)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    }
-    catch (error) {
-      console.log(error)
-    }
-  }
   useEffect(() => {
-
     fetchCarDetails();
   }, [query, wait]);
-
 
   useEffect(() => {
     setLoading(true);
@@ -259,27 +249,45 @@ const Dashboard = () => {
     fetchUserRoleAndUsername();
     fetchMonthlyCosts();
     fetchAccountDetails();
-    fetchProfit()
+    fetchProfit();
     setLoading(false);
   }, []);
 
   const currentDate = new Date();
   const soldCarsCount = carDetails.filter((car) => car.status === true).length;
   const totalCars = carDetails.filter((car) => car.status === false).length;
+  const availableOnHomepageCount = carDetails.filter(
+    (car) => car.status === false && car.onhomepage === true
+  ).length;
+  const availableNotOnHomepageCount = carDetails.filter(
+    (car) => car.status === false && car.onhomepage === false
+  ).length;
 
+  // Filter car details based on the selected filter
+  const filteredCarDetails = carDetails.filter((car) => {
+    if (filter === "all") return true;
+    if (filter === "sold") return car.status === true;
+    if (filter === "available") return car.status === false;
+    if (filter === "availableOnHomepage")
+      return car.status === false && car.onhomepage === true;
+    if (filter === "availableNotOnHomepage")
+      return car.status === false && car.onhomepage === false;
+    return true;
+  });
 
-  // Loading spinner or shadow box when loading
   if (loading) {
     return (
       <div className="loading-overlay">
-        <div className="spinner"></div> {/* Example of loading spinner */}
+        <div className="spinner"></div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-blue-100 flex flex-col lg:flex-row ${wait && "opacity-50 pointer-events-none"}`}>
-      {/* {console.log("HI", username)} */}
+    <div
+      className={`bg-blue-100 flex flex-col lg:flex-row ${wait && "opacity-50 pointer-events-none"
+        }`}
+    >
       <div
         className={`${isSidebarOpen ? "block" : "hidden"
           } lg:block bg-white w-64 p-5 fixed lg:relative z-20`}
@@ -353,7 +361,7 @@ const Dashboard = () => {
           </button>
         </NavLink>
 
-        <div className="min-h-[2px] mt-6   bg-black"></div>
+        <div className="min-h-[2px] mt-6 bg-black"></div>
         <NavLink to={"/dashboard/customerEnquiry"}>
           <button className="mt-6 bg-green-500 text-white w-36 px-10 py-2 rounded hover:bg-green-600">
             Enquiry
@@ -371,8 +379,7 @@ const Dashboard = () => {
       </div>
 
       <div className="flex-1 p-5 lg:p-5">
-
-        <div className="flex justify-between mb-3 ">
+        <div className="flex justify-between mb-3">
           <h2 className="text-2xl font-bold">Dashboard</h2>
           <h2 className="mt-1.5">
             {currentDate.toLocaleDateString("en-US", {
@@ -382,14 +389,6 @@ const Dashboard = () => {
               day: "numeric",
             })}
           </h2>
-          {/* <div className="flex items-center space-x-2">
-            <img
-              className="w-8 h-12 rounded-full"
-              src="/Assets/Images/logo.png"
-              alt="Profile"
-            />
-            <span>Nikhil Motors</span>
-          </div> */}
         </div>
         <div className="ml-auto mb-3 flex flex-wrap lg:flex-nowrap space-x-0 lg:space-x-4 space-y-3 lg:space-y-0">
           {userRole === "Admin" && (
@@ -438,14 +437,16 @@ const Dashboard = () => {
           )}
         </div>
 
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"
-        >
-          <div onClick={() => navigate("/dashboard/monthly-details")}
-            className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
+          <div
+            onClick={() => navigate("/dashboard/monthly-details")}
+            className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95"
+          >
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
-            {userRole === "Admin" && <p className="font-bold">Total Profits: ₹{profits}</p>}
+            {userRole === "Admin" && (
+              <p className="font-bold">Total Profits: ₹{profits}</p>
+            )}
           </div>
 
           <div
@@ -461,9 +462,10 @@ const Dashboard = () => {
             className={`bg-orange-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-orange-400 transition-all transform hover:scale-105 active:scale-95`}
           >
             <p>Total Account Balance</p>
-            <p className="text-lg font-bold">₹{accountDetails.Remaining_Balance}</p>
+            <p className="text-lg font-bold">
+              ₹{accountDetails.Remaining_Balance}
+            </p>
           </div>
-
 
           <div className="bg-green-400 p-3 rounded text-white min-h-4">
             <p>Office Documents</p>
@@ -487,7 +489,56 @@ const Dashboard = () => {
         <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-2">Car Details</h3>
 
-          {/* search section */}
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button
+              onClick={() => setFilter("all")}
+              className={`px-4 py-2 rounded ${filter === "all"
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-200 text-blue-800"
+                } hover:bg-blue-500 hover:text-white transition`}
+            >
+              All ({carDetails.length})
+            </button>
+            <button
+              onClick={() => setFilter("sold")}
+              className={`px-4 py-2 rounded ${filter === "sold"
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-200 text-blue-800"
+                } hover:bg-blue-500 hover:text-white transition`}
+            >
+              Sold ({soldCarsCount})
+            </button>
+            <button
+              onClick={() => setFilter("available")}
+              className={`px-4 py-2 rounded ${filter === "available"
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-200 text-blue-800"
+                } hover:bg-blue-500 hover:text-white transition`}
+            >
+              Available ({totalCars})
+            </button>
+            <button
+              onClick={() => setFilter("availableOnHomepage")}
+              className={`px-4 py-2 rounded ${filter === "availableOnHomepage"
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-200 text-blue-800"
+                } hover:bg-blue-500 hover:text-white transition`}
+            >
+              Available & On Homepage ({availableOnHomepageCount})
+            </button>
+            <button
+              onClick={() => setFilter("availableNotOnHomepage")}
+              className={`px-4 py-2 rounded ${filter === "availableNotOnHomepage"
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-200 text-blue-800"
+                } hover:bg-blue-500 hover:text-white transition`}
+            >
+              Available & Not On Homepage ({availableNotOnHomepageCount})
+            </button>
+          </div>
+
+          {/* Search Section */}
           <div className="relative mx-auto w-full max-w-md ml-0 mb-4">
             <input
               type="text"
@@ -515,7 +566,7 @@ const Dashboard = () => {
           </div>
 
           {/* Table Section with Scroll */}
-          <div className="overflow-y-auto max-h-[calc(5*3.4rem)]"> {/* Limit the table height to 5 rows */}
+          <div className="overflow-y-auto max-h-[calc(5*3.4rem)]">
             <table className="w-full table-auto">
               <thead className="sticky top-0 bg-gray-200 z-10">
                 <tr className="text-left">
@@ -532,7 +583,7 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {carDetails?.map((car, index) => (
+                {filteredCarDetails?.map((car, index) => (
                   <tr key={index} className="border-b">
                     <td className="p-2">{car.ownername}</td>
                     <td className="p-2">{car.registernumber}</td>
@@ -543,33 +594,33 @@ const Dashboard = () => {
                     <td className="p-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${car.status === true
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-900"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-900"
                           }`}
                       >
                         {car.status === true ? "sold" : "Available"}
                       </span>
                     </td>
-
-
                     <td className="p-2">
                       <div className="flex items-center">
                         <button
-                          onClick={() => handleToggle(car.registernumber, !car.onhomepage)}
+                          onClick={() =>
+                            handleToggle(car.registernumber, !car.onhomepage)
+                          }
                           className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors ${car.status
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : car.onhomepage
-                              ? "bg-green-500"
-                              : "bg-red-500"
+                              ? "bg-gray-300 cursor-not-allowed"
+                              : car.onhomepage
+                                ? "bg-green-500"
+                                : "bg-red-500"
                             }`}
                           disabled={car.status}
                         >
                           <span
                             className={`inline-block h-6 w-6 transform rounded-full bg-gray-100 transition-transform ${car.status
-                              ? "opacity-50"
-                              : car.onhomepage
-                                ? "translate-x-6"
-                                : "translate-x-0"
+                                ? "opacity-50"
+                                : car.onhomepage
+                                  ? "translate-x-6"
+                                  : "translate-x-0"
                               }`}
                           >
                             {car.onhomepage && !car.status ? "Y" : "N"}
@@ -577,14 +628,17 @@ const Dashboard = () => {
                         </button>
                       </div>
                     </td>
-
                     <td className="p-2">
-                      <button onClick={() => handleView(car.registernumber)}>
+                      <button
+                        onClick={() => handleView(car.registernumber)}
+                      >
                         <i className={"fas fa-eye"}></i>
                       </button>
                     </td>
                     <td className="p-2">
-                      <button onClick={() => handleEdit(car.registernumber)}>
+                      <button
+                        onClick={() => handleEdit(car.registernumber)}
+                      >
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                     </td>
@@ -594,7 +648,6 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -296,7 +296,7 @@ const CostReport = () => {
                         <Eye className="w-4 h-4 mr-2" />
                         View Docs
                       </button>
-                      {soldStatus && (
+                      {/* {soldStatus && (
                         <button
                           onClick={handleGenerateBill}
                           className="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
@@ -305,7 +305,7 @@ const CostReport = () => {
                           <Download className="w-4 h-4 mr-2" />
                           {loading ? "Downloading..." : "Download Bill"}
                         </button>
-                      )}
+                      )} */}
                     </div>
                   )}
                 </div>
