@@ -31,7 +31,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false);
-  const [filter, setFilter] = useState("all"); // Filter state with new options
+  const [filter, setFilter] = useState("all");
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -129,8 +129,7 @@ const Dashboard = () => {
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `user_activity_log_${new Date().toISOString().split("T")[0]
-        }.csv`;
+      link.download = `user_activity_log_${new Date().toISOString().split("T")[0]}.csv`;
       link.click();
     } catch (error) {
       console.error("Error downloading log file:", error);
@@ -263,7 +262,6 @@ const Dashboard = () => {
     (car) => car.status === false && car.onhomepage === false
   ).length;
 
-  // Filter car details based on the selected filter
   const filteredCarDetails = carDetails.filter((car) => {
     if (filter === "all") return true;
     if (filter === "sold") return car.status === true;
@@ -285,17 +283,20 @@ const Dashboard = () => {
 
   return (
     <div
-      className={`bg-blue-100 flex flex-col lg:flex-row ${wait && "opacity-50 pointer-events-none"
-        }`}
+      className={`bg-blue-100 flex flex-col lg:flex-row min-h-screen w-full ${
+        wait && "opacity-50 pointer-events-none"
+      }`}
     >
+      {/* Sidebar */}
       <div
-        className={`${isSidebarOpen ? "block" : "hidden"
-          } lg:block bg-white w-64 p-5 fixed lg:relative z-20`}
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } lg:block bg-white w-full lg:w-64 p-5 fixed lg:relative z-20 h-full lg:h-auto`}
       >
         <div className="lg:hidden mb-5">
           <button
             onClick={toggleSidebar}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full"
           >
             Close Menu
           </button>
@@ -338,48 +339,50 @@ const Dashboard = () => {
 
         <div className="min-h-[2px] mt-10 bg-black"></div>
         <NavLink to={"/dashboard/carDetailsForm"}>
-          <button className="mt-6 bg-blue-500 text-white w-36 px-7 py-2 rounded hover:bg-blue-600">
+          <button className="mt-6 bg-blue-500 text-white w-full lg:w-36 px-7 py-2 rounded hover:bg-blue-600">
             Add Vehicle
           </button>
         </NavLink>
 
         <NavLink to={"/dashboard/deleteCarDetails"}>
-          <button className="mt-6 bg-red-500 text-white w-36 px-4 py-2 rounded hover:bg-red-600">
+          <button className="mt-6 bg-red-500 text-white w-full lg:w-36 px-4 py-2 rounded hover:bg-red-600">
             Remove Vehicle
           </button>
         </NavLink>
 
         <NavLink to={"/dashboard/addNoticeImage"}>
-          <button className="mt-6 bg-yellow-500 text-white w-36 px-4 py-2 rounded hover:bg-yellow-600">
+          <button className="mt-6 bg-yellow-500 text-white w-full lg:w-36 px-4 py-2 rounded hover:bg-yellow-600">
             Add Notice
           </button>
         </NavLink>
 
         <NavLink to={"/dashboard/sellCarDetails"}>
-          <button className="mt-6 bg-blue-500 text-white w-36 px-4 py-2 rounded hover:bg-blue-600">
+          <button className="mt-6 bg-blue-500 text-white w-full lg:w-36 px-4 py-2 rounded hover:bg-blue-600">
             Sell Vehicle
           </button>
         </NavLink>
 
         <div className="min-h-[2px] mt-6 bg-black"></div>
         <NavLink to={"/dashboard/customerEnquiry"}>
-          <button className="mt-6 bg-green-500 text-white w-36 px-10 py-2 rounded hover:bg-green-600">
+          <button className="mt-6 bg-green-500 text-white w-full lg:w-36 px-10 py-2 rounded hover:bg-green-600">
             Enquiry
           </button>
         </NavLink>
       </div>
 
+      {/* Mobile Menu Toggle */}
       <div className="lg:hidden p-5">
         <button
           onClick={toggleSidebar}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
         >
           {isSidebarOpen ? "Close Menu" : "Open Menu"}
         </button>
       </div>
 
-      <div className="flex-1 p-5 lg:p-5">
-        <div className="flex justify-between mb-3">
+      {/* Main Content */}
+      <div className="flex-1 p-5 lg:p-5 w-full">
+        <div className="flex flex-col lg:flex-row lg:justify-between mb-3">
           <h2 className="text-2xl font-bold">Dashboard</h2>
           <h2 className="mt-1.5">
             {currentDate.toLocaleDateString("en-US", {
@@ -390,57 +393,58 @@ const Dashboard = () => {
             })}
           </h2>
         </div>
-        <div className="ml-auto mb-3 flex flex-wrap lg:flex-nowrap space-x-0 lg:space-x-4 space-y-3 lg:space-y-0">
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-3 mb-3 justify-start lg:justify-end">
           {userRole === "Admin" && (
             <>
               <button
                 onClick={addEmployee}
-                className="bg-blue-500 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Add Employee
               </button>
               <button
                 onClick={addDriver}
-                className="bg-blue-500 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Add Driver
               </button>
               <button
                 onClick={downloadLogFile}
-                className="bg-green-500 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Download Logs
               </button>
               <button
                 onClick={activeIds}
-                className="bg-green-500 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Account IDs
               </button>
               <button
                 onClick={handleChangePass}
-                className="bg-green-500 text-white px-4 py-2 rounded w-full lg:w-auto"
+                className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Change Password
               </button>
             </>
           )}
           {userRole === "Employee" && (
-            <>
-              <button
-                onClick={addDriver}
-                className="bg-blue-500 text-white px-4 py-2 rounded w-full lg:w-auto"
-              >
-                Add Driver
-              </button>
-            </>
+            <button
+              onClick={addDriver}
+              className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+            >
+              Add Driver
+            </button>
           )}
         </div>
 
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div
             onClick={() => navigate("/dashboard/monthly-details")}
-            className="bg-purple-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95"
+            className="bg-purple-300 p-3 rounded text-white min-h-[4rem] cursor-pointer hover:bg-purple-400 transition-all transform hover:scale-105 active:scale-95"
           >
             <p>Vehicle Inventory: {totalCars}</p>
             <p>Sold Vehicles: {soldCarsCount}</p>
@@ -451,7 +455,7 @@ const Dashboard = () => {
 
           <div
             onClick={() => navigate("/dashboard/miscellaneous-costs")}
-            className="bg-blue-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-blue-400 transition-all transform hover:scale-105 active:scale-95"
+            className="bg-blue-300 p-3 rounded text-white min-h-[4rem] cursor-pointer hover:bg-blue-400 transition-all transform hover:scale-105 active:scale-95"
           >
             <p>Miscellaneous Expenses This Month</p>
             <p className="text-lg font-bold">₹{monthlyCost}</p>
@@ -459,7 +463,7 @@ const Dashboard = () => {
 
           <div
             onClick={() => navigate("/dashboard/accountDetails")}
-            className={`bg-orange-300 p-3 rounded text-white min-h-4 cursor-pointer hover:bg-orange-400 transition-all transform hover:scale-105 active:scale-95`}
+            className="bg-orange-300 p-3 rounded text-white min-h-[4rem] cursor-pointer hover:bg-orange-400 transition-all transform hover:scale-105 active:scale-95"
           >
             <p>Total Account Balance</p>
             <p className="text-lg font-bold">
@@ -467,7 +471,7 @@ const Dashboard = () => {
             </p>
           </div>
 
-          <div className="bg-green-400 p-3 rounded text-white min-h-4">
+          <div className="bg-green-400 p-3 rounded text-white min-h-[4rem]">
             <p>Office Documents</p>
             <div className="py-1 flex space-x-4 flex-nowrap">
               <button
@@ -486,53 +490,59 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-lg shadow overflow-x-auto">
+        {/* Car Details Table */}
+        <div className="bg-white p-5 rounded-lg shadow w-full">
           <h3 className="text-lg font-semibold mb-2">Car Details</h3>
 
           {/* Filter Buttons */}
           <div className="flex flex-wrap gap-2 mb-4">
             <button
               onClick={() => setFilter("all")}
-              className={`px-4 py-2 rounded ${filter === "all"
+              className={`px-4 py-2 rounded ${
+                filter === "all"
                   ? "bg-blue-600 text-white"
                   : "bg-blue-200 text-blue-800"
-                } hover:bg-blue-500 hover:text-white transition`}
+              } hover:bg-blue-500 hover:text-white transition`}
             >
               All ({carDetails.length})
             </button>
             <button
               onClick={() => setFilter("sold")}
-              className={`px-4 py-2 rounded ${filter === "sold"
+              className={`px-4 py-2 rounded ${
+                filter === "sold"
                   ? "bg-blue-600 text-white"
                   : "bg-blue-200 text-blue-800"
-                } hover:bg-blue-500 hover:text-white transition`}
+              } hover:bg-blue-500 hover:text-white transition`}
             >
               Sold ({soldCarsCount})
             </button>
             <button
               onClick={() => setFilter("available")}
-              className={`px-4 py-2 rounded ${filter === "available"
+              className={`px-4 py-2 rounded ${
+                filter === "available"
                   ? "bg-blue-600 text-white"
                   : "bg-blue-200 text-blue-800"
-                } hover:bg-blue-500 hover:text-white transition`}
+              } hover:bg-blue-500 hover:text-white transition`}
             >
               Available ({totalCars})
             </button>
             <button
               onClick={() => setFilter("availableOnHomepage")}
-              className={`px-4 py-2 rounded ${filter === "availableOnHomepage"
+              className={`px-4 py-2 rounded ${
+                filter === "availableOnHomepage"
                   ? "bg-blue-600 text-white"
                   : "bg-blue-200 text-blue-800"
-                } hover:bg-blue-500 hover:text-white transition`}
+              } hover:bg-blue-500 hover:text-white transition`}
             >
               Available & On Homepage ({availableOnHomepageCount})
             </button>
             <button
               onClick={() => setFilter("availableNotOnHomepage")}
-              className={`px-4 py-2 rounded ${filter === "availableNotOnHomepage"
+              className={`px-4 py-2 rounded ${
+                filter === "availableNotOnHomepage"
                   ? "bg-blue-600 text-white"
                   : "bg-blue-200 text-blue-800"
-                } hover:bg-blue-500 hover:text-white transition`}
+              } hover:bg-blue-500 hover:text-white transition`}
             >
               Available & Not On Homepage ({availableNotOnHomepageCount})
             </button>
@@ -565,38 +575,39 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Table Section with Scroll */}
-          <div className="overflow-y-auto max-h-[calc(5*3.4rem)]">
-            <table className="w-full table-auto">
+          {/* Table Section */}
+          <div className="w-full overflow-x-auto max-h-[60vh]">
+            <table className="w-full table-auto min-w-max">
               <thead className="sticky top-0 bg-gray-200 z-10">
                 <tr className="text-left">
-                  <th className="p-2">Owner Name</th>
-                  <th className="p-2">Registration No.</th>
-                  <th className="p-2">Finance Company</th>
-                  <th className="p-2">Phone No.</th>
-                  <th className="p-2">Vehicle Type</th>
-                  <th className="p-2">Vehicle Name</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">Display</th>
-                  <th className="p-2">View</th>
-                  <th className="p-2">Edit</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Owner Name</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Registration No.</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Finance Company</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Phone No.</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Vehicle Type</th>
+                  <th className="p-2 min-w-[120px] whitespace-normal">Vehicle Name</th>
+                  <th className="p-2 min-w-[100px] whitespace-normal">Status</th>
+                  <th className="p-2 min-w-[100px] whitespace-normal">Display</th>
+                  <th className="p-2 min-w-[80px] whitespace-normal">View</th>
+                  <th className="p-2 min-w-[80px] whitespace-normal">Edit</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="overflow-y-auto">
                 {filteredCarDetails?.map((car, index) => (
                   <tr key={index} className="border-b">
-                    <td className="p-2">{car.ownername}</td>
-                    <td className="p-2">{car.registernumber}</td>
-                    <td className="p-2">{car.company_name}</td>
-                    <td className="p-2">{car.ownerphone}</td>
-                    <td className="p-2">{car.carmake}</td>
-                    <td className="p-2">{car.carname}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.ownername}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.registernumber}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.company_name}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.ownerphone}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.carmake}</td>
+                    <td className="p-2 whitespace-normal break-words">{car.carname}</td>
                     <td className="p-2">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${car.status === true
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          car.status === true
                             ? "bg-green-100 text-green-700"
                             : "bg-yellow-100 text-yellow-900"
-                          }`}
+                        }`}
                       >
                         {car.status === true ? "sold" : "Available"}
                       </span>
@@ -607,21 +618,23 @@ const Dashboard = () => {
                           onClick={() =>
                             handleToggle(car.registernumber, !car.onhomepage)
                           }
-                          className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors ${car.status
+                          className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors ${
+                            car.status
                               ? "bg-gray-300 cursor-not-allowed"
                               : car.onhomepage
-                                ? "bg-green-500"
-                                : "bg-red-500"
-                            }`}
+                              ? "bg-green-500"
+                              : "bg-red-500"
+                          }`}
                           disabled={car.status}
                         >
                           <span
-                            className={`inline-block h-6 w-6 transform rounded-full bg-gray-100 transition-transform ${car.status
+                            className={`inline-block h-6 w-6 transform rounded-full bg-gray-100 transition-transform ${
+                              car.status
                                 ? "opacity-50"
                                 : car.onhomepage
-                                  ? "translate-x-6"
-                                  : "translate-x-0"
-                              }`}
+                                ? "translate-x-6"
+                                : "translate-x-0"
+                            }`}
                           >
                             {car.onhomepage && !car.status ? "Y" : "N"}
                           </span>
@@ -629,16 +642,12 @@ const Dashboard = () => {
                       </div>
                     </td>
                     <td className="p-2">
-                      <button
-                        onClick={() => handleView(car.registernumber)}
-                      >
-                        <i className={"fas fa-eye"}></i>
+                      <button onClick={() => handleView(car.registernumber)}>
+                        <i className="fas fa-eye"></i>
                       </button>
                     </td>
                     <td className="p-2">
-                      <button
-                        onClick={() => handleEdit(car.registernumber)}
-                      >
+                      <button onClick={() => handleEdit(car.registernumber)}>
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                     </td>
