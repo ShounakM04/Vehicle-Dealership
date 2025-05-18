@@ -235,14 +235,6 @@ export default function Installment({ carID, isAdmin, soldStatus }) {
                           </span>
                         </p>
                         <p className="flex justify-between">
-                          <span className="text-gray-600">
-                            Total Installments:
-                          </span>
-                          <span className="font-medium">
-                            {formatCurrency(totalInstallmentsAmount)}
-                          </span>
-                        </p>
-                        <p className="flex justify-between">
                           <span className="text-gray-600">Commission:</span>
                           <span className="font-medium">
                             {formatCurrency(car.commission)}
